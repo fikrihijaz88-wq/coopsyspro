@@ -1,0 +1,2679 @@
+{
+  "users": [
+    {
+      "id": "USR-001",
+      "email": "bendahari@koperasi.my",
+      "password": "koperasi123",
+      "name": "Haji Ahmad Zaki",
+      "role": "BENDAHARI",
+      "roleLabel": "Bendahari Koperasi",
+      "noAhli": "KOP-2021-003"
+    },
+    {
+      "id": "USR-002",
+      "email": "pengerusi@koperasi.my",
+      "password": "koperasi123",
+      "name": "Dato' Hj. Razali Ismail",
+      "role": "PENGERUSI_ALK",
+      "roleLabel": "Pengerusi ALK",
+      "noAhli": "KOP-2021-001"
+    },
+    {
+      "id": "USR-003",
+      "email": "setiausaha@koperasi.my",
+      "password": "koperasi123",
+      "name": "Puan Noraini Hashim",
+      "role": "SETIAUSAHA",
+      "roleLabel": "Setiausaha Pentadbiran",
+      "noAhli": "KOP-2021-002"
+    },
+    {
+      "id": "USR-004",
+      "email": "auditor@koperasi.my",
+      "password": "koperasi123",
+      "name": "En. Tan Chee Keong",
+      "role": "AUDITOR_JAD",
+      "roleLabel": "Auditor Dalaman (JAD)",
+      "noAhli": "KOP-2021-005"
+    },
+    {
+      "id": "USR-005",
+      "email": "juruwang@koperasi.my",
+      "password": "koperasi123",
+      "name": "Cik Farah Nabilah",
+      "role": "JURUWANG_POS",
+      "roleLabel": "Juruwang Kedai POS"
+    },
+    {
+      "id": "USR-006",
+      "email": "ahli@koperasi.my",
+      "password": "koperasi123",
+      "name": "Siti Nurhaliza Bt Mohd Safian",
+      "role": "AHLI_KOPERASI",
+      "roleLabel": "Anggota Koperasi",
+      "noAhli": "KOP-2021-002"
+    }
+  ],
+  "members": [
+    {
+      "id": "AHLI-001",
+      "noAhli": "KOP-2021-001",
+      "nama": "Dato' Ahmad Razali Bin Zainal",
+      "noKp": "750412-10-5231",
+      "noTelefon": "012-3456789",
+      "eMel": "ahmad.razali@koperasi.my",
+      "jawatanStaf": "Pengerusi ALK / Pegawai Kanan",
+      "noGaji": "G-8821",
+      "majikan": "Kementerian Pendidikan Malaysia",
+      "pendidikanTertinggi": "Sarjana / Master (Pengurusan Awam)",
+      "pekerjaanPerniagaanSemasa": "Pegawai Tadbir & Diplomatik / Perunding Katering Sampingan",
+      "tarikhSertai": "2021-01-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 5000,
+      "yuranBulanan": 150,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Datin Maria Bt Hassan",
+        "hubungan": "Isteri",
+        "noKp": "780918-10-5112",
+        "noTelefon": "012-9876543"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010045231"
+      }
+    },
+    {
+      "id": "AHLI-002",
+      "noAhli": "KOP-2021-002",
+      "nama": "Siti Nurhaliza Bt Mohd Safian",
+      "noKp": "880325-08-6142",
+      "noTelefon": "019-8765432",
+      "eMel": "siti.safian@koperasi.my",
+      "jawatanStaf": "Setiausaha ALK",
+      "noGaji": "G-9104",
+      "majikan": "Jabatan Perkhidmatan Awam",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda (Pentadbiran Perniagaan)",
+      "pekerjaanPerniagaanSemasa": "Pegawai Sumber Manusia / Perniagaan Kedai Dalam Talian (E-Commerce)",
+      "tarikhSertai": "2021-02-01",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3500,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 12500,
+      "waris": {
+        "nama": "Mohd Amir Bin Yusof",
+        "hubungan": "Suami",
+        "noKp": "851102-08-5531",
+        "noTelefon": "019-3322110"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162021489012"
+      }
+    },
+    {
+      "id": "AHLI-003",
+      "noAhli": "KOP-2021-003",
+      "nama": "Tan Kah Hock",
+      "noKp": "820719-07-5319",
+      "noTelefon": "016-4433221",
+      "eMel": "tan.kahhock@gmail.com",
+      "jawatanStaf": "Bendahari ALK",
+      "noGaji": "G-7412",
+      "majikan": "Kementerian Kewangan Malaysia",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda (Perakaunan & Kewangan)",
+      "pekerjaanPerniagaanSemasa": "Akauntan Bertauliah / Agensi Cukai & Perakaunan",
+      "tarikhSertai": "2021-03-10",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 4000,
+      "yuranBulanan": 120,
+      "bakiPinjaman": 8000,
+      "waris": {
+        "nama": "Lee Mei Ling",
+        "hubungan": "Isteri",
+        "noKp": "840210-07-5220",
+        "noTelefon": "016-9988776"
+      },
+      "maklumatBank": {
+        "namaBank": "CIMB Islamic",
+        "noAkaun": "8001239087"
+      }
+    },
+    {
+      "id": "AHLI-004",
+      "noAhli": "KOP-2022-012",
+      "nama": "Devadasan a/l Ramasamy",
+      "noKp": "801105-02-5883",
+      "noTelefon": "017-5544332",
+      "eMel": "deva.ramasamy@yahoo.com",
+      "jawatanStaf": "Anggota ALK (Biro POS Kedai)",
+      "noGaji": "G-6541",
+      "majikan": "Jabatan Kerja Raya",
+      "pendidikanTertinggi": "Diploma Kejuruteraan Awam",
+      "pekerjaanPerniagaanSemasa": "Penolong Jurutera / Pengurusan Runcit Koperasi",
+      "tarikhSertai": "2022-05-18",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2500,
+      "yuranBulanan": 80,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Kavitha a/p Subramaniam",
+        "hubungan": "Isteri",
+        "noKp": "830412-02-5114",
+        "noTelefon": "017-8877665"
+      },
+      "maklumatBank": {
+        "namaBank": "RHB Islamic",
+        "noAkaun": "212019000123"
+      }
+    },
+    {
+      "id": "AHLI-005",
+      "noAhli": "KOP-2022-033",
+      "nama": "Zarina Bt Wan Sulaiman",
+      "noKp": "860904-03-5122",
+      "noTelefon": "018-9900112",
+      "eMel": "zarina.wan@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Pendidikan)",
+      "noGaji": "G-8319",
+      "majikan": "Kementerian Pendidikan Malaysia",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Pendidikan",
+      "pekerjaanPerniagaanSemasa": "Guru Penolong Kanan / Pengendali Pusat Tuisyen",
+      "tarikhSertai": "2022-09-01",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3000,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 5000,
+      "waris": {
+        "nama": "Wan Sulaiman Bin Wan Teh",
+        "hubungan": "Bapa",
+        "noKp": "590112-03-5003",
+        "noTelefon": "018-7766112"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Muamalat",
+        "noAkaun": "1402001088991"
+      }
+    },
+    {
+      "id": "AHLI-006",
+      "noAhli": "KOP-2021-008",
+      "nama": "Haji Ismail Bin Mohamed",
+      "noKp": "721010-01-5099",
+      "noTelefon": "013-7788990",
+      "eMel": "ismail.mohamed@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Syariah)",
+      "noGaji": "G-5512",
+      "majikan": "Jabatan Kemajuan Islam Malaysia (JAKIM)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Syariah & Undang-Undang",
+      "pekerjaanPerniagaanSemasa": "Pegawai Hal Ehwal Islam / Penasihat Syariah",
+      "tarikhSertai": "2021-04-12",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3500,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Hjh Salmah Bt Yusof",
+        "hubungan": "Isteri",
+        "noKp": "740502-01-5120",
+        "noTelefon": "013-9988112"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010099882"
+      }
+    },
+    {
+      "id": "AHLI-007",
+      "noAhli": "KOP-2022-045",
+      "nama": "Puan Salmah Binti Mansor",
+      "noKp": "840715-08-5522",
+      "noTelefon": "019-2233441",
+      "eMel": "salmah.mansor@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Hal Ehwal Wanita)",
+      "noGaji": "G-7719",
+      "majikan": "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Sains Sosial",
+      "pekerjaanPerniagaanSemasa": "Pegawai Kebajikan Masyarakat",
+      "tarikhSertai": "2022-10-05",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2800,
+      "yuranBulanan": 90,
+      "bakiPinjaman": 3500,
+      "waris": {
+        "nama": "Ahmad Faris Bin Jalil",
+        "hubungan": "Suami",
+        "noKp": "820310-08-5441",
+        "noTelefon": "019-7766551"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011998822"
+      }
+    },
+    {
+      "id": "AHLI-008",
+      "noAhli": "KOP-2023-019",
+      "nama": "Mohd Khairul Anuar Bin Yusof",
+      "noKp": "850612-03-5671",
+      "noTelefon": "011-2345678",
+      "eMel": "khairul.anuar@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Pemasaran IT)",
+      "noGaji": "G-9844",
+      "majikan": "MAMPU, Jabatan Perdana Menteri",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Sains Komputer",
+      "pekerjaanPerniagaanSemasa": "Pegawai Teknologi Maklumat F44",
+      "tarikhSertai": "2023-03-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3000,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Nurul Ain Bt Ghazali",
+        "hubungan": "Isteri",
+        "noKp": "870819-03-5222",
+        "noTelefon": "011-9988771"
+      },
+      "maklumatBank": {
+        "namaBank": "CIMB Islamic",
+        "noAkaun": "8601229988"
+      }
+    },
+    {
+      "id": "AHLI-009",
+      "noAhli": "KOP-2022-061",
+      "nama": "Arumugam a/l Govindasamy",
+      "noKp": "780824-08-5911",
+      "noTelefon": "014-5566778",
+      "eMel": "arumugam.g@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Aset & Premis)",
+      "noGaji": "G-6190",
+      "majikan": "Kementerian Perumahan dan Kerajaan Tempatan",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Pengurusan Hartanah",
+      "pekerjaanPerniagaanSemasa": "Penilai Hartanah / Pengurus Fasiliti",
+      "tarikhSertai": "2022-11-20",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2700,
+      "yuranBulanan": 80,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Meenachi a/p Muthusamy",
+        "hubungan": "Isteri",
+        "noKp": "800415-08-5330",
+        "noTelefon": "014-8899112"
+      },
+      "maklumatBank": {
+        "namaBank": "RHB Islamic",
+        "noAkaun": "212019998811"
+      }
+    },
+    {
+      "id": "AHLI-010",
+      "noAhli": "KOP-2021-005",
+      "nama": "Hafiz Bin Sulaiman",
+      "noKp": "810903-14-5229",
+      "noTelefon": "012-8899001",
+      "eMel": "hafiz.sulaiman@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Audit & Risiko)",
+      "noGaji": "G-7201",
+      "majikan": "Jabatan Audit Negara",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Perakaunan (Audit)",
+      "pekerjaanPerniagaanSemasa": "Penolong Pengarah Audit W44",
+      "tarikhSertai": "2021-02-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 4000,
+      "yuranBulanan": 120,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Nor Fazilah Bt Rosli",
+        "hubungan": "Isteri",
+        "noKp": "831011-14-5110",
+        "noTelefon": "012-7788112"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010077221"
+      }
+    },
+    {
+      "id": "AHLI-011",
+      "noAhli": "KOP-2023-042",
+      "nama": "Dr. Nor Aini Binti Hashim",
+      "noKp": "870118-01-5440",
+      "noTelefon": "017-3344112",
+      "eMel": "noraini.hashim@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Komunikasi & PR)",
+      "noGaji": "G-9055",
+      "majikan": "Kementerian Komunikasi",
+      "pendidikanTertinggi": "Doktor Falsafah (PhD Komunikasi Strategik)",
+      "pekerjaanPerniagaanSemasa": "Ketua Penolong Pengarah Komunikasi",
+      "tarikhSertai": "2023-06-10",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3200,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Mohd Zaki Bin Ibrahim",
+        "hubungan": "Suami",
+        "noKp": "850912-01-5661",
+        "noTelefon": "017-6655441"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011445566"
+      }
+    },
+    {
+      "id": "AHLI-012",
+      "noAhli": "KOP-2022-077",
+      "nama": "Che Wan Ahmad Fadzil Bin Wan Othman",
+      "noKp": "791205-03-5117",
+      "noTelefon": "013-9988776",
+      "eMel": "chewan.fadzil@koperasi.my",
+      "jawatanStaf": "Anggota ALK (Biro Sosio-Ekonomi)",
+      "noGaji": "G-6640",
+      "majikan": "Kementerian Kemajuan Desa dan Wilayah (KKDW)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Ekonomi Pembangunan",
+      "pekerjaanPerniagaanSemasa": "Pegawai Pembangunan Masyarakat S44",
+      "tarikhSertai": "2022-12-01",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3000,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Nik Norzila Bt Nik Hassan",
+        "hubungan": "Isteri",
+        "noKp": "810725-03-5332",
+        "noTelefon": "013-8877119"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010066440"
+      }
+    },
+    {
+      "id": "AHLI-013",
+      "noAhli": "KOP-2021-015",
+      "nama": "Dr. Roslan Bin Mohamad",
+      "noKp": "790514-08-5432",
+      "noTelefon": "019-3344556",
+      "eMel": "roslan.mohamad@koperasi.my",
+      "jawatanStaf": "Pengerusi JAD",
+      "noGaji": "G-7810",
+      "majikan": "Institut Tadbiran Awam Negara (INTAN)",
+      "pendidikanTertinggi": "Doktor Falsafah (Tadbir Urus & Audit Awam)",
+      "pekerjaanPerniagaanSemasa": "Perunding Tadbir Urus Awam",
+      "tarikhSertai": "2021-05-10",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 3500,
+      "yuranBulanan": 100,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Hasnah Bt Kassim",
+        "hubungan": "Isteri",
+        "noKp": "810312-08-5110",
+        "noTelefon": "019-4455661"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010078101"
+      }
+    },
+    {
+      "id": "AHLI-014",
+      "noAhli": "KOP-2022-009",
+      "nama": "Ahmad Fadzil Bin Kassim",
+      "noKp": "831120-10-5881",
+      "noTelefon": "012-6677889",
+      "eMel": "fadzil.kassim@koperasi.my",
+      "jawatanStaf": "Setiausaha JAD",
+      "noGaji": "G-6921",
+      "majikan": "Kementerian Perdagangan Dalam Negeri (KPDN)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Perakaunan",
+      "pekerjaanPerniagaanSemasa": "Pegawai Penguatkuasa Kanan",
+      "tarikhSertai": "2022-04-10",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2500,
+      "yuranBulanan": 80,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Zubaidah Bt Ali",
+        "hubungan": "Isteri",
+        "noKp": "850614-10-5224",
+        "noTelefon": "012-5544112"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011692100"
+      }
+    },
+    {
+      "id": "AHLI-015",
+      "noAhli": "KOP-2023-011",
+      "nama": "Cik Kamala a/p Krishnan",
+      "noKp": "890208-05-5220",
+      "noTelefon": "017-9988112",
+      "eMel": "kamala.krishnan@koperasi.my",
+      "jawatanStaf": "Anggota JAD",
+      "noGaji": "G-8114",
+      "majikan": "Lembaga Hasil Dalam Negeri (LHDN)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Percukaian & Kewangan",
+      "pekerjaanPerniagaanSemasa": "Pegawai Penaksir Cukai",
+      "tarikhSertai": "2023-02-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2000,
+      "yuranBulanan": 70,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Krishnan a/l Raman",
+        "hubungan": "Bapa",
+        "noKp": "610410-05-5003",
+        "noTelefon": "017-4433119"
+      },
+      "maklumatBank": {
+        "namaBank": "CIMB Islamic",
+        "noAkaun": "8001811400"
+      }
+    },
+    {
+      "id": "AHLI-016",
+      "noAhli": "KOP-2021-004",
+      "nama": "Kamaruddin Bin Ismail",
+      "noKp": "760315-08-5441",
+      "noTelefon": "012-4455667",
+      "eMel": "kamaruddin.ismail@gov.my",
+      "jawatanStaf": "Penolong Kanan Pentadbiran",
+      "noGaji": "G-5102",
+      "majikan": "Kementerian Pendidikan Malaysia",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Pendidikan",
+      "pekerjaanPerniagaanSemasa": "Guru Penolong Kanan Pentadbiran",
+      "tarikhSertai": "2021-03-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2500,
+      "yuranBulanan": 80,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Norhaida Bt Othman",
+        "hubungan": "Isteri",
+        "noKp": "780612-08-5224",
+        "noTelefon": "012-7788992"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010051021"
+      }
+    },
+    {
+      "id": "AHLI-017",
+      "noAhli": "KOP-2021-006",
+      "nama": "Azman Bin Hashim",
+      "noKp": "791104-10-5331",
+      "noTelefon": "013-3322114",
+      "eMel": "azman.hashim@gov.my",
+      "jawatanStaf": "Pegawai Teknologi Maklumat",
+      "noGaji": "G-7104",
+      "majikan": "Kementerian Digital",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Sains Komputer",
+      "pekerjaanPerniagaanSemasa": "Pegawai IT F41",
+      "tarikhSertai": "2021-04-01",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2200,
+      "yuranBulanan": 70,
+      "bakiPinjaman": 4500,
+      "waris": {
+        "nama": "Zaiton Bt Daud",
+        "hubungan": "Isteri",
+        "noKp": "810214-10-5116",
+        "noTelefon": "013-6655442"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011710401"
+      }
+    },
+    {
+      "id": "AHLI-018",
+      "noAhli": "KOP-2021-007",
+      "nama": "Noraini Binti Zakaria",
+      "noKp": "830519-02-5114",
+      "noTelefon": "019-4433221",
+      "eMel": "noraini.zakaria@gov.my",
+      "jawatanStaf": "Pegawai Tadbir N41",
+      "noGaji": "G-6409",
+      "majikan": "Jabatan Perdana Menteri",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Pengurusan Awam",
+      "pekerjaanPerniagaanSemasa": "Pegawai Tadbir Pentadbiran",
+      "tarikhSertai": "2021-04-18",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2000,
+      "yuranBulanan": 60,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Mohd Fauzi Bin Saad",
+        "hubungan": "Suami",
+        "noKp": "810810-02-5331",
+        "noTelefon": "019-5566772"
+      },
+      "maklumatBank": {
+        "namaBank": "CIMB Islamic",
+        "noAkaun": "8001640900"
+      }
+    },
+    {
+      "id": "AHLI-019",
+      "noAhli": "KOP-2023-045",
+      "nama": "Faridah Bt Abdullah",
+      "noKp": "910830-14-6004",
+      "noTelefon": "013-2211009",
+      "eMel": "faridah.abdullah@gov.my",
+      "jawatanStaf": "Kakitangan Pentadbiran",
+      "noGaji": "G-1029",
+      "majikan": "Kementerian Kesihatan Malaysia",
+      "pendidikanTertinggi": "Diploma Pengurusan Kesihatan",
+      "pekerjaanPerniagaanSemasa": "Pembantu Tadbir Kesihatan N19",
+      "tarikhSertai": "2023-01-20",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 1500,
+      "yuranBulanan": 50,
+      "bakiPinjaman": 18000,
+      "waris": {
+        "nama": "Abdullah Bin Osman",
+        "hubungan": "Bapa",
+        "noKp": "620510-14-5001",
+        "noTelefon": "013-7766554"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Simpanan Nasional (BSN)",
+        "noAkaun": "1410029000112"
+      }
+    },
+    {
+      "id": "AHLI-020",
+      "noAhli": "KOP-2024-001",
+      "nama": "Muhammad Azam Bin Khairuddin",
+      "noKp": "950214-10-6721",
+      "noTelefon": "011-1234567",
+      "eMel": "azam.khair@gmail.com",
+      "jawatanStaf": "Pegawai Teknologi Maklumat",
+      "noGaji": "G-1150",
+      "majikan": "MAMPU / JPN",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Sains Komputer",
+      "pekerjaanPerniagaanSemasa": "Pembangun Perisian Web",
+      "tarikhSertai": "2024-02-10",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 1000,
+      "yuranBulanan": 50,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Norishah Bt Ramli",
+        "hubungan": "Ibu",
+        "noKp": "681020-10-5302",
+        "noTelefon": "019-2233445"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "12099010088711"
+      }
+    },
+    {
+      "id": "AHLI-021",
+      "noAhli": "KOP-2022-011",
+      "nama": "Zainal Bin Abidin",
+      "noKp": "770921-08-5113",
+      "noTelefon": "012-7766554",
+      "eMel": "zainal.abidin@gov.my",
+      "jawatanStaf": "Pegawai Kanan Audit",
+      "noGaji": "G-5920",
+      "majikan": "Jabatan Audit Negara",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Perakaunan",
+      "pekerjaanPerniagaanSemasa": "Penolong Pengarah Audit W41",
+      "tarikhSertai": "2022-04-25",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2400,
+      "yuranBulanan": 80,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Mariam Bt Sulaiman",
+        "hubungan": "Isteri",
+        "noKp": "790412-08-5442",
+        "noTelefon": "012-9988114"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010059201"
+      }
+    },
+    {
+      "id": "AHLI-022",
+      "noAhli": "KOP-2022-014",
+      "nama": "Rohani Binti Abdullah",
+      "noKp": "821104-03-5226",
+      "noTelefon": "018-4455112",
+      "eMel": "rohani.abdullah@gov.my",
+      "jawatanStaf": "Pegawai Hal Ehwal Islam",
+      "noGaji": "G-6310",
+      "majikan": "JAKIM",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Pengajian Islam",
+      "pekerjaanPerniagaanSemasa": "Pegawai Dakwah S41",
+      "tarikhSertai": "2022-06-01",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2100,
+      "yuranBulanan": 70,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Mohamad Bin Hassan",
+        "hubungan": "Suami",
+        "noKp": "800518-03-5115",
+        "noTelefon": "018-6655221"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Muamalat",
+        "noAkaun": "14020010631001"
+      }
+    },
+    {
+      "id": "AHLI-023",
+      "noAhli": "KOP-2022-017",
+      "nama": "Mohd Syafiq Bin Ramli",
+      "noKp": "880112-10-5883",
+      "noTelefon": "019-9988223",
+      "eMel": "syafiq.ramli@gov.my",
+      "jawatanStaf": "Jurutera Awam J41",
+      "noGaji": "G-8109",
+      "majikan": "Jabatan Kerja Raya (JKR)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Kejuruteraan Awam",
+      "pekerjaanPerniagaanSemasa": "Jurutera Projek J41",
+      "tarikhSertai": "2022-07-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2000,
+      "yuranBulanan": 70,
+      "bakiPinjaman": 6000,
+      "waris": {
+        "nama": "Siti Hajar Bt Azlan",
+        "hubungan": "Isteri",
+        "noKp": "900315-10-5332",
+        "noTelefon": "019-7766114"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011810901"
+      }
+    },
+    {
+      "id": "AHLI-024",
+      "noAhli": "KOP-2022-021",
+      "nama": "Faridah Binti Othman",
+      "noKp": "850720-08-5332",
+      "noTelefon": "013-8899110",
+      "eMel": "faridah.othman@gov.my",
+      "jawatanStaf": "Penolong Akauntan W29",
+      "noGaji": "G-5401",
+      "majikan": "Jabatan Akauntan Negara Malaysia",
+      "pendidikanTertinggi": "Diploma Perakaunan",
+      "pekerjaanPerniagaanSemasa": "Penolong Akauntan W29",
+      "tarikhSertai": "2022-08-10",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 1800,
+      "yuranBulanan": 60,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Othman Bin Mat",
+        "hubungan": "Bapa",
+        "noKp": "580410-08-5001",
+        "noTelefon": "013-6655118"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010054011"
+      }
+    },
+    {
+      "id": "AHLI-025",
+      "noAhli": "KOP-2022-025",
+      "nama": "Ahmad Fauzi Bin Hassan",
+      "noKp": "800412-01-5221",
+      "noTelefon": "017-7788441",
+      "eMel": "fauzi.hassan@gov.my",
+      "jawatanStaf": "Pegawai Perikanan G41",
+      "noGaji": "G-6702",
+      "majikan": "Jabatan Perikanan Malaysia",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Sains Akuakultur",
+      "pekerjaanPerniagaanSemasa": "Pegawai Penyelidik Akuakultur",
+      "tarikhSertai": "2022-09-20",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2200,
+      "yuranBulanan": 75,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Norasmah Bt Yahya",
+        "hubungan": "Isteri",
+        "noKp": "820914-01-5440",
+        "noTelefon": "017-5544119"
+      },
+      "maklumatBank": {
+        "namaBank": "RHB Islamic",
+        "noAkaun": "212019670201"
+      }
+    },
+    {
+      "id": "AHLI-026",
+      "noAhli": "KOP-2022-029",
+      "nama": "Halimah Binti Yusof",
+      "noKp": "840915-06-5334",
+      "noTelefon": "019-6655443",
+      "eMel": "halimah.yusof@gov.my",
+      "jawatanStaf": "Pegawai Veterinar GV41",
+      "noGaji": "G-7312",
+      "majikan": "Jabatan Perkhidmatan Veterinar",
+      "pendidikanTertinggi": "Doktor Perubatan Veterinar (DVM)",
+      "pekerjaanPerniagaanSemasa": "Doktor Veterinar Kerajaan",
+      "tarikhSertai": "2022-10-15",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2400,
+      "yuranBulanan": 80,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Yusof Bin Hashim",
+        "hubungan": "Bapa",
+        "noKp": "570612-06-5003",
+        "noTelefon": "019-3322119"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011731201"
+      }
+    },
+    {
+      "id": "AHLI-027",
+      "noAhli": "KOP-2023-033",
+      "nama": "Khairul Azmi Bin Othman",
+      "noKp": "891004-11-5221",
+      "noTelefon": "012-3344991",
+      "eMel": "khairul.azmi@gov.my",
+      "jawatanStaf": "Pegawai Farmasi U41",
+      "noGaji": "G-8401",
+      "majikan": "Hospital Kuala Lumpur (KKM)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Farmasi",
+      "pekerjaanPerniagaanSemasa": "Pegawai Farmasi Klinikal",
+      "tarikhSertai": "2023-04-12",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2000,
+      "yuranBulanan": 70,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Siti Salwa Bt Zainal",
+        "hubungan": "Isteri",
+        "noKp": "910518-11-5442",
+        "noTelefon": "012-6655228"
+      },
+      "maklumatBank": {
+        "namaBank": "CIMB Islamic",
+        "noAkaun": "8001840101"
+      }
+    },
+    {
+      "id": "AHLI-028",
+      "noAhli": "KOP-2023-040",
+      "nama": "Mastura Binti Jalil",
+      "noKp": "861210-08-5662",
+      "noTelefon": "018-2233119",
+      "eMel": "mastura.jalil@gov.my",
+      "jawatanStaf": "Pegawai Undang-Undang L41",
+      "noGaji": "G-7910",
+      "majikan": "Jabatan Peguam Negara",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Undang-Undang (LLB Hons)",
+      "pekerjaanPerniagaanSemasa": "Peguam Kanan Persekutuan",
+      "tarikhSertai": "2023-05-18",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2500,
+      "yuranBulanan": 85,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Jalil Bin Salleh",
+        "hubungan": "Bapa",
+        "noKp": "591114-08-5001",
+        "noTelefon": "018-9988331"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010079101"
+      }
+    },
+    {
+      "id": "AHLI-029",
+      "noAhli": "KOP-2023-048",
+      "nama": "Siti Aminah Binti Ahmad",
+      "noKp": "850314-14-5330",
+      "noTelefon": "013-4455882",
+      "eMel": "siti.aminah@gov.my",
+      "jawatanStaf": "Pegawai Latihan Kanan",
+      "noGaji": "G-7221",
+      "majikan": "Institut Penilaian Negara (INSPEN)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Pengurusan Latihan",
+      "pekerjaanPerniagaanSemasa": "Pegawai Penyelaras Latihan Kanan",
+      "tarikhSertai": "2023-07-22",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 2200,
+      "yuranBulanan": 75,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Ahmad Bin Zakaria",
+        "hubungan": "Bapa",
+        "noKp": "580812-14-5003",
+        "noTelefon": "013-8877221"
+      },
+      "maklumatBank": {
+        "namaBank": "Maybank Islamic",
+        "noAkaun": "162011722101"
+      }
+    },
+    {
+      "id": "AHLI-030",
+      "noAhli": "KOP-2024-002",
+      "nama": "Nurul Izzati Binti Razali",
+      "noKp": "960822-10-6114",
+      "noTelefon": "011-5566778",
+      "eMel": "nurul.izzati@gov.my",
+      "jawatanStaf": "Pegawai Penyelidik Q41",
+      "noGaji": "G-1205",
+      "majikan": "Institut Penyelidikan Hidraulik Kebangsaan Malaysia (NAHRIM)",
+      "pendidikanTertinggi": "Ijazah Sarjana Muda Sains Alam Sekitar",
+      "pekerjaanPerniagaanSemasa": "Pegawai Penyelidik Alam Sekitar",
+      "tarikhSertai": "2024-03-01",
+      "status": "AKTIF",
+      "yuranMasuk": 10,
+      "modalSyer": 1500,
+      "yuranBulanan": 60,
+      "bakiPinjaman": 0,
+      "waris": {
+        "nama": "Razali Bin Mohd Noor",
+        "hubungan": "Bapa",
+        "noKp": "670415-10-5113",
+        "noTelefon": "011-8899221"
+      },
+      "maklumatBank": {
+        "namaBank": "Bank Islam Malaysia Berhad",
+        "noAkaun": "14012010012051"
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "kod": "1010",
+      "namaAkaun": "Bank Islam Malaysia Berhad",
+      "kategori": "ASET",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 185000,
+      "bakiSemasa": 245800,
+      "notaSKM": "Akaun Utama Operasi Koperasi"
+    },
+    {
+      "kod": "1020",
+      "namaAkaun": "Tunai Di Tangan",
+      "kategori": "ASET",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 3500,
+      "bakiSemasa": 4200,
+      "notaSKM": "Akaun Tunai Runcit"
+    },
+    {
+      "kod": "1030",
+      "namaAkaun": "Akaun Belum Terima (Penghutang)",
+      "kategori": "ASET",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 12000,
+      "bakiSemasa": 15400,
+      "notaSKM": "Tunggakan Potongan Gaji Majikan"
+    },
+    {
+      "kod": "1040",
+      "namaAkaun": "Pembiayaan Ahli Belum Selesai",
+      "kategori": "ASET",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 120000,
+      "bakiSemasa": 142000,
+      "notaSKM": "Baki Pinjaman Murabahah Ahli"
+    },
+    {
+      "kod": "1050",
+      "namaAkaun": "Pelaburan Syer ANGKASA / Bank Rakyat",
+      "kategori": "ASET",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 50000,
+      "bakiSemasa": 50000,
+      "notaSKM": "Pelaburan Syer Institusi Koperasi"
+    },
+    {
+      "kod": "1060",
+      "namaAkaun": "Aset Tetap - Perabot & Peralatan Pejabat",
+      "kategori": "ASET",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 25000,
+      "bakiSemasa": 22000,
+      "notaSKM": "Aset Tetap Bawaan Nilai Bersih"
+    },
+    {
+      "kod": "2010",
+      "namaAkaun": "Akaun Belum Bayar (Pemiutang)",
+      "kategori": "LIABILITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 8500,
+      "bakiSemasa": 11200,
+      "notaSKM": "Bekalan Perniagaan & Bil"
+    },
+    {
+      "kod": "2020",
+      "namaAkaun": "Yuran Terkumpul Ahli (Tunggakan Yuran)",
+      "kategori": "LIABILITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 42000,
+      "bakiSemasa": 54000,
+      "notaSKM": "Yuran Bulanan Ahli Disimpan"
+    },
+    {
+      "kod": "2030",
+      "namaAkaun": "Cukai / Zakat Koperasi Belum Bayar",
+      "kategori": "LIABILITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 4500,
+      "bakiSemasa": 6800,
+      "notaSKM": "Peruntukan Zakat & Cukai SKM"
+    },
+    {
+      "kod": "3010",
+      "namaAkaun": "Modal Syer Ahli",
+      "kategori": "EKUITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 220000,
+      "bakiSemasa": 268000,
+      "notaSKM": "Modal Syer Terbitan Dipegang Ahli"
+    },
+    {
+      "kod": "3020",
+      "namaAkaun": "Kumpulan Wang Rizab Statutori (KWRS 12%)",
+      "kategori": "EKUITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 38000,
+      "bakiSemasa": 45200,
+      "notaSKM": "Rizab Statutori Mengikut Seksyen 57 Akta 1993"
+    },
+    {
+      "kod": "3030",
+      "namaAkaun": "Kumpulan Wang Pendidikan Koperasi (KWPK 3%)",
+      "kategori": "EKUITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 9500,
+      "bakiSemasa": 11300,
+      "notaSKM": "Caruman Kumpulan Wang Pendidikan SKM"
+    },
+    {
+      "kod": "3040",
+      "namaAkaun": "Kumpulan Wang Pembangunan Koperasi (KWP 1%)",
+      "kategori": "EKUITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 3200,
+      "bakiSemasa": 3800,
+      "notaSKM": "Caruman Kumpulan Wang Pembangunan SKM"
+    },
+    {
+      "kod": "3050",
+      "namaAkaun": "Untung / Rugi Terkumpul Bawaan",
+      "kategori": "EKUITI",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 64800,
+      "bakiSemasa": 94300,
+      "notaSKM": "Baki Keuntungan Dihawa Ke Hadapan"
+    },
+    {
+      "kod": "4010",
+      "namaAkaun": "Hasil Jualan Kedai & Perniagaan Koperasi",
+      "kategori": "HASIL",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 84500,
+      "notaSKM": "Jualan Kedai/Kedai Buku/Kantin"
+    },
+    {
+      "kod": "4020",
+      "namaAkaun": "Hasil Keuntungan Pembiayaan Murabahah Ahli",
+      "kategori": "HASIL",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 18200,
+      "notaSKM": "Caj / Keuntungan Pembiayaan"
+    },
+    {
+      "kod": "4030",
+      "namaAkaun": "Hasil Yuran Masuk Ahli Baru",
+      "kategori": "HASIL",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 800,
+      "notaSKM": "Yuran Masuk RM10 (Hasil Bukan Ulangan)"
+    },
+    {
+      "kod": "4040",
+      "namaAkaun": "Hasil Dividen Pelaburan Syer ANGKASA",
+      "kategori": "HASIL",
+      "jenisBaki": "KREDIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 4500,
+      "notaSKM": "Dividen Diterima Daripada Pelaburan"
+    },
+    {
+      "kod": "5010",
+      "namaAkaun": "Belanja Gaji & Caruman KWSP/PERKESO Staf",
+      "kategori": "BELANJA",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 32000,
+      "notaSKM": "Gaji Pengurus & Pembantu Koperasi"
+    },
+    {
+      "kod": "5020",
+      "namaAkaun": "Elaun Ahli Lembaga Koperasi (ALK)",
+      "kategori": "BELANJA",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 9600,
+      "notaSKM": "Elaun Mesyuarat & Tuntutan ALK"
+    },
+    {
+      "kod": "5030",
+      "namaAkaun": "Belanja Penganjuran Mesyuarat Agung Tahunan (AGM)",
+      "kategori": "BELANJA",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 7500,
+      "notaSKM": "Sewa Dewan, Makanan & Cenderamata"
+    },
+    {
+      "kod": "5040",
+      "namaAkaun": "Belanja Sewa, Utiliti & Alat Tulis Pejabat",
+      "kategori": "BELANJA",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 8400,
+      "notaSKM": "Sewa Pejabat & Bil Elektrik/Air"
+    },
+    {
+      "kod": "5050",
+      "namaAkaun": "Belanja Yuran Audit SKM & Guaman",
+      "kategori": "BELANJA",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 4500,
+      "notaSKM": "Bayaran Juruukur / Juruaudit Bertauliah"
+    },
+    {
+      "kod": "5060",
+      "namaAkaun": "Belanja Susut Nilai Aset Tetap",
+      "kategori": "BELANJA",
+      "jenisBaki": "DEBIT",
+      "bakiAwal": 0,
+      "bakiSemasa": 3000,
+      "notaSKM": "Susut Nilai Tahunan Peralatan"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "TX-2026-001",
+      "tarikh": "2026-08-01",
+      "noRujukan": "RST-2026-0801",
+      "perihal": "Terimaan Potongan Gaji Bulanan Ahli Ogos 2026 (Syer & Yuran)",
+      "noAhli": "KOP-2021-001",
+      "namaAhli": "Dato' Ahmad Razali Bin Zainal",
+      "debitAkaunKod": "1010",
+      "kreditAkaunKod": "3010",
+      "jumlah": 1500,
+      "kategori": "POTONGAN_GAJI",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2026-002",
+      "tarikh": "2026-08-02",
+      "noRujukan": "RST-2026-0802",
+      "perihal": "Jualan Barangan Kedai Koperasi & Kedai Buku",
+      "debitAkaunKod": "1010",
+      "kreditAkaunKod": "4010",
+      "jumlah": 4250,
+      "kategori": "JUALAN_PERNIAGAAN",
+      "dikemaskiniOleh": "Staf Kedai Koperasi"
+    },
+    {
+      "id": "TX-2026-003",
+      "tarikh": "2026-08-04",
+      "noRujukan": "PV-2026-0810",
+      "perihal": "Bayaran Sewa Pejabat & Bil Utiliti Ogos 2026",
+      "debitAkaunKod": "5040",
+      "kreditAkaunKod": "1010",
+      "jumlah": 1800,
+      "kategori": "BELANJA_PENTADBIRAN",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2026-004",
+      "tarikh": "2026-08-05",
+      "noRujukan": "PV-2026-0812",
+      "perihal": "Pengeluaran Pembiayaan Murabahah Ahli (Siti Nurhaliza)",
+      "noAhli": "KOP-2021-002",
+      "namaAhli": "Siti Nurhaliza Bt Mohd Safian",
+      "debitAkaunKod": "1040",
+      "kreditAkaunKod": "1010",
+      "jumlah": 15000,
+      "kategori": "PEMBIAYAN",
+      "dikemaskiniOleh": "Pengerusi ALK"
+    },
+    {
+      "id": "TX-2026-005",
+      "tarikh": "2026-08-06",
+      "noRujukan": "RST-2026-0818",
+      "perihal": "Yuran Masuk Ahli Baru (Muhammad Azam)",
+      "noAhli": "KOP-2024-001",
+      "namaAhli": "Muhammad Azam Bin Khairuddin",
+      "debitAkaunKod": "1010",
+      "kreditAkaunKod": "4030",
+      "jumlah": 10,
+      "kategori": "YURAN_SYER",
+      "dikemaskiniOleh": "Setiausaha ALK"
+    },
+    {
+      "id": "TX-2025-101",
+      "tarikh": "2025-12-28",
+      "noRujukan": "DIV-2025-75",
+      "perihal": "Agihan Dividen Modal Syer & Yuran Ahli 7.5% Bagi Tahun Kewangan 2025",
+      "debitAkaunKod": "3020",
+      "kreditAkaunKod": "1010",
+      "jumlah": 20100,
+      "kategori": "AGIHAN_DIVIDEN",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2025-088",
+      "tarikh": "2025-11-15",
+      "noRujukan": "PV-2025-1102",
+      "perihal": "Sumbangan Statutori SKM (KWRS 12% & KWP 3%) Tahun 2025",
+      "debitAkaunKod": "5040",
+      "kreditAkaunKod": "1010",
+      "jumlah": 20220,
+      "kategori": "STATUTORI_SKM",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2025-045",
+      "tarikh": "2025-06-30",
+      "noRujukan": "RST-2025-0630",
+      "perihal": "Hasil Jualan Kedai Koperasi & Bekalan Sekolah Separuh Tahun Pertama 2025",
+      "debitAkaunKod": "1010",
+      "kreditAkaunKod": "4010",
+      "jumlah": 185000,
+      "kategori": "JUALAN_PERNIAGAAN",
+      "dikemaskiniOleh": "Staf Koperasi"
+    },
+    {
+      "id": "TX-2024-092",
+      "tarikh": "2024-12-30",
+      "noRujukan": "DIV-2024-70",
+      "perihal": "Agihan Dividen Modal Syer Ahli 7.0% Bagi Tahun Kewangan 2024",
+      "debitAkaunKod": "3020",
+      "kreditAkaunKod": "1010",
+      "jumlah": 18200,
+      "kategori": "AGIHAN_DIVIDEN",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2024-050",
+      "tarikh": "2024-08-12",
+      "noRujukan": "RST-2024-0812",
+      "perihal": "Terimaan Potongan Gaji Pukal Angkasa & Majikan Ogos 2024",
+      "debitAkaunKod": "1010",
+      "kreditAkaunKod": "3010",
+      "jumlah": 125000,
+      "kategori": "POTONGAN_GAJI",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2023-010",
+      "tarikh": "2023-12-20",
+      "noRujukan": "DIV-2023-65",
+      "perihal": "Agihan Dividen Modal Syer Ahli 6.5% Bagi Tahun Kewangan 2023",
+      "debitAkaunKod": "3020",
+      "kreditAkaunKod": "1010",
+      "jumlah": 15000,
+      "kategori": "AGIHAN_DIVIDEN",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    },
+    {
+      "id": "TX-2023-001",
+      "tarikh": "2023-01-15",
+      "noRujukan": "RST-2023-0115",
+      "perihal": "Gandaan Modal Syer Asas Pembukaan Koperasi & Yuran Masuk Ahli Awal 2023",
+      "debitAkaunKod": "1010",
+      "kreditAkaunKod": "3010",
+      "jumlah": 210000,
+      "kategori": "YURAN_SYER",
+      "dikemaskiniOleh": "Bendahari Koperasi"
+    }
+  ],
+  "loans": [
+    {
+      "id": "PEMB-2026-001",
+      "noAhli": "KOP-2021-002",
+      "namaAhli": "Siti Nurhaliza Bt Mohd Safian",
+      "jenisPembiayaan": "MURABAHAH_BARANGAN",
+      "jumlahPinjaman": 15000,
+      "kadarKeuntungan": 4.5,
+      "tempohBulan": 36,
+      "bayaranBulanan": 472.92,
+      "bakiPinjaman": 12500,
+      "tarikhPermohonan": "2026-01-10",
+      "tarikhLulus": "2026-01-15",
+      "status": "DILULUSKAN",
+      "penjamin": [
+        "Dato' Ahmad Razali Bin Zainal",
+        "Tan Kah Hock"
+      ]
+    },
+    {
+      "id": "PEMB-2026-002",
+      "noAhli": "KOP-2021-003",
+      "namaAhli": "Tan Kah Hock",
+      "jenisPembiayaan": "PINJAMAN_DIRI",
+      "jumlahPinjaman": 10000,
+      "kadarKeuntungan": 4,
+      "tempohBulan": 24,
+      "bayaranBulanan": 450,
+      "bakiPinjaman": 8000,
+      "tarikhPermohonan": "2026-03-01",
+      "tarikhLulus": "2026-03-05",
+      "status": "DILULUSKAN",
+      "penjamin": [
+        "Devadasan a/l Ramasamy"
+      ]
+    },
+    {
+      "id": "PEMB-2026-003",
+      "noAhli": "KOP-2023-045",
+      "namaAhli": "Faridah Bt Abdullah",
+      "jenisPembiayaan": "PEMBIAYAN_PENDIDIKAN",
+      "jumlahPinjaman": 20000,
+      "kadarKeuntungan": 3.8,
+      "tempohBulan": 48,
+      "bayaranBulanan": 479.17,
+      "bakiPinjaman": 18000,
+      "tarikhPermohonan": "2026-05-12",
+      "tarikhLulus": "2026-05-20",
+      "status": "DILULUSKAN",
+      "penjamin": [
+        "Siti Nurhaliza Bt Mohd Safian",
+        "Zarina Bt Wan Sulaiman"
+      ]
+    }
+  ],
+  "meetings": [
+    {
+      "id": "MSY-2026-AGM-01",
+      "bilangan": "AGM Ke-15 (Tahun Kewangan 2025/2026)",
+      "jenis": "AGM",
+      "tajuk": "Mesyuarat Agung Tahunan Koperasi Berhad Tahun 2026",
+      "tarikh": "2026-06-20",
+      "masa": "09:00 AM",
+      "tempat": "Dewan Serbaguna Wisma Koperasi, Kuala Lumpur",
+      "pengerusi": "Dato' Ahmad Razali Bin Othman (Pengerusi ALK)",
+      "pencatatMinit": "Siti Nurhaliza Bt Mohd Safian (Setiausaha ALK)",
+      "status": "SELESAI",
+      "jumlahAhliBerhak": 50,
+      "kehadiranHadir": 38,
+      "kehadiranBersebab": 8,
+      "korumMinimaDiperlukan": 17,
+      "korumSah": true,
+      "notaPematuhanSKM": "Mematuhi Seksyen 39 & 40 Akta Koperasi 1993 (Korum 1/3 atau 50 ahli dicapai).",
+      "agenda": [
+        {
+          "no": 1,
+          "id": "AG-1",
+          "tajuk": "Ucapan Aluan Pengerusi ALK",
+          "pembawa": "Dato' Ahmad Razali",
+          "keputusan": "Diterima & disahkan"
+        },
+        {
+          "no": 2,
+          "id": "AG-2",
+          "tajuk": "Pengesahan Minit Mesyuarat Agung Tahunan Ke-14",
+          "pembawa": "Setiausaha ALK",
+          "keputusan": "Disahkan tanpa pindaan"
+        },
+        {
+          "no": 3,
+          "id": "AG-3",
+          "tajuk": "Membentang & Menerima Laporan Lembaga & Laporan Juruaudit Luar SKM 2025",
+          "pembawa": "Bendahari (Tan Kah Hock)",
+          "keputusan": "Diluluskan sebulat suara"
+        },
+        {
+          "no": 4,
+          "id": "AG-4",
+          "tajuk": "Kelulusan Pengagihan Keuntungan & Kadar Dividen Modal Syer 7.5%",
+          "pembawa": "Pengerusi ALK",
+          "keputusan": "Diluluskan mengikut Seksyen 57 Akta 1993"
+        },
+        {
+          "no": 5,
+          "id": "AG-5",
+          "tajuk": "Pemilihan Ahli Lembaga Koperasi (ALK) & Jawatankuasa Audit Dalaman (JAD)",
+          "pembawa": "Jawatankuasa Pemilihan",
+          "keputusan": "3 ALK baru dilantik"
+        }
+      ],
+      "resolusi": [
+        {
+          "id": "RES-01",
+          "tajuk": "Kelulusan Kadar Dividen 7.5% Bagi Tahun Kewangan Berakhir 2025",
+          "pencadang": "Ahmad Bin Hassan (KOP-2021-001)",
+          "penyokong": "Zarina Bt Wan Sulaiman (KOP-2022-018)",
+          "keputusan": "SEBULAT_SUARA",
+          "undiSetuju": 38,
+          "undiBantah": 0,
+          "undiKecuali": 0,
+          "notaSKM": "Dividen 7.5% berada di bawah siling statutori 10% Seksyen 57."
+        },
+        {
+          "id": "RES-02",
+          "tajuk": "Kelulusan Pelantikan Juruaudit Luar Bertauliah SKM Bagi Tahun 2026/2027",
+          "pencadang": "Tan Kah Hock (Bendahari)",
+          "penyokong": "Faridah Bt Abdullah (KOP-2023-045)",
+          "keputusan": "LULUS_MAJORITI",
+          "undiSetuju": 36,
+          "undiBantah": 2,
+          "undiKecuali": 0
+        }
+      ],
+      "kehadiranSenarai": [
+        {
+          "id": "KH-1",
+          "noAhli": "KOP-2021-001",
+          "nama": "Ahmad Bin Hassan",
+          "jawatan": "Pengerusi ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-2",
+          "noAhli": "KOP-2021-002",
+          "nama": "Siti Nurhaliza Bt Mohd Safian",
+          "jawatan": "Setiausaha ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-3",
+          "noAhli": "KOP-2021-003",
+          "nama": "Tan Kah Hock",
+          "jawatan": "Bendahari ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-4",
+          "noAhli": "KOP-2022-018",
+          "nama": "Zarina Bt Wan Sulaiman",
+          "jawatan": "Ahli Lembaga ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-5",
+          "noAhli": "KOP-2023-045",
+          "nama": "Faridah Bt Abdullah",
+          "jawatan": "Pengerusi JAD",
+          "status": "HADIR"
+        }
+      ],
+      "minitMesyuaratText": "MINIT MESYUARAT AGUNG TAHUNAN (AGM) KE-15\nKOPERASI BERHAD MALAYSIA\n\nTarikh: 20 Jun 2026 (Sabtu)\nMasa: 09:00 Pagi - 12:30 Tengah Hari\nTempat: Dewan Serbaguna Wisma Koperasi, Kuala Lumpur\nPengerusi: Dato' Ahmad Razali Bin Othman\n\n1. SEMAKAN KORUM MESYUARAT\nSetiausaha mengesahkan bahawa seramai 38 orang ahli hadir fizikal daripada 50 orang ahli berhak mengundi. Korum minima Akta Koperasi 1993 (1/3 bersamaan 17 ahli) telah DICAPAI dan mesyuarat adalah SAH di bawah undang-undang.\n\n2. UCAPAN ALUAN PENGERUSI\nPengerusi merakamkan penghargaan atas sambutan menggalakkan dan menekankan pematuhan penuh kewangan kepada arahan Suruhanjaya Koperasi Malaysia (SKM).\n\n3. MEMBENTANG LAPORAN KEWANGAAN & DIVIDEN 7.5%\nBendahari membentangkan Penyata Kewangan 2025. Keuntungan bersih membenarkan agihan dividen modal syer pada kadar 7.5%. Usul dicadang dan disokong sebulat suara oleh ahli.\n\n4. PENANGGUHAN MESYUARAT\nMesyuarat ditangguhkan pada jam 12:30 tengah hari dengan ucapan terima kasih daripada Pengerusi.",
+      "tandatanganDigital": [
+        {
+          "id": "SIG-AGM-01",
+          "namaSigner": "Dato' Ahmad Razali Bin Othman",
+          "jawatan": "Pengerusi Mesyuarat / ALK",
+          "noKpOrAhli": "KOP-2021-001",
+          "tarikhTandatangan": "2026-06-20 14:15:00",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Minit disahkan sebagai rekod tepat perjalanan Mesyuarat Agung Tahunan Ke-15.",
+          "hashAuditan": "SHA256: A82F-9C1D-VERTTERE-AGM15-01",
+          "ipAlamat": "192.168.1.102"
+        },
+        {
+          "id": "SIG-AGM-02",
+          "namaSigner": "Siti Nurhaliza Bt Mohd Safian",
+          "jawatan": "Setiausaha ALK",
+          "noKpOrAhli": "KOP-2021-002",
+          "tarikhTandatangan": "2026-06-20 14:20:00",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Draf minit disediakan mengikut keputusan ketetapan ahli.",
+          "hashAuditan": "SHA256: B91E-4D2A-VERTTERE-AGM15-02",
+          "ipAlamat": "192.168.1.108"
+        },
+        {
+          "id": "SIG-AGM-03",
+          "namaSigner": "Kamal Bin Ariffin",
+          "jawatan": "Penentusah Minit #1 (Ahli Lantikan AGM)",
+          "noKpOrAhli": "KOP-2022-014",
+          "tarikhTandatangan": "2026-06-20 14:30:10",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Penentusah Minit Lantikan Ahli AGM mengesahkan butiran mesyuarat.",
+          "hashAuditan": "SHA256: 3F91-7B82-VERTTERE-AGM15-03",
+          "ipAlamat": "192.168.1.115"
+        },
+        {
+          "id": "SIG-AGM-04",
+          "namaSigner": "Zarina Bt Wan Sulaiman",
+          "jawatan": "Penentusah Minit #2 (Ahli Lantikan AGM)",
+          "noKpOrAhli": "KOP-2022-018",
+          "tarikhTandatangan": "2026-06-20 14:35:00",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Disahkan tepat mengikut resolusi yang telah diluluskan.",
+          "hashAuditan": "SHA256: 4C2D-8E1A-VERTTERE-AGM15-04",
+          "ipAlamat": "192.168.1.119"
+        },
+        {
+          "id": "SIG-AGM-05",
+          "namaSigner": "Rahim Bin Ismail",
+          "jawatan": "Penentusah Minit #3 (Ahli Lantikan AGM)",
+          "noKpOrAhli": "KOP-2023-033",
+          "tarikhTandatangan": "2026-06-20 14:40:22",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Penentusah Minit Ahli menyemak dan menyetujui minit.",
+          "hashAuditan": "SHA256: 5E3A-9F2B-VERTTERE-AGM15-05",
+          "ipAlamat": "192.168.1.122"
+        },
+        {
+          "id": "SIG-AGM-06",
+          "namaSigner": "Faridah Bt Abdullah",
+          "jawatan": "Penentusah Minit #4 (Ahli Lantikan AGM)",
+          "noKpOrAhli": "KOP-2023-045",
+          "tarikhTandatangan": "2026-06-20 14:45:10",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Semakan semula minit disahkan teratur.",
+          "hashAuditan": "SHA256: 6F4B-0A3C-VERTTERE-AGM15-06",
+          "ipAlamat": "192.168.1.125"
+        },
+        {
+          "id": "SIG-AGM-07",
+          "namaSigner": "Mohd Amir Bin Yusof",
+          "jawatan": "Penentusah Minit #5 (Ahli Lantikan AGM)",
+          "noKpOrAhli": "KOP-2024-052",
+          "tarikhTandatangan": "2026-06-20 14:50:00",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Disahkan teratur mengikut Akta Koperasi 1993.",
+          "hashAuditan": "SHA256: 7A5C-1B4D-VERTTERE-AGM15-07",
+          "ipAlamat": "192.168.1.130"
+        },
+        {
+          "id": "SIG-AGM-08",
+          "namaSigner": "Hjh Aminah Bt Kasim",
+          "jawatan": "Penentusah Minit #6 (Ahli Lantikan AGM)",
+          "noKpOrAhli": "KOP-2024-060",
+          "tarikhTandatangan": "2026-06-20 14:55:00",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Lengkap 6 orang Penentusah Minit Ahli Lantikan AGM.",
+          "hashAuditan": "SHA256: 8B6D-2C5E-VERTTERE-AGM15-08",
+          "ipAlamat": "192.168.1.135"
+        }
+      ]
+    },
+    {
+      "id": "MSY-2026-ALK-04",
+      "bilangan": "Bil. 04/2026",
+      "jenis": "ALK",
+      "tajuk": "Mesyuarat Ahli Lembaga Koperasi Bil. 4 Tahun 2026",
+      "tarikh": "2026-08-01",
+      "masa": "02:30 PM",
+      "tempat": "Bilik Mesyuarat ALK, Wisma Koperasi",
+      "pengerusi": "Dato' Ahmad Razali Bin Othman",
+      "pencatatMinit": "Siti Nurhaliza Bt Mohd Safian",
+      "status": "SELESAI",
+      "jumlahAhliBerhak": 6,
+      "kehadiranHadir": 5,
+      "kehadiranBersebab": 1,
+      "korumMinimaDiperlukan": 4,
+      "korumSah": true,
+      "notaPematuhanSKM": "Mematuhi Seksyen 44 Akta Koperasi 1993 (Korum ALK melebihi 50%).",
+      "agenda": [
+        {
+          "no": 1,
+          "id": "AG-101",
+          "tajuk": "Semakan Permohonan Keahlian Baru & Modal Syer",
+          "pembawa": "Setiausaha",
+          "keputusan": "5 ahli baru diluluskan"
+        },
+        {
+          "no": 2,
+          "id": "AG-102",
+          "tajuk": "Kelulusan Permohonan Pembiayaan Murabahah Barangan",
+          "pembawa": "Jawatankuasa Pembiayaan",
+          "keputusan": "RM15,000 diluluskan bagi Siti Nurhaliza"
+        },
+        {
+          "no": 3,
+          "id": "AG-103",
+          "tajuk": "Semakan Prestasi Laporan Lejar Am & Potongan Gaji Bulanan BPA",
+          "pembawa": "Bendahari",
+          "keputusan": "Akaun disahkan seimbang"
+        }
+      ],
+      "resolusi": [
+        {
+          "id": "RES-101",
+          "tajuk": "Kelulusan Permohonan Pembiayaan RM15,000 Siti Nurhaliza",
+          "pencadang": "Dato' Ahmad Razali",
+          "penyokong": "Tan Kah Hock",
+          "keputusan": "SEBULAT_SUARA",
+          "undiSetuju": 5,
+          "undiBantah": 0
+        }
+      ],
+      "kehadiranSenarai": [
+        {
+          "id": "KH-101",
+          "nama": "Dato' Ahmad Razali Bin Othman",
+          "jawatan": "Pengerusi ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-102",
+          "nama": "Siti Nurhaliza Bt Mohd Safian",
+          "jawatan": "Setiausaha ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-103",
+          "nama": "Tan Kah Hock",
+          "jawatan": "Bendahari ALK",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-104",
+          "nama": "Zarina Bt Wan Sulaiman",
+          "jawatan": "ALK Biro Kewangan",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-105",
+          "nama": "Rahim Bin Ismail",
+          "jawatan": "ALK Biro Pemasaran",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-106",
+          "nama": "Hjh Aminah Bt Kasim",
+          "jawatan": "ALK Biro Kebajikan",
+          "status": "BERSEBAB"
+        }
+      ],
+      "minitMesyuaratText": "MINIT MESYUARAT AHLI LEMBAGA KOPERASI (ALK) BIL. 04/2026\nKOPERASI BERHAD MALAYSIA\n\nTarikh: 1 Ogos 2026\nMasa: 2:30 Petang\nTempat: Bilik Mesyuarat ALK, Wisma Koperasi\n\nHadir: 5 / 6 Orang ALK (Korum 4 orang DIPATUHI)\n\n1. PERMOHONAN PEMBIAYAAN\nPermohonan pembiayaan Murabahah bernilai RM15,000 diluluskan sebulat suara mengikut syarat nisbah syer.\n\n2. PENANGANAN POTONGAN GAJI BULANAN\nSemua akaun potongan gaji bulanan disahkan diposting tepat pada masanya.",
+      "tandatanganDigital": [
+        {
+          "id": "SIG-101",
+          "namaSigner": "Dato' Ahmad Razali Bin Othman",
+          "jawatan": "Pengerusi ALK",
+          "noKpOrAhli": "KOP-2026-0001",
+          "tarikhTandatangan": "2026-08-01 16:45:12",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Disahkan minit mesyuarat adalah tepat dan diluluskan sebulat suara.",
+          "hashAuditan": "SHA256: 8A2F-9C1D-4E87-VERTTERE-SKM-ALK-01",
+          "ipAlamat": "192.168.1.102"
+        },
+        {
+          "id": "SIG-102",
+          "namaSigner": "Siti Nurhaliza Bt Mohd Safian",
+          "jawatan": "Setiausaha ALK",
+          "noKpOrAhli": "KOP-2026-0002",
+          "tarikhTandatangan": "2026-08-01 16:30:00",
+          "signatureType": "TYPED_DIGITAL",
+          "status": "DISAHKAN",
+          "catatan": "Pencatat minit mengesahkan draf minit lengkap diaudit.",
+          "hashAuditan": "SHA256: 3F91-7B82-1D44-VERTTERE-SKM-ALK-02",
+          "ipAlamat": "192.168.1.108"
+        }
+      ]
+    },
+    {
+      "id": "MSY-2026-JAD-02",
+      "bilangan": "Bil. 02/2026",
+      "jenis": "JAD",
+      "tajuk": "Mesyuarat Jawatankuasa Audit Dalaman (JAD) Suku Tahun 3",
+      "tarikh": "2026-08-05",
+      "masa": "10:00 AM",
+      "tempat": "Bilik Audit, Aras 2 Wisma Koperasi",
+      "pengerusi": "Faridah Bt Abdullah (Pengerusi JAD)",
+      "pencatatMinit": "Kamal Bin Ariffin (Pemeriksa Akaun JAD)",
+      "status": "SELESAI",
+      "jumlahAhliBerhak": 3,
+      "kehadiranHadir": 3,
+      "kehadiranBersebab": 0,
+      "korumMinimaDiperlukan": 2,
+      "korumSah": true,
+      "notaPematuhanSKM": "Mematuhi Seksyen 47 Akta Koperasi 1993 (Pemeriksaan Rekod Akaun & Lejar).",
+      "agenda": [
+        {
+          "no": 1,
+          "id": "AG-201",
+          "tajuk": "Semakan Imbangan Duga & Integriti Log Audit SKM",
+          "pembawa": "Faridah Bt Abdullah",
+          "keputusan": "Tiada selisih lejar dikesan"
+        },
+        {
+          "no": 2,
+          "id": "AG-202",
+          "tajuk": "Pemeriksaan Sijil Deposit & Penyata Penyesuaian Bank",
+          "pembawa": "Kamal Bin Ariffin",
+          "keputusan": "Disahkan lengkap & sahih"
+        }
+      ],
+      "resolusi": [
+        {
+          "id": "RES-201",
+          "tajuk": "Pengesahan Laporan Integriti Audit Dalaman Suku Tahun 3/2026",
+          "pencadang": "Faridah Bt Abdullah",
+          "penyokong": "Kamal Bin Ariffin",
+          "keputusan": "SEBULAT_SUARA",
+          "undiSetuju": 3,
+          "undiBantah": 0
+        }
+      ],
+      "kehadiranSenarai": [
+        {
+          "id": "KH-201",
+          "nama": "Faridah Bt Abdullah",
+          "jawatan": "Pengerusi JAD",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-202",
+          "nama": "Kamal Bin Ariffin",
+          "jawatan": "AJK Audit 1",
+          "status": "HADIR"
+        },
+        {
+          "id": "KH-203",
+          "nama": "Noraini Bt Kasim",
+          "jawatan": "AJK Audit 2",
+          "status": "HADIR"
+        }
+      ]
+    },
+    {
+      "id": "MSY-2026-JKK-01",
+      "bilangan": "Bil. 01/2026",
+      "jenis": "JK_KHAS",
+      "tajuk": "Mesyuarat Jawatankuasa Khas Pelaburan & Hartanah Koperasi",
+      "tarikh": "2026-08-15",
+      "masa": "10:30 AM",
+      "tempat": "Bilik Perbincangan Khas Wisma Koperasi",
+      "pengerusi": "Tan Kah Hock (Ketua Panel Pelaburan)",
+      "pencatatMinit": "Zarina Bt Wan Sulaiman",
+      "status": "DIJADUALKAN",
+      "jumlahAhliBerhak": 5,
+      "kehadiranHadir": 4,
+      "kehadiranBersebab": 1,
+      "korumMinimaDiperlukan": 3,
+      "korumSah": true,
+      "notaPematuhanSKM": "Mengikut Garis Panduan Pelaburan SKM GP4.",
+      "agenda": [
+        {
+          "no": 1,
+          "id": "AG-301",
+          "tajuk": "Kajian Kebolehlaksanaan Cadangan Pembelian Unit Kedai Koperasi",
+          "pembawa": "Tan Kah Hock",
+          "keputusan": "Menunggu pembentangan penilaian"
+        }
+      ],
+      "resolusi": [],
+      "kehadiranSenarai": []
+    },
+    {
+      "id": "MSY-2026-EGM-01",
+      "bilangan": "EGM Bil. 01/2026",
+      "jenis": "EGM",
+      "tajuk": "Mesyuarat Agung Luar Biasa (EGM) Khas Pindaan Undang-Undang Kecil",
+      "tarikh": "2026-09-12",
+      "masa": "09:30 AM",
+      "tempat": "Dewan Utama Wisma Koperasi / Zoom Hybrid",
+      "pengerusi": "Dato' Ahmad Razali Bin Othman",
+      "pencatatMinit": "Siti Nurhaliza Bt Mohd Safian",
+      "status": "DIJADUALKAN",
+      "jumlahAhliBerhak": 50,
+      "kehadiranHadir": 0,
+      "kehadiranBersebab": 0,
+      "korumMinimaDiperlukan": 17,
+      "korumSah": false,
+      "notaPematuhanSKM": "Mematuhi Seksyen 39 Akta Koperasi 1993 (Notis 14 hari panggil EGM).",
+      "agenda": [
+        {
+          "no": 1,
+          "id": "AG-401",
+          "tajuk": "Pindaan Undang-Undang Kecil Fasal 12 (Kadar Yuran Bulanan)",
+          "pembawa": "Setiausaha ALK"
+        },
+        {
+          "no": 2,
+          "id": "AG-402",
+          "tajuk": "Kelulusan Had Maksimum Liabiliti Luar Koperasi",
+          "pembawa": "Bendahari ALK"
+        }
+      ],
+      "resolusi": [],
+      "kehadiranSenarai": []
+    }
+  ],
+  "documents": [
+    {
+      "id": "DOK-001",
+      "namaFail": "Sijil_Pendaftaran_SKM_Koperasi_2021.pdf",
+      "kategori": "SIJIL_PENDAFTARAN",
+      "rujukan": "SKM-W-10492/1993 (Daftar Koperasi Malaysia)",
+      "tarikhMuatNaik": "2026-01-10",
+      "saizFail": "2.4 MB",
+      "status": "DISAHKAN",
+      "sumberMuatNaik": "Setiausaha ALK",
+      "catatanPengesahan": "Disahkan sah oleh Suruhanjaya Koperasi Malaysia (SKM) cawangan W.P. Putrajaya."
+    },
+    {
+      "id": "DOK-002",
+      "namaFail": "Kad_Pengenalan_Pengerusi_Ahmad_Razali.pdf",
+      "kategori": "KAD_PENGENALAN",
+      "rujukan": "Ahli KOP-2021-001 (Dato' Ahmad Razali)",
+      "tarikhMuatNaik": "2026-01-15",
+      "saizFail": "1.1 MB",
+      "status": "DISAHKAN",
+      "sumberMuatNaik": "Urus Setia Keahlian",
+      "catatanPengesahan": "Salinan IC depan/belakang jelas, disahkan selari dengan pendaftaran JPN."
+    },
+    {
+      "id": "DOK-003",
+      "namaFail": "Minit_ALK_Bil_02_Pengeluaran_Pembiayaan_RM50k.pdf",
+      "kategori": "MINIT_MESYUARAT",
+      "rujukan": "Kelulusan Pengeluaran Duit RM50,000 (Minit ALK 02/2026 Fasal 4.2)",
+      "tarikhMuatNaik": "2026-03-20",
+      "saizFail": "3.8 MB",
+      "status": "DISAHKAN",
+      "sumberMuatNaik": "Setiausaha ALK",
+      "catatanPengesahan": "Memenuhi korum minit mesyuarat ALK untuk kelulusan pengeluaran dana pinjaman ahli.",
+      "jumlahPengeluaranRM": 50000
+    },
+    {
+      "id": "DOK-004",
+      "namaFail": "Invois_Pembekal_Sistem_IT_Inv_8842.pdf",
+      "kategori": "BIL_INVOIS",
+      "rujukan": "Invois Peralatan & Lesen Komputer Pejabat (Invois #INV-8842)",
+      "tarikhMuatNaik": "2026-04-05",
+      "saizFail": "850 KB",
+      "status": "DISAHKAN",
+      "sumberMuatNaik": "Bendahari ALK",
+      "catatanPengesahan": "Invois rasmi syarikat IT, telah dipadankan dengan Pesanan Belian (PO).",
+      "jumlahPengeluaranRM": 4500
+    },
+    {
+      "id": "DOK-005",
+      "namaFail": "Baucar_Pembayaran_PV2026_0102.pdf",
+      "kategori": "BAUCAR_PEMBAYARAN",
+      "rujukan": "Baucar Pembayaran PV-2026-0102 (Perbelanjaan AGM)",
+      "tarikhMuatNaik": "2026-04-12",
+      "saizFail": "1.5 MB",
+      "status": "DISAHKAN",
+      "sumberMuatNaik": "Bendahari ALK",
+      "catatanPengesahan": "Baucar lengkap ditandatangani Pengerusi, Bendahari & Penerima bayaran.",
+      "jumlahPengeluaranRM": 7500
+    },
+    {
+      "id": "DOK-006",
+      "namaFail": "Kad_Pengenalan_Siti_Nurhaliza_Safian.pdf",
+      "kategori": "KAD_PENGENALAN",
+      "rujukan": "Ahli KOP-2021-002 (Siti Nurhaliza)",
+      "tarikhMuatNaik": "2026-05-02",
+      "saizFail": "920 KB",
+      "status": "DISAHKAN",
+      "sumberMuatNaik": "Urus Setia Keahlian",
+      "catatanPengesahan": "Dokumen pengenalan disahkan sah."
+    },
+    {
+      "id": "DOK-007",
+      "namaFail": "Bil_Utiliti_TNB_Sewa_Pejabat_Jun2026.pdf",
+      "kategori": "BIL_INVOIS",
+      "rujukan": "Bil Elektrik Pejabat Koperasi (TNB Jun 2026)",
+      "tarikhMuatNaik": "2026-06-10",
+      "saizFail": "450 KB",
+      "status": "PENDING_SEMAKAN",
+      "sumberMuatNaik": "Pembantu Pentadbiran",
+      "catatanPengesahan": "Menunggu semakan kelulusan Bendahari bagi pembayaran online.",
+      "jumlahPengeluaranRM": 680
+    }
+  ],
+  "posProducts": [
+    {
+      "id": "PRD-001",
+      "kodBar": "9556001100012",
+      "namaProduk": "Buku Nota Log Koperasi SKM A4 (Hardcover)",
+      "kategori": "Alat Tulis & Buku",
+      "hargaKos": 8.5,
+      "hargaJualan": 14,
+      "hargaAhli": 12,
+      "stok": 45,
+      "stokMinima": 10,
+      "unit": "Buku"
+    },
+    {
+      "id": "PRD-002",
+      "kodBar": "9556001100029",
+      "namaProduk": "Pen Gel Hitam Bertauliah SPPKM 0.5mm",
+      "kategori": "Alat Tulis & Buku",
+      "hargaKos": 1.2,
+      "hargaJualan": 3,
+      "hargaAhli": 2.5,
+      "stok": 120,
+      "stokMinima": 20,
+      "unit": "Batang"
+    },
+    {
+      "id": "PRD-003",
+      "kodBar": "9556002200101",
+      "namaProduk": "Kopi Pracampur Madu & Kelulut Co-op Premium (15 Sachet)",
+      "kategori": "Makanan & Minuman",
+      "hargaKos": 16,
+      "hargaJualan": 26,
+      "hargaAhli": 22,
+      "stok": 28,
+      "stokMinima": 8,
+      "unit": "Kotak"
+    },
+    {
+      "id": "PRD-004",
+      "kodBar": "9556002200255",
+      "namaProduk": "Air Mineral Semulajadi Koperasi 500ml",
+      "kategori": "Makanan & Minuman",
+      "hargaKos": 0.6,
+      "hargaJualan": 1.5,
+      "hargaAhli": 1.2,
+      "stok": 180,
+      "stokMinima": 30,
+      "unit": "Botol"
+    },
+    {
+      "id": "PRD-005",
+      "kodBar": "9556003300052",
+      "namaProduk": "Baju Batik Korporat Koperasi Malaysia (Lelaki/Wanita)",
+      "kategori": "Pakaian & Uniform",
+      "hargaKos": 65,
+      "hargaJualan": 110,
+      "hargaAhli": 95,
+      "stok": 15,
+      "stokMinima": 5,
+      "unit": "Helai"
+    },
+    {
+      "id": "PRD-006",
+      "kodBar": "9556004400881",
+      "namaProduk": "Pendrive USB-C 64GB Logo Koperasi",
+      "kategori": "Barangan Komputer",
+      "hargaKos": 18,
+      "hargaJualan": 35,
+      "hargaAhli": 30,
+      "stok": 6,
+      "stokMinima": 8,
+      "unit": "Unit"
+    },
+    {
+      "id": "PRD-007",
+      "kodBar": "9556005500123",
+      "namaProduk": "Minyak Masuk Kelapa Sawit Koperasi 2KG",
+      "kategori": "Produk Keluaran Ahli",
+      "hargaKos": 10.5,
+      "hargaJualan": 15.5,
+      "hargaAhli": 14,
+      "stok": 35,
+      "stokMinima": 10,
+      "unit": "Botol"
+    },
+    {
+      "id": "PRD-008",
+      "kodBar": "9556005500456",
+      "namaProduk": "Madu Lebah Asli Hutan Ranau (500g)",
+      "kategori": "Produk Keluaran Ahli",
+      "hargaKos": 28,
+      "hargaJualan": 48,
+      "hargaAhli": 42,
+      "stok": 12,
+      "stokMinima": 5,
+      "unit": "Botol"
+    }
+  ],
+  "posTransactions": [
+    {
+      "id": "POS-2026-001",
+      "noResit": "RST-POS-20260807-001",
+      "tarikhMasa": "2026-08-07 09:30:15",
+      "isAhli": true,
+      "noAhli": "KOP-2021-002",
+      "namaPelanggan": "Siti Nurhaliza Bt Mohd Safian",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-001",
+          "namaProduk": "Buku Nota Log Koperasi SKM A4 (Hardcover)",
+          "kuantiti": 2,
+          "hargaUnit": 12,
+          "jumlah": 24
+        },
+        {
+          "idProduk": "PRD-003",
+          "namaProduk": "Kopi Pracampur Madu & Kelulut Co-op Premium (15 Sachet)",
+          "kuantiti": 1,
+          "hargaUnit": 22,
+          "jumlah": 22
+        }
+      ],
+      "subtotal": 50,
+      "diskaun": 6,
+      "jumlahKeseluruhan": 46,
+      "caraBayaran": "DUITNOW_QR",
+      "jumlahBayar": 46,
+      "bakiTunai": 0,
+      "juruwang": "Pembantu Kaunter Kedai",
+      "noTransaksiLejar": "TX-2026-002"
+    },
+    {
+      "id": "POS-2026-002",
+      "noResit": "RST-POS-20260807-002",
+      "tarikhMasa": "2026-08-07 11:15:40",
+      "isAhli": false,
+      "namaPelanggan": "Pelanggan Awam",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-004",
+          "namaProduk": "Air Mineral Semulajadi Koperasi 500ml",
+          "kuantiti": 5,
+          "hargaUnit": 1.5,
+          "jumlah": 7.5
+        },
+        {
+          "idProduk": "PRD-002",
+          "namaProduk": "Pen Gel Hitam Bertauliah SPPKM 0.5mm",
+          "kuantiti": 2,
+          "hargaUnit": 3,
+          "jumlah": 6
+        }
+      ],
+      "subtotal": 13.5,
+      "diskaun": 0,
+      "jumlahKeseluruhan": 13.5,
+      "caraBayaran": "TUNAI",
+      "jumlahBayar": 20,
+      "bakiTunai": 6.5,
+      "juruwang": "Pembantu Kaunter Kedai",
+      "noTransaksiLejar": "TX-2026-002"
+    },
+    {
+      "id": "POS-2026-003",
+      "noResit": "RST-POS-20260807-003",
+      "tarikhMasa": "2026-08-07 14:20:00",
+      "isAhli": true,
+      "noAhli": "KOP-2021-001",
+      "namaPelanggan": "Dato' Ahmad Razali Bin Hashim",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-005",
+          "namaProduk": "Baju Batik Korporat Koperasi Malaysia (Lelaki/Wanita)",
+          "kuantiti": 2,
+          "hargaUnit": 95,
+          "jumlah": 190
+        },
+        {
+          "idProduk": "PRD-006",
+          "namaProduk": "Pendrive USB-C 64GB Logo Koperasi",
+          "kuantiti": 1,
+          "hargaUnit": 30,
+          "jumlah": 30
+        }
+      ],
+      "subtotal": 255,
+      "diskaun": 35,
+      "jumlahKeseluruhan": 220,
+      "caraBayaran": "POTONGAN_GAJI_AHLI",
+      "jumlahBayar": 220,
+      "bakiTunai": 0,
+      "juruwang": "Pembantu Kaunter Kedai",
+      "noTransaksiLejar": "TX-2026-003"
+    },
+    {
+      "id": "POS-2026-004",
+      "noResit": "RST-POS-20260806-001",
+      "tarikhMasa": "2026-08-06 08:45:10",
+      "isAhli": false,
+      "namaPelanggan": "Pelanggan Awam",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-004",
+          "namaProduk": "Air Mineral Semulajadi Koperasi 500ml",
+          "kuantiti": 10,
+          "hargaUnit": 1.5,
+          "jumlah": 15
+        },
+        {
+          "idProduk": "PRD-003",
+          "namaProduk": "Kopi Pracampur Madu & Kelulut Co-op Premium (15 Sachet)",
+          "kuantiti": 2,
+          "hargaUnit": 26,
+          "jumlah": 52
+        }
+      ],
+      "subtotal": 67,
+      "diskaun": 0,
+      "jumlahKeseluruhan": 67,
+      "caraBayaran": "TUNAI",
+      "jumlahBayar": 100,
+      "bakiTunai": 33,
+      "juruwang": "Juruwang Koperasi 1",
+      "noTransaksiLejar": "TX-2026-004"
+    },
+    {
+      "id": "POS-2026-005",
+      "noResit": "RST-POS-20260806-002",
+      "tarikhMasa": "2026-08-06 12:10:30",
+      "isAhli": true,
+      "noAhli": "KOP-2021-003",
+      "namaPelanggan": "Muhamad Hafiz Bin Zulkifli",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-007",
+          "namaProduk": "Minyak Masuk Kelapa Sawit Koperasi 2KG",
+          "kuantiti": 3,
+          "hargaUnit": 14,
+          "jumlah": 42
+        },
+        {
+          "idProduk": "PRD-008",
+          "namaProduk": "Madu Lebah Asli Hutan Ranau (500g)",
+          "kuantiti": 1,
+          "hargaUnit": 42,
+          "jumlah": 42
+        }
+      ],
+      "subtotal": 94.5,
+      "diskaun": 10.5,
+      "jumlahKeseluruhan": 84,
+      "caraBayaran": "DUITNOW_QR",
+      "jumlahBayar": 84,
+      "bakiTunai": 0,
+      "juruwang": "Juruwang Koperasi 1",
+      "noTransaksiLejar": "TX-2026-005"
+    },
+    {
+      "id": "POS-2026-006",
+      "noResit": "RST-POS-20260805-001",
+      "tarikhMasa": "2026-08-05 10:05:00",
+      "isAhli": true,
+      "noAhli": "KOP-2021-002",
+      "namaPelanggan": "Siti Nurhaliza Bt Mohd Safian",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-001",
+          "namaProduk": "Buku Nota Log Koperasi SKM A4 (Hardcover)",
+          "kuantiti": 5,
+          "hargaUnit": 12,
+          "jumlah": 60
+        },
+        {
+          "idProduk": "PRD-002",
+          "namaProduk": "Pen Gel Hitam Bertauliah SPPKM 0.5mm",
+          "kuantiti": 10,
+          "hargaUnit": 2.5,
+          "jumlah": 25
+        }
+      ],
+      "subtotal": 100,
+      "diskaun": 15,
+      "jumlahKeseluruhan": 85,
+      "caraBayaran": "KAD",
+      "jumlahBayar": 85,
+      "bakiTunai": 0,
+      "juruwang": "Juruwang Koperasi 2",
+      "noTransaksiLejar": "TX-2026-006"
+    },
+    {
+      "id": "POS-2026-007",
+      "noResit": "RST-POS-20260804-001",
+      "tarikhMasa": "2026-08-04 16:30:20",
+      "isAhli": false,
+      "namaPelanggan": "Pelanggan Awam",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-003",
+          "namaProduk": "Kopi Pracampur Madu & Kelulut Co-op Premium (15 Sachet)",
+          "kuantiti": 3,
+          "hargaUnit": 26,
+          "jumlah": 78
+        },
+        {
+          "idProduk": "PRD-008",
+          "namaProduk": "Madu Lebah Asli Hutan Ranau (500g)",
+          "kuantiti": 2,
+          "hargaUnit": 48,
+          "jumlah": 96
+        }
+      ],
+      "subtotal": 174,
+      "diskaun": 4,
+      "jumlahKeseluruhan": 170,
+      "caraBayaran": "DUITNOW_QR",
+      "jumlahBayar": 170,
+      "bakiTunai": 0,
+      "juruwang": "Juruwang Koperasi 2",
+      "noTransaksiLejar": "TX-2026-007"
+    },
+    {
+      "id": "POS-2026-008",
+      "noResit": "RST-POS-20260803-001",
+      "tarikhMasa": "2026-08-03 15:10:45",
+      "isAhli": true,
+      "noAhli": "KOP-2021-001",
+      "namaPelanggan": "Dato' Ahmad Razali Bin Hashim",
+      "itemSenarai": [
+        {
+          "idProduk": "PRD-005",
+          "namaProduk": "Baju Batik Korporat Koperasi Malaysia (Lelaki/Wanita)",
+          "kuantiti": 1,
+          "hargaUnit": 95,
+          "jumlah": 95
+        },
+        {
+          "idProduk": "PRD-001",
+          "namaProduk": "Buku Nota Log Koperasi SKM A4 (Hardcover)",
+          "kuantiti": 3,
+          "hargaUnit": 12,
+          "jumlah": 36
+        }
+      ],
+      "subtotal": 146,
+      "diskaun": 15,
+      "jumlahKeseluruhan": 131,
+      "caraBayaran": "POTONGAN_GAJI_AHLI",
+      "jumlahBayar": 131,
+      "bakiTunai": 0,
+      "juruwang": "Juruwang Koperasi 1",
+      "noTransaksiLejar": "TX-2026-008"
+    }
+  ],
+  "committees": [
+    {
+      "id": "ALK-001",
+      "noAhli": "KOP-2021-001",
+      "nama": "Dato' Ahmad Razali Bin Zainal",
+      "noKp": "750412-10-5231",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Pengerusi ALK",
+      "portfolio": "Biro Pentadbiran, Strategik & Hubungan SKM",
+      "tarikhLantikan": "2024-06-22",
+      "tempohKhidmat": "Sesi 2024/2027 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "012-3456789",
+      "eMel": "ahmad.razali@koperasi.my",
+      "catatanSKM": "Dipilih semula dalam MAT Ke-15 (Kumpulan Giliran A)",
+      "kumpulanGiliran": "KUMPULAN_A",
+      "tahunGiliranBersara": 2027,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-004",
+      "noAhli": "KOP-2022-012",
+      "nama": "Devadasan a/l Ramasamy",
+      "noKp": "801105-02-5883",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Perniagaan, POS Kedai & Rangkaian Bekalan",
+      "tarikhLantikan": "2024-06-22",
+      "tempohKhidmat": "Sesi 2024/2027 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "017-5544332",
+      "eMel": "deva.ramasamy@yahoo.com",
+      "catatanSKM": "Pengurusan Perniagaan Runcit Koperasi (Kumpulan Giliran A)",
+      "kumpulanGiliran": "KUMPULAN_A",
+      "tahunGiliranBersara": 2027,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-006",
+      "noAhli": "KOP-2021-008",
+      "nama": "Haji Ismail Bin Mohamed",
+      "noKp": "721010-01-5099",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Pembiayaan Murabahah & Halal Assurance",
+      "tarikhLantikan": "2024-06-22",
+      "tempohKhidmat": "Sesi 2024/2027 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "013-7788990",
+      "eMel": "ismail.mohamed@koperasi.my",
+      "catatanSKM": "Panel Penasihat Syariah & Kredit (Kumpulan Giliran A)",
+      "kumpulanGiliran": "KUMPULAN_A",
+      "tahunGiliranBersara": 2027,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-007",
+      "noAhli": "KOP-2022-045",
+      "nama": "Puan Salmah Binti Mansor",
+      "noKp": "840715-08-5522",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Hal Ehwal Wanita, Kebajikan & Khairat Kematian",
+      "tarikhLantikan": "2024-06-22",
+      "tempohKhidmat": "Sesi 2024/2027 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "019-2233441",
+      "eMel": "salmah.mansor@koperasi.my",
+      "catatanSKM": "Pengurusan Tabung Kebajikan Anggota (Kumpulan Giliran A)",
+      "kumpulanGiliran": "KUMPULAN_A",
+      "tahunGiliranBersara": 2027,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-002",
+      "noAhli": "KOP-2021-002",
+      "nama": "Siti Nurhaliza Bt Mohd Safian",
+      "noKp": "880325-08-6142",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Setiausaha ALK",
+      "portfolio": "Biro Pengurusan Keahlian & Rekod Minit MAT",
+      "tarikhLantikan": "2025-05-17",
+      "tempohKhidmat": "Sesi 2025/2028 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "019-8765432",
+      "eMel": "siti.safian@koperasi.my",
+      "catatanSKM": "Dipilih semula dalam MAT Ke-16 (Kumpulan Giliran B)",
+      "kumpulanGiliran": "KUMPULAN_B",
+      "tahunGiliranBersara": 2028,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-005",
+      "noAhli": "KOP-2022-033",
+      "nama": "Zarina Bt Wan Sulaiman",
+      "noKp": "860904-03-5122",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Pendidikan, Latihan & Kursus Wajib SKM",
+      "tarikhLantikan": "2025-05-17",
+      "tempohKhidmat": "Sesi 2025/2028 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "018-9900112",
+      "eMel": "zarina.wan@koperasi.my",
+      "catatanSKM": "Penganjuran Kursus Anggota & ALK (Kumpulan Giliran B)",
+      "kumpulanGiliran": "KUMPULAN_B",
+      "tahunGiliranBersara": 2028,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-008",
+      "noAhli": "KOP-2023-019",
+      "nama": "Mohd Khairul Anuar Bin Yusof",
+      "noKp": "850612-03-5671",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Pemasaran Digital, Portal & Teknologi Maklumat",
+      "tarikhLantikan": "2025-05-17",
+      "tempohKhidmat": "Sesi 2025/2028 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "011-2345678",
+      "eMel": "khairul.anuar@koperasi.my",
+      "catatanSKM": "Lantikan Baharu MAT Ke-16 (Kumpulan Giliran B)",
+      "kumpulanGiliran": "KUMPULAN_B",
+      "tahunGiliranBersara": 2028,
+      "statusGiliran": "LANTIKAN_BAHARU"
+    },
+    {
+      "id": "ALK-009",
+      "noAhli": "KOP-2022-061",
+      "nama": "Arumugam a/l Govindasamy",
+      "noKp": "780824-08-5911",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Pembangunan Aset, Hartanah & Premis Koperasi",
+      "tarikhLantikan": "2025-05-17",
+      "tempohKhidmat": "Sesi 2025/2028 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "014-5566778",
+      "eMel": "arumugam.g@koperasi.my",
+      "catatanSKM": "Pengurusan Fasiliti & Aset Koperasi (Kumpulan Giliran B)",
+      "kumpulanGiliran": "KUMPULAN_B",
+      "tahunGiliranBersara": 2028,
+      "statusGiliran": "LANTIKAN_BAHARU"
+    },
+    {
+      "id": "ALK-003",
+      "noAhli": "KOP-2021-003",
+      "nama": "Tan Kah Hock",
+      "noKp": "820719-07-5319",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Bendahari ALK",
+      "portfolio": "Biro Kewangan, Pelaburan & Belanjawan Koperasi",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2029 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "016-4433221",
+      "eMel": "tan.kahhock@gmail.com",
+      "catatanSKM": "Akauntan Bertauliah MIA - Dipilih Semula MAT Ke-17",
+      "kumpulanGiliran": "KUMPULAN_C",
+      "tahunGiliranBersara": 2029,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-010",
+      "noAhli": "KOP-2021-005",
+      "nama": "Hafiz Bin Sulaiman",
+      "noKp": "810903-14-5229",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Pematuhan Audit Dalaman, Risiko & Tadbir Urus",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2029 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "012-8899001",
+      "eMel": "hafiz.sulaiman@koperasi.my",
+      "catatanSKM": "Penyelaras Pematuhan SKM (Kumpulan Giliran C)",
+      "kumpulanGiliran": "KUMPULAN_C",
+      "tahunGiliranBersara": 2029,
+      "statusGiliran": "DIPILIH_SEMULA"
+    },
+    {
+      "id": "ALK-011",
+      "noAhli": "KOP-2023-042",
+      "nama": "Dr. Nor Aini Binti Hashim",
+      "noKp": "870118-01-5440",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Komunikasi Strategik & Perhubungan Korporat",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2029 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "017-3344112",
+      "eMel": "noraini.hashim@koperasi.my",
+      "catatanSKM": "Lantikan Baharu MAT Ke-17 (Kumpulan Giliran C)",
+      "kumpulanGiliran": "KUMPULAN_C",
+      "tahunGiliranBersara": 2029,
+      "statusGiliran": "LANTIKAN_BAHARU"
+    },
+    {
+      "id": "ALK-012",
+      "noAhli": "KOP-2022-077",
+      "nama": "Che Wan Ahmad Fadzil Bin Wan Othman",
+      "noKp": "791205-03-5117",
+      "kategori": "ALK",
+      "jawatanKoperasi": "Anggota ALK",
+      "portfolio": "Biro Sosio-Ekonomi & Pembangunan Projek Komuniti",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2029 (3 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "013-9988776",
+      "eMel": "chewan.fadzil@koperasi.my",
+      "catatanSKM": "Lantikan Baharu MAT Ke-17 (Kumpulan Giliran C)",
+      "kumpulanGiliran": "KUMPULAN_C",
+      "tahunGiliranBersara": 2029,
+      "statusGiliran": "LANTIKAN_BAHARU"
+    },
+    {
+      "id": "JAD-001",
+      "noAhli": "KOP-2021-015",
+      "nama": "Dr. Roslan Bin Mohamad",
+      "noKp": "790514-08-5432",
+      "kategori": "JAD",
+      "jawatanKoperasi": "Pengerusi JAD",
+      "portfolio": "Audit Kewangan, Penyata SKM & Kawalan Dalaman",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2027 (1 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "019-3344556",
+      "eMel": "roslan.mohamad@koperasi.my",
+      "catatanSKM": "Dilantik di bawah Seksyen 42A Akta Koperasi 1993"
+    },
+    {
+      "id": "JAD-002",
+      "noAhli": "KOP-2022-009",
+      "nama": "Ahmad Fadzil Bin Kassim",
+      "noKp": "831120-10-5881",
+      "kategori": "JAD",
+      "jawatanKoperasi": "Setiausaha JAD",
+      "portfolio": "Audit Operasi Kedai, Inventori & Buku Log",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2027 (1 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "012-6677889",
+      "eMel": "fadzil.kassim@koperasi.my",
+      "catatanSKM": "Pemeriksa Akaun Dalaman Bertauliah"
+    },
+    {
+      "id": "JAD-003",
+      "noAhli": "KOP-2023-011",
+      "nama": "Cik Kamala a/p Krishnan",
+      "noKp": "890208-05-5220",
+      "kategori": "JAD",
+      "jawatanKoperasi": "Anggota JAD",
+      "portfolio": "Audit Pembiayaan Ahli & Terbitan Syer",
+      "tarikhLantikan": "2026-04-25",
+      "tempohKhidmat": "Sesi 2026/2027 (1 Tahun)",
+      "status": "AKTIF",
+      "noTelefon": "017-9988112",
+      "eMel": "kamala.krishnan@koperasi.my",
+      "catatanSKM": "Laporan Audit Suku Tahun ke ALK"
+    }
+  ],
+  "yearlyRecords": [
+    {
+      "tahun": 2023,
+      "jumlahHasil": 245800,
+      "jumlahBelanja": 168400,
+      "untungBersih": 77400,
+      "kwrs12": 9288,
+      "kwpk3": 2322,
+      "kwp1": 774,
+      "dividenAgihanRM": 15000,
+      "peratusDividen": 6.5,
+      "totalAset": 485000,
+      "totalLiabiliti": 195000,
+      "totalEkuiti": 290000,
+      "modalSyerTerkumpul": 210000,
+      "bilanganAhli": 85,
+      "statusAuditSKM": "DISAHKAN_SKM",
+      "juruauditBertauliah": "Tetuan Azman & Co. (Juru Audit Bertauliah SKM No. JSKM/2023/1088)",
+      "catatanSKM": "Laporan Audit Kewangan Disahkan Bersih Tanpa Teguran (Unqualified Audit Opinion)"
+    },
+    {
+      "tahun": 2024,
+      "jumlahHasil": 312500,
+      "jumlahBelanja": 210200,
+      "untungBersih": 102300,
+      "kwrs12": 12276,
+      "kwpk3": 3069,
+      "kwp1": 1023,
+      "dividenAgihanRM": 18200,
+      "peratusDividen": 7,
+      "totalAset": 610000,
+      "totalLiabiliti": 240000,
+      "totalEkuiti": 370000,
+      "modalSyerTerkumpul": 245000,
+      "bilanganAhli": 112,
+      "statusAuditSKM": "DISAHKAN_SKM",
+      "juruauditBertauliah": "Tetuan Deloitte & Partners SKM (No. JSKM/2024/0411)",
+      "catatanSKM": "Akaun Teraudit Disahkan dan Pembayaran Dividen 7.0% Diluluskan Mesyuarat Agung Tahunan ke-14"
+    },
+    {
+      "tahun": 2025,
+      "jumlahHasil": 388900,
+      "jumlahBelanja": 254100,
+      "untungBersih": 134800,
+      "kwrs12": 16176,
+      "kwpk3": 4044,
+      "kwp1": 1348,
+      "dividenAgihanRM": 20100,
+      "peratusDividen": 7.5,
+      "totalAset": 742000,
+      "totalLiabiliti": 275000,
+      "totalEkuiti": 467000,
+      "modalSyerTerkumpul": 268000,
+      "bilanganAhli": 138,
+      "statusAuditSKM": "DISAHKAN_SKM",
+      "juruauditBertauliah": "Tetuan Hisham & Associates (No. JSKM/2025/0892)",
+      "catatanSKM": "Laporan Audit Diterima oleh SKM. Tiada Ketidakpatuhan Tatacara Perakaunan."
+    },
+    {
+      "tahun": 2026,
+      "jumlahHasil": 435000,
+      "jumlahBelanja": 280000,
+      "untungBersih": 155000,
+      "kwrs12": 18600,
+      "kwpk3": 4650,
+      "kwp1": 1550,
+      "dividenAgihanRM": 22500,
+      "peratusDividen": 7.5,
+      "totalAset": 850000,
+      "totalLiabiliti": 310000,
+      "totalEkuiti": 540000,
+      "modalSyerTerkumpul": 300000,
+      "bilanganAhli": 150,
+      "statusAuditSKM": "DALAM_PROSES",
+      "juruauditBertauliah": "Jawatankuasa Audit Dalaman (JAD) & Panel Audit SKM",
+      "catatanSKM": "Anggaran Bagi Tahun Kewangan Semasa (Ogos 2026). Sedia Untuk Audit Penutup."
+    }
+  ],
+  "logs": [
+    {
+      "id": "LOG-2026-0807-001",
+      "tarikhMasa": "2026-08-07 10:15:32",
+      "kategori": "AHLI",
+      "tindakan": "Permohonan Ahli Baru Diterima",
+      "deskripsi": "Muhammad Azam Bin Khairuddin (KOP-2024-001) mendaftar sebagai ahli koperasi. Menunggu kelulusan ALK.",
+      "pengguna": "Setiausaha ALK (Siti Nurhaliza)",
+      "noAhli": "KOP-2024-001",
+      "namaAhli": "Muhammad Azam Bin Khairuddin",
+      "status": "INFO",
+      "jumlahRM": 510,
+      "ipAlamat": "192.168.1.42"
+    },
+    {
+      "id": "LOG-2026-0806-002",
+      "tarikhMasa": "2026-08-06 15:45:10",
+      "kategori": "PEMBIAYAAN",
+      "tindakan": "Kelulusan Pembiayaan Murabahah",
+      "deskripsi": "Permohonan pembiayaan Murabahah Barangan bernilai RM15,000.00 bagi Siti Nurhaliza Bt Mohd Safian telah diluluskan.",
+      "pengguna": "Pengerusi ALK (Dato' Ahmad Razali)",
+      "noAhli": "KOP-2021-002",
+      "namaAhli": "Siti Nurhaliza Bt Mohd Safian",
+      "status": "BERJAYA",
+      "jumlahRM": 15000,
+      "ipAlamat": "10.0.4.18"
+    },
+    {
+      "id": "LOG-2026-0805-003",
+      "tarikhMasa": "2026-08-05 09:30:00",
+      "kategori": "POTONGAN_GAJI",
+      "tindakan": "Posting Bulanan Potongan Gaji Majikan",
+      "deskripsi": "Posting berjadual potongan gaji bulanan Julai/Ogos diposting ke Lejar Am. Jumlah potongan RM18,450.00.",
+      "pengguna": "Sistem Pemprosesan Automatik BPA",
+      "status": "BERJAYA",
+      "jumlahRM": 18450,
+      "ipAlamat": "172.16.0.5"
+    },
+    {
+      "id": "LOG-2026-0804-004",
+      "tarikhMasa": "2026-08-04 14:12:05",
+      "kategori": "PERAKAUNAN",
+      "tindakan": "Pelarasan Jurnal Am SKM",
+      "deskripsi": "Jurnal pelarasan bayaran sewa pejabat & utiliti bernilai RM1,800.00 diposting (Debit: 5040, Kredit: 1010).",
+      "pengguna": "Bendahari (Tan Kah Hock)",
+      "status": "BERJAYA",
+      "jumlahRM": 1800,
+      "ipAlamat": "192.168.1.15"
+    },
+    {
+      "id": "LOG-2026-0802-005",
+      "tarikhMasa": "2026-08-02 11:00:22",
+      "kategori": "DIVIDEN",
+      "tindakan": "Tetapan Kadar Cadangan Dividen 7.5%",
+      "deskripsi": "ALK menetapkan cadangan dividen syer 7.5% untuk kelulusan Mesyuarat Agung Tahunan (AGM) mengikut Seksyen 57.",
+      "pengguna": "Ahli Lembaga Koperasi (ALK)",
+      "status": "INFO",
+      "jumlahRM": 20100,
+      "ipAlamat": "10.0.4.18"
+    },
+    {
+      "id": "LOG-2026-0801-006",
+      "tarikhMasa": "2026-08-01 16:20:40",
+      "kategori": "SISTEM",
+      "tindakan": "Pengesahan Integriti Log Audit SKM",
+      "deskripsi": "Semakan integriti data imbangan duga dan rekod log audit disahkan seimbang tanpa sebarang selisih.",
+      "pengguna": "Pengurus Audit SKM",
+      "status": "BERJAYA",
+      "ipAlamat": "127.0.0.1"
+    },
+    {
+      "id": "LOG-SIG-2026-0620-001",
+      "tarikhMasa": "2026-06-20 14:15:00",
+      "kategori": "MESYUARAT",
+      "tindakan": "Tandatangan Digital Minit Mesyuarat",
+      "deskripsi": "Dato' Ahmad Razali Bin Othman (Pengerusi ALK) memetrik tandatangan digital bagi Minit Mesyuarat \"Mesyuarat Agung Tahunan (AGM) Ke-15\". Hash Auditan SHA-256: SHA256: A82F-9C1D-VERTTERE-AGM15-01.",
+      "pengguna": "Dato' Ahmad Razali Bin Othman",
+      "namaAhli": "Dato' Ahmad Razali Bin Othman",
+      "status": "BERJAYA",
+      "ipAlamat": "192.168.1.102"
+    },
+    {
+      "id": "LOG-SIG-2026-0620-002",
+      "tarikhMasa": "2026-06-20 14:30:10",
+      "kategori": "MESYUARAT",
+      "tindakan": "Tandatangan Digital Minit Mesyuarat",
+      "deskripsi": "Kamal Bin Ariffin (Penentusah Minit #1 - Lantikan AGM) memetrik tandatangan digital bagi Minit Mesyuarat \"Mesyuarat Agung Tahunan (AGM) Ke-15\". Hash Auditan SHA-256: SHA256: 3F91-7B82-VERTTERE-AGM15-02.",
+      "pengguna": "Kamal Bin Ariffin",
+      "namaAhli": "Kamal Bin Ariffin",
+      "status": "BERJAYA",
+      "ipAlamat": "192.168.1.115"
+    }
+  ],
+  "meta": {
+    "koperasiName": "Koperasi Warga Berdaya Malaysia Berhad",
+    "registrationNo": "SKM-W-4921/2018",
+    "lastUpdated": "2026-08-20T08:57:46.665Z",
+    "version": "2.5.0-PRO"
+  }
+}
