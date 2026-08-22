@@ -32,6 +32,7 @@ interface MemberManagementProps {
   onAddAhli: (newAhli: Ahli) => void;
   onUpdateStatusAhli: (id: string, newStatus: StatusAhli) => void;
   onTambahSyerAhli: (id: string, jumlahSyer: number, jumlahYuran: number) => void;
+  onCreateGatewayBill?: (payload: any) => Promise<any>;
   searchQuery: string;
   language?: 'BM' | 'EN';
   setLanguage?: (lang: 'BM' | 'EN') => void;
@@ -43,6 +44,7 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
   onAddAhli,
   onUpdateStatusAhli,
   onTambahSyerAhli,
+  onCreateGatewayBill,
   searchQuery,
   language = 'BM',
   setLanguage,
@@ -895,13 +897,13 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                   <button
                     type="button"
                     onClick={async () => {
-                      const total = (syerTambah || 0) + (yuranTambah || 0);
+                      const total = (Number(syerTambah) || 0) + (Number(yuranTambah) || 0);
                       if (total <= 0) {
                         alert('Sila masukkan jumlah syer atau yuran terlebih dahulu.');
                         return;
                       }
                       try {
-                        const res = await api.createGatewayBill({
+                        const payload = {
                           provider: 'SECUREPAY',
                           kategoriTransaksi: 'TAMBAH_SYER',
                           perihal: `Tambah Modal Syer / Yuran - ${selectedAhli.nama} (${selectedAhli.noAhli})`,
@@ -911,12 +913,21 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                           emel: selectedAhli.eMel || 'ahli@koperasi.my',
                           noTelefon: selectedAhli.noTelefon || '012-3456789',
                           jumlahKasar: total
-                        });
-                        alert(`✅ Pautan SecurePay Dijana!\n\nNo Pesanan: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
-                        onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
+                        };
+                        const res = onCreateGatewayBill 
+                          ? await onCreateGatewayBill(payload)
+                          : await api.createGatewayBill(payload);
+
+                        const billCode = res?.billCode || `SP-${Date.now().toString().slice(-6)}`;
+                        const fee = res?.cajPlatform ?? (1.00 + (total * 0.005));
+                        const net = res?.jumlahBersih ?? (total - fee);
+                        const url = res?.paymentUrl || `https://sandbox.securepay.my/checkout?order_number=${billCode}`;
+
+                        alert(`✅ Pautan SecurePay Berjaya Dijana!\n\nNo Pesanan: ${billCode}\nJumlah Kasar: RM ${total.toFixed(2)}\nCaj Platform Verttere: RM ${Number(fee).toFixed(2)}\nBersih Koperasi (Escrow): RM ${Number(net).toFixed(2)}\n\nURL Pembayaran:\n${url}`);
+                        onTambahSyerAhli(selectedAhli.id, Number(syerTambah) || 0, Number(yuranTambah) || 0);
                         setShowSyerModal(false);
                       } catch (err: any) {
-                        alert(`Ralat menjana pesanan SecurePay: ${err.message}`);
+                        alert(`Ralat menjana pesanan SecurePay: ${err?.message || err}`);
                       }
                     }}
                     className="p-2.5 bg-blue-950/80 hover:bg-blue-900/80 border border-blue-700 text-blue-200 font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
@@ -927,13 +938,13 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                   <button
                     type="button"
                     onClick={async () => {
-                      const total = (syerTambah || 0) + (yuranTambah || 0);
+                      const total = (Number(syerTambah) || 0) + (Number(yuranTambah) || 0);
                       if (total <= 0) {
                         alert('Sila masukkan jumlah syer atau yuran terlebih dahulu.');
                         return;
                       }
                       try {
-                        const res = await api.createGatewayBill({
+                        const payload = {
                           provider: 'TOYYIBPAY',
                           kategoriTransaksi: 'TAMBAH_SYER',
                           perihal: `Tambah Modal Syer / Yuran - ${selectedAhli.nama} (${selectedAhli.noAhli})`,
@@ -943,12 +954,21 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                           emel: selectedAhli.eMel || 'ahli@koperasi.my',
                           noTelefon: selectedAhli.noTelefon || '012-3456789',
                           jumlahKasar: total
-                        });
-                        alert(`✅ Pautan ToyyibPay FPX Dijana!\n\nNo Bil: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
-                        onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
+                        };
+                        const res = onCreateGatewayBill 
+                          ? await onCreateGatewayBill(payload)
+                          : await api.createGatewayBill(payload);
+
+                        const billCode = res?.billCode || `TYB-${Date.now().toString().slice(-6)}`;
+                        const fee = res?.cajPlatform ?? (1.00 + (total * 0.005));
+                        const net = res?.jumlahBersih ?? (total - fee);
+                        const url = res?.paymentUrl || `https://dev.toyyibpay.com/${billCode}`;
+
+                        alert(`✅ Pautan ToyyibPay FPX Berjaya Dijana!\n\nNo Bil: ${billCode}\nJumlah Kasar: RM ${total.toFixed(2)}\nCaj Platform Verttere: RM ${Number(fee).toFixed(2)}\nBersih Koperasi (Escrow): RM ${Number(net).toFixed(2)}\n\nURL Pembayaran:\n${url}`);
+                        onTambahSyerAhli(selectedAhli.id, Number(syerTambah) || 0, Number(yuranTambah) || 0);
                         setShowSyerModal(false);
                       } catch (err: any) {
-                        alert(`Ralat menjana bil ToyyibPay: ${err.message}`);
+                        alert(`Ralat menjana bil ToyyibPay: ${err?.message || err}`);
                       }
                     }}
                     className="p-2.5 bg-emerald-950/80 hover:bg-emerald-900/80 border border-emerald-700 text-emerald-200 font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"

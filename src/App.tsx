@@ -1145,6 +1145,7 @@ export default function App() {
             onAddAhli={handleAddAhli}
             onUpdateStatusAhli={handleUpdateStatusAhli}
             onTambahSyerAhli={handleTambahSyerAhli}
+            onCreateGatewayBill={handleCreateGatewayBill}
             searchQuery={searchQuery}
             language={language}
             setLanguage={setLanguage}
