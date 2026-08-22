@@ -2756,22 +2756,32 @@ export const INITIAL_E_INVOICES: EInvoisLHDN[] = [
 ];
 
 // -------------------------------------------------------------
-// Initial Data: Verttere Solutions Payment Gateway & Escrow Settlement (SecurePay)
+// Initial Data: Verttere Solutions Payment Gateway & Escrow Settlement (Dual Gateway: SecurePay & ToyyibPay)
 // -------------------------------------------------------------
 
 export const INITIAL_PAYMENT_GATEWAY_CONFIG: PaymentGatewayConfig = {
-  provider: 'SECUREPAY',
+  provider: 'BOTH',
+  activeProvider: 'BOTH',
+  // SecurePay Credentials
+  securePayMerchantUid: '7f4a9b2c-8821-49fa-91b3-verttere01',
+  securePayAuthToken: 'sec_auth_verttere_live_948192048102941',
+  securePayChecksumToken: 'chk_verttere_sha256_secpay_883019',
+  // ToyyibPay Credentials
+  toyyibUserSecretKey: 'sec_verttere_live_948192048102941',
+  toyyibCategoryCode: 'cat_verttere_coop_pay_01',
+  // Legacy aliases
   merchantUid: '7f4a9b2c-8821-49fa-91b3-verttere01',
   authToken: 'sec_auth_verttere_live_948192048102941',
   checksumToken: 'chk_verttere_sha256_secpay_883019',
-  userSecretKey: 'sec_auth_verttere_live_948192048102941',
+  userSecretKey: 'sec_verttere_live_948192048102941',
   categoryCode: 'cat_verttere_coop_pay_01',
+  // Platform & Fee Structure
   platformFeeType: 'HYBRID',
-  fixedFeeRM: 1.00, // SecurePay Direct Transaction Fee RM 1.00
+  fixedFeeRM: 1.00, // Gateway Transaction Fee RM 1.00
   percentageFee: 0.50, // Verttere SaaS Platform Escrow Fee 0.5%
   isSandbox: true,
   settlementCycle: 'T+1',
-  namaPlatform: 'Verttere Solutions Sdn Bhd (FinTech SecurePay Aggregator)',
+  namaPlatform: 'Verttere Solutions Sdn Bhd (FinTech Payment Aggregator)',
   akaunBankPlatform: '5621-8849-1029 (Maybank Islamic)',
   namaBankPlatform: 'Maybank Berhad'
 };
@@ -2790,17 +2800,18 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     emel: 'faiz.rosli@gmail.com',
     noTelefon: '013-4455667',
     jumlahKasar: 500.00,
-    cajPlatformVerttere: 3.50, // RM1.00 SecurePay + RM2.50 (0.5%)
+    cajPlatformVerttere: 3.50, // RM1.00 Gateway + RM2.50 (0.5%)
     jumlahBersihKoperasi: 496.50,
     status: 'BERJAYA',
     tarikhMasa: '2026-02-18 09:30:15',
     tarikhSelesai: '2026-02-18 09:31:02',
+    gatewayProvider: 'SECUREPAY',
     kaedahBayaran: 'SECUREPAY',
     transaksiBankId: 'SP-MBB-20260218-0912'
   },
   {
     id: 'TX-GW-2026-002',
-    billCode: 'SP-891024-02',
+    billCode: 'TYB-891024-02',
     kategoriTransaksi: 'POS_STORE',
     perihal: 'Pembelian Barangan Runcit & Baja Koperasi',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2816,8 +2827,9 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     status: 'BERJAYA',
     tarikhMasa: '2026-02-19 11:45:20',
     tarikhSelesai: '2026-02-19 11:46:00',
-    kaedahBayaran: 'SECUREPAY',
-    transaksiBankId: 'SP-CIMB-20260219-4819'
+    gatewayProvider: 'TOYYIBPAY',
+    kaedahBayaran: 'TOYYIBPAY',
+    transaksiBankId: 'TYB-CIMB-20260219-4819'
   },
   {
     id: 'TX-GW-2026-003',
@@ -2837,12 +2849,13 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     status: 'BERJAYA',
     tarikhMasa: '2026-02-20 14:10:00',
     tarikhSelesai: '2026-02-20 14:10:45',
+    gatewayProvider: 'SECUREPAY',
     kaedahBayaran: 'SECUREPAY',
     transaksiBankId: 'SP-RHB-20260220-9921'
   },
   {
     id: 'TX-GW-2026-004',
-    billCode: 'SP-891024-04',
+    billCode: 'TYB-891024-04',
     kategoriTransaksi: 'TAMBAH_SYER',
     perihal: 'Pendaftaran Ahli Baru & Syer Minimum RM100',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2856,7 +2869,8 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     jumlahBersihKoperasi: 128.35,
     status: 'MENUNGGU',
     tarikhMasa: '2026-02-21 16:20:00',
-    kaedahBayaran: 'SECUREPAY'
+    gatewayProvider: 'TOYYIBPAY',
+    kaedahBayaran: 'TOYYIBPAY'
   },
   {
     id: 'TX-GW-2026-005',
@@ -2877,6 +2891,7 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     tarikhMasa: '2026-02-15 10:00:00',
     tarikhSelesai: '2026-02-15 10:01:20',
     noBatchSettlement: 'SETTLE-2026-B01',
+    gatewayProvider: 'SECUREPAY',
     kaedahBayaran: 'SECUREPAY',
     transaksiBankId: 'SP-BIMB-20260215-3819'
   }

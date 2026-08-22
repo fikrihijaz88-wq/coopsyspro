@@ -884,42 +884,78 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                 />
               </div>
 
-              {/* SecurePay Online Gateway Banner */}
-              <div className="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/80 flex items-center justify-between">
-                <div>
-                  <div className="text-[11px] font-bold text-indigo-300">Bayar Online via SecurePay</div>
-                  <div className="text-[10px] text-indigo-400/80">FPX, DuitNow QR & Kad (Transit Escrow)</div>
+              {/* Online Payment Gateway Banners (Dual Provider) */}
+              <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
+                <div className="text-[11px] font-bold text-slate-300 flex items-center justify-between">
+                  <span>Pilihan Bayaran Online (Transit Escrow):</span>
+                  <span className="text-[10px] text-indigo-400">Auto-Resit & Resit Rasmi</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    const total = (syerTambah || 0) + (yuranTambah || 0);
-                    if (total <= 0) {
-                      alert('Sila masukkan jumlah syer atau yuran terlebih dahulu.');
-                      return;
-                    }
-                    try {
-                      const res = await api.createGatewayBill({
-                        kategoriTransaksi: 'TAMBAH_SYER',
-                        perihal: `Tambah Modal Syer / Yuran - ${selectedAhli.nama} (${selectedAhli.noAhli})`,
-                        namaPembayar: selectedAhli.nama,
-                        noKP: selectedAhli.noKp,
-                        noAhli: selectedAhli.noAhli,
-                        emel: selectedAhli.eMel || 'ahli@koperasi.my',
-                        noTelefon: selectedAhli.noTelefon || '012-3456789',
-                        jumlahKasar: total
-                      });
-                      alert(`✅ Pautan SecurePay Dijana!\n\nNo Pesanan: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
-                      onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
-                      setShowSyerModal(false);
-                    } catch (err: any) {
-                      alert(`Ralat menjana pesanan SecurePay: ${err.message}`);
-                    }
-                  }}
-                  className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] rounded-lg shadow transition-all flex items-center gap-1 cursor-pointer"
-                >
-                  <CreditCard className="w-3.5 h-3.5" /> Bayar SecurePay
-                </button>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const total = (syerTambah || 0) + (yuranTambah || 0);
+                      if (total <= 0) {
+                        alert('Sila masukkan jumlah syer atau yuran terlebih dahulu.');
+                        return;
+                      }
+                      try {
+                        const res = await api.createGatewayBill({
+                          provider: 'SECUREPAY',
+                          kategoriTransaksi: 'TAMBAH_SYER',
+                          perihal: `Tambah Modal Syer / Yuran - ${selectedAhli.nama} (${selectedAhli.noAhli})`,
+                          namaPembayar: selectedAhli.nama,
+                          noKP: selectedAhli.noKp,
+                          noAhli: selectedAhli.noAhli,
+                          emel: selectedAhli.eMel || 'ahli@koperasi.my',
+                          noTelefon: selectedAhli.noTelefon || '012-3456789',
+                          jumlahKasar: total
+                        });
+                        alert(`✅ Pautan SecurePay Dijana!\n\nNo Pesanan: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
+                        onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
+                        setShowSyerModal(false);
+                      } catch (err: any) {
+                        alert(`Ralat menjana pesanan SecurePay: ${err.message}`);
+                      }
+                    }}
+                    className="p-2.5 bg-blue-950/80 hover:bg-blue-900/80 border border-blue-700 text-blue-200 font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                  >
+                    <CreditCard className="w-3.5 h-3.5 text-blue-400" /> Bayar SecurePay (FPX/Kad/QR)
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const total = (syerTambah || 0) + (yuranTambah || 0);
+                      if (total <= 0) {
+                        alert('Sila masukkan jumlah syer atau yuran terlebih dahulu.');
+                        return;
+                      }
+                      try {
+                        const res = await api.createGatewayBill({
+                          provider: 'TOYYIBPAY',
+                          kategoriTransaksi: 'TAMBAH_SYER',
+                          perihal: `Tambah Modal Syer / Yuran - ${selectedAhli.nama} (${selectedAhli.noAhli})`,
+                          namaPembayar: selectedAhli.nama,
+                          noKP: selectedAhli.noKp,
+                          noAhli: selectedAhli.noAhli,
+                          emel: selectedAhli.eMel || 'ahli@koperasi.my',
+                          noTelefon: selectedAhli.noTelefon || '012-3456789',
+                          jumlahKasar: total
+                        });
+                        alert(`✅ Pautan ToyyibPay FPX Dijana!\n\nNo Bil: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
+                        onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
+                        setShowSyerModal(false);
+                      } catch (err: any) {
+                        alert(`Ralat menjana bil ToyyibPay: ${err.message}`);
+                      }
+                    }}
+                    className="p-2.5 bg-emerald-950/80 hover:bg-emerald-900/80 border border-emerald-700 text-emerald-200 font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                  >
+                    <CreditCard className="w-3.5 h-3.5 text-emerald-400" /> Bayar ToyyibPay (FPX)
+                  </button>
+                </div>
               </div>
 
               <div className="flex justify-end gap-2 pt-2">

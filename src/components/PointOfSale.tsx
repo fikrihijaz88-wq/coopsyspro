@@ -954,27 +954,53 @@ export const PointOfSale: React.FC<PointOfSaleProps> = ({
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('SECUREPAY')}
-                    className={`col-span-2 p-2 rounded-xl border text-center font-bold flex items-center justify-center gap-1.5 transition-all ${
+                    className={`p-2 rounded-xl border text-center font-bold flex items-center justify-center gap-1.5 transition-all ${
                       paymentMethod === 'SECUREPAY'
-                        ? 'bg-indigo-950 border-indigo-500 text-indigo-300 shadow-sm'
+                        ? 'bg-blue-950 border-blue-500 text-blue-300 shadow-sm'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    <Building2 className="w-4 h-4 text-indigo-400" />
-                    <span>Bayar Online (SecurePay FPX/Kad/QR)</span>
+                    <Building2 className="w-3.5 h-3.5 text-blue-400" />
+                    <span className="text-[11px] truncate">SecurePay (FPX/Kad)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('TOYYIBPAY')}
+                    className={`p-2 rounded-xl border text-center font-bold flex items-center justify-center gap-1.5 transition-all ${
+                      paymentMethod === 'TOYYIBPAY'
+                        ? 'bg-emerald-950 border-emerald-500 text-emerald-300 shadow-sm'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-[11px] truncate">ToyyibPay (FPX)</span>
                   </button>
                 </div>
               </div>
 
               {/* SecurePay Summary Info */}
               {paymentMethod === 'SECUREPAY' && (
-                <div className="bg-indigo-950/60 border border-indigo-800/80 p-3 rounded-xl space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between text-indigo-200 font-bold">
+                <div className="bg-blue-950/60 border border-blue-800/80 p-3 rounded-xl space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between text-blue-200 font-bold">
                     <span>Gerbang Bayaran SecurePay</span>
-                    <span className="text-[10px] bg-indigo-900 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-700">Automatik</span>
+                    <span className="text-[10px] bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full border border-blue-700">Automatik</span>
                   </div>
                   <p className="text-[11px] text-slate-300">
                     Pelanggan boleh membayar melalui FPX, Kad Debit/Kredit atau DuitNow QR. Duit ditahan di akaun transit Verttere dan dilepaskan ke akaun bank koperasi mengikut kitaran payout.
+                  </p>
+                </div>
+              )}
+
+              {/* ToyyibPay Summary Info */}
+              {paymentMethod === 'TOYYIBPAY' && (
+                <div className="bg-emerald-950/60 border border-emerald-800/80 p-3 rounded-xl space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between text-emerald-200 font-bold">
+                    <span>Gerbang Bayaran ToyyibPay FPX</span>
+                    <span className="text-[10px] bg-emerald-900 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-700">Automatik</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    Pelanggan akan membayar melalui perbankan internet FPX Direct. Duit ditahan di akaun transit Verttere dan dilepaskan ke akaun bank koperasi mengikut kitaran payout.
                   </p>
                 </div>
               )}

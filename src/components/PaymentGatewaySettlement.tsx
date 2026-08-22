@@ -69,6 +69,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
   const [successToast, setSuccessToast] = useState<string | null>(null);
 
   // Simulator State
+  const [simProvider, setSimProvider] = useState<'SECUREPAY' | 'TOYYIBPAY'>('SECUREPAY');
   const [simKategori, setSimKategori] = useState<'TAMBAH_SYER' | 'POS_STORE' | 'SIMPANAN_KHAS' | 'BAYARAN_PEMBIAYAAN'>('TAMBAH_SYER');
   const [simSelectedAhli, setSimSelectedAhli] = useState<string>(ahliList[0]?.noAhli || 'KOP-2022-005');
   const [simNama, setSimNama] = useState<string>(ahliList[0]?.nama || 'Ahmad Faiz Bin Rosli');
@@ -126,8 +127,9 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
     try {
       const selected = ahliList.find(a => a.noAhli === simSelectedAhli);
       const res = await onCreateBill({
+        provider: simProvider,
         kategoriTransaksi: simKategori,
-        perihal: `Bayaran ${simKategori.replace('_', ' ')} Online FPX`,
+        perihal: `Bayaran ${simKategori.replace('_', ' ')} via ${simProvider === 'TOYYIBPAY' ? 'ToyyibPay FPX' : 'SecurePay'}`,
         namaPembayar: selected ? selected.nama : simNama,
         noKP: selected ? selected.noKp : simNoKP,
         noAhli: simSelectedAhli,
@@ -137,7 +139,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
       });
 
       setSimGeneratedBill(res);
-      showToast(`Bil ${res.billCode} berjaya dijana melalui API ToyyibPay!`);
+      showToast(`Pesanan ${res.billCode} (${res.provider || simProvider}) berjaya dijana!`);
     } catch (err: any) {
       alert(`Ralat menjana bil: ${err.message}`);
     } finally {
@@ -216,14 +218,14 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               </span>
               <span className="inline-flex items-center gap-1 bg-emerald-950/80 text-emerald-300 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-800">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                SecurePay Gateway {gatewayConfig.isSandbox ? '(Sandbox Mode)' : '(Live Production)'}
+                {gatewayConfig.activeProvider === 'BOTH' ? 'SecurePay + ToyyibPay' : gatewayConfig.activeProvider || 'SECUREPAY'} ({gatewayConfig.isSandbox ? 'Sandbox Mode' : 'Live Mode'})
               </span>
             </div>
             <h1 className="text-2xl lg:text-3xl font-black text-white tracking-tight">
-              {isEN ? 'Payment Gateway & Escrow Settlement (SecurePay)' : 'Gerbang Bayaran SecurePay & Dana Escrow'}
+              {isEN ? 'Payment Gateway & Escrow Settlement (SecurePay & ToyyibPay)' : 'Gerbang Pembayaran & Pengurusan Escrow'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl mt-1">
-              Pemudah cara kutipan bayaran online syer, yuran, dan jualan POS melalui SecurePay (FPX, DuitNow QR & Kad) dengan penahanan dana transit dan pelepasan berkala (*payout*) ke akaun bank koperasi.
+              Kutipan automatik bayaran syer, yuran, dan POS melalui SecurePay (FPX, DuitNow QR, Kad) & ToyyibPay dengan penahanan dana transit dan pelepasan berkala (*payout*) ke akaun bank koperasi.
             </p>
           </div>
 
@@ -246,7 +248,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-xs flex items-center gap-2 shadow-lg shadow-indigo-900/30 transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
-              {isEN ? 'Test SecurePay Simulator' : 'Uji Simulasi SecurePay'}
+              {isEN ? 'Test Gateway Simulator' : 'Uji Simulasi Gateway'}
             </button>
           </div>
         </div>
@@ -457,7 +459,16 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
                       <tr key={tx.id} className="hover:bg-slate-800/40 transition-colors">
                         
                         <td className="py-3.5 px-4">
-                          <div className="font-mono font-bold text-indigo-400">{tx.billCode}</div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-mono font-bold text-indigo-400">{tx.billCode}</span>
+                            <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
+                              (tx.gatewayProvider === 'TOYYIBPAY' || tx.billCode.startsWith('TYB'))
+                                ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                                : 'bg-blue-950 text-blue-300 border border-blue-800'
+                            }`}>
+                              {(tx.gatewayProvider === 'TOYYIBPAY' || tx.billCode.startsWith('TYB')) ? 'ToyyibPay' : 'SecurePay'}
+                            </span>
+                          </div>
                           <div className="text-[10px] text-slate-500">{tx.tarikhMasa}</div>
                         </td>
 
@@ -634,14 +645,42 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
             <div>
               <span className="text-[10px] bg-indigo-950 text-indigo-300 font-bold px-2.5 py-0.5 rounded-full border border-indigo-800 uppercase tracking-wider">
-                Simulasi SecurePay Sandbox
+                Simulasi Gateway Sandbox
               </span>
               <h3 className="text-lg font-black text-white mt-1">Uji Aliran Bayaran Ahli ke Gateway</h3>
-              <p className="text-xs text-slate-400">Pilih anggota dan jumlah bayaran untuk menguji pengiraan caj automatik dan penjanaan pesanan SecurePay.</p>
+              <p className="text-xs text-slate-400">Pilih penyedia (SecurePay atau ToyyibPay), anggota, dan jumlah bayaran untuk menguji pengiraan caj dan pesanan.</p>
             </div>
 
             <form onSubmit={handleSimulateCreateBill} className="space-y-4">
               
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Pilih Penyedia Gerbang (Gateway Provider):</label>
+                <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setSimProvider('SECUREPAY')}
+                    className={`p-2.5 rounded-xl border text-center transition-all ${
+                      simProvider === 'SECUREPAY'
+                        ? 'bg-blue-950 border-blue-500 text-blue-300 shadow-sm'
+                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                    }`}
+                  >
+                    🔵 SecurePay (FPX, QR & Kad)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSimProvider('TOYYIBPAY')}
+                    className={`p-2.5 rounded-xl border text-center transition-all ${
+                      simProvider === 'TOYYIBPAY'
+                        ? 'bg-emerald-950 border-emerald-500 text-emerald-300 shadow-sm'
+                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                    }`}
+                  >
+                    🟢 ToyyibPay (FPX Direct)
+                  </button>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-slate-300 mb-1">Pilih Kategori Pembayaran:</label>
                 <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
@@ -799,106 +838,196 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
       {/* TAB 4: CONFIGURATION & SETTINGS */}
       {/* ------------------------------------------------------------- */}
       {activeSubTab === 'SETTINGS' && (
-        <div className="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+        <div className="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
           <div>
             <span className="text-[10px] bg-indigo-950 text-indigo-300 font-bold px-2.5 py-0.5 rounded-full border border-indigo-800 uppercase tracking-wider">
-              Tetapan Platform Verttere
+              Tetapan Gerbang Pembayaran & Escrow Verttere
             </span>
-            <h3 className="text-lg font-black text-white mt-1">Konfigurasi SecurePay & Struktur Caj</h3>
-            <p className="text-xs text-slate-400">Tetapan API Key SecurePay Malaysia dan formula komisen/yuran perkhidmatan platform Verttere Solutions.</p>
+            <h3 className="text-lg font-black text-white mt-1">Konfigurasi Gateway (SecurePay & ToyyibPay)</h3>
+            <p className="text-xs text-slate-400">
+              Konfigurasi kunci API rasmi bagi SecurePay dan ToyyibPay untuk menerima bayaran FPX, Kad & DuitNow QR serta formula pengiraan caj platform.
+            </p>
           </div>
 
-          <form onSubmit={handleSaveConfig} className="space-y-4">
+          <form onSubmit={handleSaveConfig} className="space-y-6">
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Merchant UID SecurePay:</label>
-                <input
-                  type="text"
-                  placeholder="7f4a9b2c-8821-49fa-91b3-..."
-                  value={editConfig.merchantUid || ''}
-                  onChange={e => setEditConfig({ ...editConfig, merchantUid: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Auth Token SecurePay:</label>
-                <input
-                  type="password"
-                  value={editConfig.authToken || ''}
-                  onChange={e => setEditConfig({ ...editConfig, authToken: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Checksum Token (SHA256):</label>
-                <input
-                  type="password"
-                  value={editConfig.checksumToken || ''}
-                  onChange={e => setEditConfig({ ...editConfig, checksumToken: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
-                />
+            {/* Active Provider Selector */}
+            <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+              <label className="block text-xs font-bold text-slate-200">Penyedia Gerbang Aktif (Payment Gateway Provider):</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  { id: 'BOTH', label: '🟣 Kedua-duanya (SecurePay + ToyyibPay)', desc: 'Beri pilihan kepada pembayar/anggota' },
+                  { id: 'SECUREPAY', label: '🔵 SecurePay Malaysia Sahaja', desc: 'FPX, DuitNow QR & Kad' },
+                  { id: 'TOYYIBPAY', label: '🟢 ToyyibPay FPX Sahaja', desc: 'Perbankan Internet FPX Direct' },
+                ].map(p => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setEditConfig({ ...editConfig, activeProvider: p.id as any, provider: p.id })}
+                    className={`p-3 rounded-xl border text-left transition-all ${
+                      (editConfig.activeProvider || editConfig.provider) === p.id
+                        ? 'bg-indigo-950 border-indigo-500 text-white shadow-sm'
+                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800/80'
+                    }`}
+                  >
+                    <div className="text-xs font-bold">{p.label}</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">{p.desc}</div>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Model Caj Platform:</label>
-                <select
-                  value={editConfig.platformFeeType}
-                  onChange={e => setEditConfig({ ...editConfig, platformFeeType: e.target.value as any })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
-                >
-                  <option value="HYBRID">Hibrid (Tetap + %)</option>
-                  <option value="FIXED">Caj Tetap Sahaja (RM)</option>
-                  <option value="PERCENTAGE">Peratusan Sahaja (%)</option>
-                </select>
+            {/* Section 1: SecurePay Configuration */}
+            <div className="bg-slate-950/60 p-4 rounded-2xl border border-indigo-900/40 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                <h4 className="text-xs font-black text-indigo-200 uppercase tracking-wider">
+                  1. Kredensial SecurePay Malaysia (securepay.my)
+                </h4>
               </div>
+              <p className="text-[11px] text-slate-400">Diperoleh daripada Dashboard SecurePay Merchant Settings.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Merchant UID (UUID):</label>
+                  <input
+                    type="text"
+                    placeholder="7f4a9b2c-8821-49fa-91b3-..."
+                    value={editConfig.securePayMerchantUid || editConfig.merchantUid || ''}
+                    onChange={e => setEditConfig({ ...editConfig, securePayMerchantUid: e.target.value, merchantUid: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Caj Tetap Gateway (RM):</label>
-                <input
-                  type="number"
-                  step="0.10"
-                  value={editConfig.fixedFeeRM}
-                  onChange={e => setEditConfig({ ...editConfig, fixedFeeRM: Number(e.target.value) })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
-                />
-              </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Authorization Token:</label>
+                  <input
+                    type="password"
+                    placeholder="sec_auth_..."
+                    value={editConfig.securePayAuthToken || editConfig.authToken || ''}
+                    onChange={e => setEditConfig({ ...editConfig, securePayAuthToken: e.target.value, authToken: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Caj Peratusan Platform (%):</label>
-                <input
-                  type="number"
-                  step="0.10"
-                  value={editConfig.percentageFee}
-                  onChange={e => setEditConfig({ ...editConfig, percentageFee: Number(e.target.value) })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
-                />
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Checksum Token (SHA256):</label>
+                  <input
+                    type="password"
+                    placeholder="chk_..."
+                    value={editConfig.securePayChecksumToken || editConfig.checksumToken || ''}
+                    onChange={e => setEditConfig({ ...editConfig, securePayChecksumToken: e.target.value, checksumToken: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Nama Pemegang Akaun Escrow (Platform):</label>
-                <input
-                  type="text"
-                  value={editConfig.namaPlatform}
-                  onChange={e => setEditConfig({ ...editConfig, namaPlatform: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
-                />
+            {/* Section 2: ToyyibPay Configuration */}
+            <div className="bg-slate-950/60 p-4 rounded-2xl border border-emerald-900/40 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <h4 className="text-xs font-black text-emerald-200 uppercase tracking-wider">
+                  2. Kredensial ToyyibPay FPX (toyyibpay.com)
+                </h4>
               </div>
+              <p className="text-[11px] text-slate-400">Diperoleh daripada Dashboard ToyyibPay &gt; Settings &gt; API &amp; Category.</p>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Akaun Bank Transit (Maybank):</label>
-                <input
-                  type="text"
-                  value={editConfig.akaunBankPlatform}
-                  onChange={e => setEditConfig({ ...editConfig, akaunBankPlatform: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">User Secret Key (ToyyibPay):</label>
+                  <input
+                    type="password"
+                    placeholder="sec_toyyib_..."
+                    value={editConfig.toyyibUserSecretKey || editConfig.userSecretKey || ''}
+                    onChange={e => setEditConfig({ ...editConfig, toyyibUserSecretKey: e.target.value, userSecretKey: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Category Code (ToyyibPay):</label>
+                  <input
+                    type="text"
+                    placeholder="cat_toyyib_..."
+                    value={editConfig.toyyibCategoryCode || editConfig.categoryCode || ''}
+                    onChange={e => setEditConfig({ ...editConfig, toyyibCategoryCode: e.target.value, categoryCode: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Fee Model & Escrow */}
+            <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-3">
+              <h4 className="text-xs font-black text-slate-300 uppercase tracking-wider">
+                3. Model Caj Platform Verttere Solutions
+              </h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Struktur Caj Platform:</label>
+                  <select
+                    value={editConfig.platformFeeType}
+                    onChange={e => setEditConfig({ ...editConfig, platformFeeType: e.target.value as any })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="HYBRID">Hibrid (Tetap RM + Peratusan %)</option>
+                    <option value="FIXED">Caj Tetap Sahaja (RM)</option>
+                    <option value="PERCENTAGE">Peratusan Sahaja (%)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Caj Tetap Gateway (RM):</label>
+                  <input
+                    type="number"
+                    step="0.10"
+                    value={editConfig.fixedFeeRM}
+                    onChange={e => setEditConfig({ ...editConfig, fixedFeeRM: Number(e.target.value) })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Caj Peratusan Platform (%):</label>
+                  <input
+                    type="number"
+                    step="0.10"
+                    value={editConfig.percentageFee}
+                    onChange={e => setEditConfig({ ...editConfig, percentageFee: Number(e.target.value) })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 4: Escrow Bank Account */}
+            <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-3">
+              <h4 className="text-xs font-black text-slate-300 uppercase tracking-wider">
+                4. Maklumat Akaun Bank Transit (Escrow Verttere)
+              </h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Nama Pemegang Akaun Platform:</label>
+                  <input
+                    type="text"
+                    value={editConfig.namaPlatform}
+                    onChange={e => setEditConfig({ ...editConfig, namaPlatform: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">No Akaun Bank Transit:</label>
+                  <input
+                    type="text"
+                    value={editConfig.akaunBankPlatform}
+                    onChange={e => setEditConfig({ ...editConfig, akaunBankPlatform: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
               </div>
             </div>
 
@@ -911,16 +1040,16 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
                 className="w-4 h-4 rounded text-indigo-600 bg-slate-950 border-slate-800"
               />
               <label htmlFor="sandboxToggle" className="text-xs text-slate-300 cursor-pointer">
-                Aktifkan **Sandbox Mode** (Untuk ujian tanpa caj bank sebenar)
+                Aktifkan **Sandbox Mode** (Untuk ujian tanpa pemotongan caj bank sebenar)
               </label>
             </div>
 
             <div className="pt-3 border-t border-slate-800 flex justify-end">
               <button
                 type="submit"
-                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all"
+                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
               >
-                Simpan Tetapan SecurePay
+                Simpan Semua Tetapan Gateway
               </button>
             </div>
 
