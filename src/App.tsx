@@ -561,8 +561,8 @@ export default function App() {
       }
       return res;
     } catch (err) {
-      console.warn('Local gateway bill create:', err);
-      const billCode = `SP-${Date.now().toString().slice(-6)}`;
+      const isToyyib = payload.provider === 'TOYYIBPAY';
+      const billCode = isToyyib ? `TYB-${Date.now().toString().slice(-6)}` : `SP-${Date.now().toString().slice(-6)}`;
       const fee = 1.00 + (payload.jumlahKasar * 0.005);
       const newTx: GatewayTransaction = {
         id: `TX-GW-${Date.now()}`,
@@ -581,7 +581,8 @@ export default function App() {
         jumlahBersihKoperasi: payload.jumlahKasar - fee,
         status: 'MENUNGGU',
         tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        kaedahBayaran: 'SECUREPAY'
+        gatewayProvider: isToyyib ? 'TOYYIBPAY' : 'SECUREPAY',
+        kaedahBayaran: isToyyib ? 'TOYYIBPAY' : 'SECUREPAY'
       };
       setGatewayTransactions(prev => [newTx, ...prev]);
       return { success: true, billCode, transaction: newTx, cajPlatform: fee, jumlahBersih: newTx.jumlahBersihKoperasi };

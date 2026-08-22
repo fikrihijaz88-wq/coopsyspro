@@ -549,6 +549,7 @@ export const api = {
     emel?: string;
     noTelefon?: string;
     jumlahKasar: number;
+    provider?: 'SECUREPAY' | 'TOYYIBPAY' | string;
   }): Promise<{
     success: boolean;
     billCode: string;
@@ -556,6 +557,7 @@ export const api = {
     transaction: GatewayTransaction;
     cajPlatform: number;
     jumlahBersih: number;
+    provider?: string;
   }> {
     const res = await fetch('/api/gateway/create-bill', {
       method: 'POST',
