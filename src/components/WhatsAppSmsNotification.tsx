@@ -134,7 +134,7 @@ export const WhatsAppSmsNotification: React.FC<WhatsAppSmsNotificationProps> = (
       .replace(/{bilangan}/g, 'ke-12')
       .replace(/{tahun}/g, '2025/2026')
       .replace(/{kadarDividen}/g, '6.5')
-      .replace(/{maklumatBank}/g, target?.noAkaunBank ? `${target.namaBank} (***${target.noAkaunBank.slice(-4)})` : 'Maybank Islamic (***4921)')
+      .replace(/{maklumatBank}/g, target?.maklumatBank?.noAkaun ? `${target.maklumatBank.namaBank} (***${target.maklumatBank.noAkaun.slice(-4)})` : 'Maybank Islamic (***4921)')
       .replace(/{kaedahBayaran}/g, 'SecurePay FPX')
       .replace(/{noRujukan}/g, 'PB-2026-009')
       .replace(/{linkResit}/g, 'https://fikrihijaz.aila.my/resit/SP-88219')
@@ -186,7 +186,7 @@ export const WhatsAppSmsNotification: React.FC<WhatsAppSmsNotificationProps> = (
         // Broadcast Mode
         const targetList = recipientType === 'ALL_ACTIVE' 
           ? ahliList.filter(a => a.status === 'AKTIF')
-          : ahliList.filter(a => a.kategoriAhli === 'ANGGOTA_LEMBAGA' || a.noAhli.includes('ALK'));
+          : ahliList.filter(a => (a.jawatanStaf && a.jawatanStaf.includes('ALK')) || a.noAhli.includes('ALK') || (a.jawatan && a.jawatan.includes('ALK')));
 
         let count = 0;
         for (const m of targetList) {

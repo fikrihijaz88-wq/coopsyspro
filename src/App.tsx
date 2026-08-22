@@ -703,7 +703,7 @@ export default function App() {
     handleAddLog({
       id: `LOG-${Date.now()}`,
       tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
-      kategori: 'TADBIR_URUS',
+      kategori: 'PENTADBIRAN',
       tindakan: 'Kemaskini Tetapan Notifikasi WhatsApp/SMS',
       deskripsi: 'Tetapan konfigurasi gerbang dan suis automasi notifikasi dikemaskini.',
       pengguna: currentUser?.name || 'Pentadbir Sistem',
