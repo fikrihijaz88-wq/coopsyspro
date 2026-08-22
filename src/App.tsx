@@ -28,6 +28,7 @@ import { MemberSavingsDeposit } from './components/MemberSavingsDeposit';
 import { BankReconciliation } from './components/BankReconciliation';
 import { SKMAndEInvoiceBridge } from './components/SKMAndEInvoiceBridge';
 import { PaymentGatewaySettlement } from './components/PaymentGatewaySettlement';
+import { WhatsAppSmsNotification } from './components/WhatsAppSmsNotification';
 import { LoginScreen } from './components/LoginScreen';
 import { SessionTimeoutModal } from './components/SessionTimeoutModal';
 import { api } from './services/api';
@@ -62,7 +63,10 @@ import {
   DataExportEKoperasi,
   PaymentGatewayConfig,
   GatewayTransaction,
-  SettlementBatch
+  SettlementBatch,
+  NotificationTemplate,
+  NotificationLog,
+  NotificationConfig
 } from './types';
 import { 
   INITIAL_AHLI, 
@@ -86,7 +90,10 @@ import {
   INITIAL_E_INVOICES,
   INITIAL_PAYMENT_GATEWAY_CONFIG,
   INITIAL_GATEWAY_TRANSACTIONS,
-  INITIAL_SETTLEMENT_BATCHES
+  INITIAL_SETTLEMENT_BATCHES,
+  INITIAL_NOTIFICATION_CONFIG,
+  INITIAL_NOTIFICATION_TEMPLATES,
+  INITIAL_NOTIFICATION_LOGS
 } from './data/initialData';
 
 export default function App() {
@@ -131,6 +138,9 @@ export default function App() {
   const [gatewayConfig, setGatewayConfig] = useState<PaymentGatewayConfig>(INITIAL_PAYMENT_GATEWAY_CONFIG);
   const [gatewayTransactions, setGatewayTransactions] = useState<GatewayTransaction[]>(INITIAL_GATEWAY_TRANSACTIONS);
   const [settlementBatches, setSettlementBatches] = useState<SettlementBatch[]>(INITIAL_SETTLEMENT_BATCHES);
+  const [notificationConfig, setNotificationConfig] = useState<NotificationConfig>(INITIAL_NOTIFICATION_CONFIG);
+  const [notificationTemplates, setNotificationTemplates] = useState<NotificationTemplate[]>(INITIAL_NOTIFICATION_TEMPLATES);
+  const [notificationLogs, setNotificationLogs] = useState<NotificationLog[]>(INITIAL_NOTIFICATION_LOGS);
 
   // Initial persistent database fetch
   useEffect(() => {
@@ -158,6 +168,9 @@ export default function App() {
         if (data.gatewayConfig) setGatewayConfig(data.gatewayConfig);
         if (data.gatewayTransactions) setGatewayTransactions(data.gatewayTransactions);
         if (data.settlementBatches) setSettlementBatches(data.settlementBatches);
+        if (data.notificationConfig) setNotificationConfig(data.notificationConfig);
+        if (data.notificationTemplates) setNotificationTemplates(data.notificationTemplates);
+        if (data.notificationLogs) setNotificationLogs(data.notificationLogs);
         if (data.logs) setLogs(data.logs);
       } catch (err) {
         console.warn('API sync unavailable, running with initial local data:', err);
@@ -656,6 +669,62 @@ export default function App() {
       }));
       return newB;
     }
+  };
+
+  // -------------------------------------------------------------
+  // WhatsApp & SMS Notification Handlers
+  // -------------------------------------------------------------
+  const handleSendNotification = async (payload: {
+    namaPenerima: string;
+    noAhli?: string;
+    noTelefon: string;
+    saluran: 'WHATSAPP' | 'SMS' | 'BOTH';
+    pencetus?: any;
+    tajuk?: string;
+    mesej: string;
+    rujukanTransaksi?: string;
+  }) => {
+    const res = await api.sendNotification(payload);
+    if (res.log) {
+      setNotificationLogs(prev => [res.log, ...prev]);
+      if (payload.saluran === 'SMS') {
+        setNotificationConfig(prev => ({
+          ...prev,
+          smsBalanceCredits: Math.max(0, (prev.smsBalanceCredits || 850) - 1)
+        }));
+      }
+    }
+    return res;
+  };
+
+  const handleUpdateNotificationConfig = async (cfg: Partial<NotificationConfig>) => {
+    const updated = await api.updateNotificationConfig(cfg);
+    setNotificationConfig(updated);
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      kategori: 'TADBIR_URUS',
+      tindakan: 'Kemaskini Tetapan Notifikasi WhatsApp/SMS',
+      deskripsi: 'Tetapan konfigurasi gerbang dan suis automasi notifikasi dikemaskini.',
+      pengguna: currentUser?.name || 'Pentadbir Sistem',
+      status: 'BERJAYA',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
+  const handleAddNotificationTemplate = async (template: NotificationTemplate) => {
+    const created = await api.createNotificationTemplate(template);
+    setNotificationTemplates(prev => [created, ...prev]);
+  };
+
+  const handleUpdateNotificationTemplate = async (id: string, updates: Partial<NotificationTemplate>) => {
+    const updated = await api.updateNotificationTemplate(id, updates);
+    setNotificationTemplates(prev => prev.map(t => t.id === id ? updated : t));
+  };
+
+  const handleDeleteNotificationTemplate = async (id: string) => {
+    await api.deleteNotificationTemplate(id);
+    setNotificationTemplates(prev => prev.filter(t => t.id !== id));
   };
 
   // Direct modal triggers
@@ -1397,6 +1466,22 @@ export default function App() {
             searchQuery={searchQuery}
             language={language}
             setLanguage={setLanguage}
+          />
+        )}
+
+        {activeTab === 'notifications' && (
+          <WhatsAppSmsNotification
+            ahliList={ahliList}
+            templates={notificationTemplates}
+            logs={notificationLogs}
+            config={notificationConfig}
+            onSendNotification={handleSendNotification}
+            onUpdateConfig={handleUpdateNotificationConfig}
+            onAddTemplate={handleAddNotificationTemplate}
+            onUpdateTemplate={handleUpdateNotificationTemplate}
+            onDeleteTemplate={handleDeleteNotificationTemplate}
+            language={language}
+            userRole={currentUser?.role}
           />
         )}
 

@@ -24,7 +24,10 @@ import {
   DataExportEKoperasi,
   PaymentGatewayConfig,
   GatewayTransaction,
-  SettlementBatch
+  SettlementBatch,
+  NotificationTemplate,
+  NotificationLog,
+  NotificationConfig
 } from '../types';
 
 export const api = {
@@ -742,4 +745,160 @@ export const api = {
       catatan: payload.catatan || 'Pelepasan kutipan gateway ke akaun koperasi.'
     };
   },
+
+  // ==========================================
+  // WhatsApp & SMS Notification System APIs
+  // ==========================================
+  async getNotificationConfig(): Promise<NotificationConfig> {
+    try {
+      const res = await fetch('/api/notifications/config');
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.getNotificationConfig offline fallback:', e);
+    }
+    return {
+      autoSendPaymentReceipt: true,
+      autoSendPosReceipt: true,
+      autoSendAgmReminder: true,
+      autoSendDividendNotice: true,
+      autoSendLoanStatus: true,
+      whatsappProvider: 'DIRECT_WA_LINK',
+      whatsappPhoneNumberId: '109849102941029',
+      whatsappAccessToken: 'EAAOx_sample_token_verttere_wa_cloud_api',
+      whatsappBusinessAccountId: '1920491029410',
+      whatsappSenderNumber: '+60123456789',
+      smsProvider: 'SIMULATOR',
+      smsApiKey: 'sms_live_api_verttere_9481920',
+      smsSenderId: 'MYCOOP',
+      smsBalanceCredits: 850,
+      isSandbox: true,
+    };
+  },
+
+  async updateNotificationConfig(config: Partial<NotificationConfig>): Promise<NotificationConfig> {
+    try {
+      const res = await fetch('/api/notifications/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.updateNotificationConfig offline fallback:', e);
+    }
+    return config as NotificationConfig;
+  },
+
+  async getNotificationTemplates(): Promise<NotificationTemplate[]> {
+    try {
+      const res = await fetch('/api/notifications/templates');
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.getNotificationTemplates offline fallback:', e);
+    }
+    return [];
+  },
+
+  async createNotificationTemplate(template: NotificationTemplate): Promise<NotificationTemplate> {
+    try {
+      const res = await fetch('/api/notifications/templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(template),
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.createNotificationTemplate offline fallback:', e);
+    }
+    return template;
+  },
+
+  async updateNotificationTemplate(id: string, updates: Partial<NotificationTemplate>): Promise<NotificationTemplate> {
+    try {
+      const res = await fetch(`/api/notifications/templates/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.updateNotificationTemplate offline fallback:', e);
+    }
+    return { ...updates, id } as NotificationTemplate;
+  },
+
+  async deleteNotificationTemplate(id: string): Promise<{ success: boolean }> {
+    try {
+      const res = await fetch(`/api/notifications/templates/${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.deleteNotificationTemplate offline fallback:', e);
+    }
+    return { success: true };
+  },
+
+  async getNotificationLogs(): Promise<NotificationLog[]> {
+    try {
+      const res = await fetch('/api/notifications/logs');
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.getNotificationLogs offline fallback:', e);
+    }
+    return [];
+  },
+
+  async sendNotification(payload: {
+    namaPenerima: string;
+    noAhli?: string;
+    noTelefon: string;
+    saluran: 'WHATSAPP' | 'SMS' | 'BOTH';
+    pencetus?: string;
+    tajuk?: string;
+    mesej: string;
+    rujukanTransaksi?: string;
+  }): Promise<{
+    success: boolean;
+    log: NotificationLog;
+    directWaUrl: string;
+    remainingSmsCredits?: number;
+  }> {
+    try {
+      const res = await fetch('/api/notifications/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.sendNotification offline fallback:', e);
+    }
+
+    const cleanPhone = (payload.noTelefon || '').replace(/[^0-9]/g, '');
+    const formattedPhone = cleanPhone.startsWith('60') ? cleanPhone : cleanPhone.startsWith('0') ? `6${cleanPhone}` : `60${cleanPhone}`;
+    const directWaUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(payload.mesej)}`;
+
+    const newLog: NotificationLog = {
+      id: `NOTIF-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      namaPenerima: payload.namaPenerima,
+      noAhli: payload.noAhli,
+      noTelefon: payload.noTelefon,
+      saluran: payload.saluran,
+      pencetus: (payload.pencetus as any) || 'MANUAL_BROADCAST',
+      tajuk: payload.tajuk || 'Notifikasi Rasmi Koperasi',
+      mesej: payload.mesej,
+      status: 'BERJAYA',
+      pembekal: payload.saluran === 'SMS' ? 'BULKSMS_MY' : 'DIRECT_WA_LINK',
+      rujukanTransaksi: payload.rujukanTransaksi
+    };
+
+    return {
+      success: true,
+      log: newLog,
+      directWaUrl,
+      remainingSmsCredits: 849
+    };
+  }
 };

@@ -825,4 +825,66 @@ export interface SettlementBatch {
   catatan?: string;
 }
 
+// -------------------------------------------------------------
+// WhatsApp & SMS Automated Notification Types
+// -------------------------------------------------------------
+
+export type SaluranNotifikasi = 'WHATSAPP' | 'SMS' | 'BOTH';
+export type JenisPencetusNotifikasi = 
+  | 'BAYARAN_GATEWAY' 
+  | 'JUALAN_POS' 
+  | 'HEBAHAN_AGM' 
+  | 'AGIHAN_DIVIDEN' 
+  | 'KELULUSAN_PINJAMAN' 
+  | 'TABUNG_KEBAJIKAN' 
+  | 'MANUAL_BROADCAST';
+
+export interface NotificationTemplate {
+  id: string;
+  kod: string;
+  nama: string;
+  saluran: SaluranNotifikasi;
+  pencetus: JenisPencetusNotifikasi;
+  tajuk: string;
+  kandungan: string;
+  aktif: boolean;
+  pembolehUbah: string[]; // e.g. ['{nama}', '{jumlah}', '{noResit}']
+}
+
+export interface NotificationLog {
+  id: string;
+  tarikhMasa: string;
+  namaPenerima: string;
+  noAhli?: string;
+  noTelefon: string;
+  saluran: SaluranNotifikasi;
+  pencetus: JenisPencetusNotifikasi;
+  tajuk: string;
+  mesej: string;
+  status: 'BERJAYA' | 'GAGAL' | 'MENUNGGU';
+  pembekal: 'WHATSAPP_CLOUD_API' | 'TWILIO_SMS' | 'BULKSMS_MY' | 'DIRECT_WA_LINK' | string;
+  rujukanTransaksi?: string;
+  ralat?: string;
+}
+
+export interface NotificationConfig {
+  autoSendPaymentReceipt: boolean;
+  autoSendPosReceipt: boolean;
+  autoSendAgmReminder: boolean;
+  autoSendDividendNotice: boolean;
+  autoSendLoanStatus: boolean;
+  // WhatsApp Configuration
+  whatsappProvider: 'WHATSAPP_CLOUD_API' | 'TWILIO' | 'DIRECT_WA_LINK';
+  whatsappPhoneNumberId?: string;
+  whatsappAccessToken?: string;
+  whatsappBusinessAccountId?: string;
+  whatsappSenderNumber?: string;
+  // SMS Configuration
+  smsProvider: 'BULKSMS_MY' | 'TWILIO' | 'SIMULATOR';
+  smsApiKey?: string;
+  smsSenderId?: string;
+  smsBalanceCredits: number;
+  isSandbox: boolean;
+}
+
 

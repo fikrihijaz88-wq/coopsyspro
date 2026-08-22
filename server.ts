@@ -854,6 +854,108 @@ async function startServer() {
   });
 
   // -------------------------------------------------------------
+  // WhatsApp & SMS Automated Notification Routes
+  // -------------------------------------------------------------
+  app.get("/api/notifications/config", (_req, res) => {
+    res.json(db.getNotificationConfig());
+  });
+
+  app.post("/api/notifications/config", (req, res) => {
+    try {
+      const updated = db.updateNotificationConfig(req.body);
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/notifications/templates", (_req, res) => {
+    res.json(db.getNotificationTemplates());
+  });
+
+  app.post("/api/notifications/templates", (req, res) => {
+    try {
+      const tmpl = {
+        ...req.body,
+        id: req.body.id || `TMPL-${Date.now()}`,
+      };
+      const created = db.addNotificationTemplate(tmpl);
+      res.status(201).json(created);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.put("/api/notifications/templates/:id", (req, res) => {
+    try {
+      const updated = db.updateNotificationTemplate(req.params.id, req.body);
+      if (!updated) return res.status(404).json({ error: "Templat tidak ditemui" });
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.delete("/api/notifications/templates/:id", (req, res) => {
+    try {
+      const success = db.deleteNotificationTemplate(req.params.id);
+      res.json({ success });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/notifications/logs", (_req, res) => {
+    res.json(db.getNotificationLogs());
+  });
+
+  app.post("/api/notifications/send", (req, res) => {
+    try {
+      const {
+        namaPenerima,
+        noAhli,
+        noTelefon,
+        saluran,
+        pencetus,
+        tajuk,
+        mesej,
+        rujukanTransaksi
+      } = req.body;
+
+      const config = db.getNotificationConfig();
+
+      const newLog = db.addNotificationLog({
+        id: `NOTIF-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
+        tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        namaPenerima: namaPenerima || 'Anggota Koperasi',
+        noAhli,
+        noTelefon: noTelefon || '012-3456789',
+        saluran: saluran || 'WHATSAPP',
+        pencetus: pencetus || 'MANUAL_BROADCAST',
+        tajuk: tajuk || 'Notifikasi Koperasi',
+        mesej: mesej || '',
+        status: 'BERJAYA',
+        pembekal: saluran === 'SMS' ? (config.smsProvider || 'BULKSMS_MY') : (config.whatsappProvider || 'WHATSAPP_CLOUD_API'),
+        rujukanTransaksi
+      });
+
+      // Generate direct WhatsApp click-to-chat URL if applicable
+      const cleanPhone = (noTelefon || '').replace(/[^0-9]/g, '');
+      const formattedPhone = cleanPhone.startsWith('60') ? cleanPhone : cleanPhone.startsWith('0') ? `6${cleanPhone}` : `60${cleanPhone}`;
+      const directWaUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(mesej)}`;
+
+      res.status(201).json({
+        success: true,
+        log: newLog,
+        directWaUrl,
+        remainingSmsCredits: config.smsBalanceCredits
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // -------------------------------------------------------------
   // Gemini AI Audit & SKM Compliance Advisor Route (With Auto Fallback)
   // -------------------------------------------------------------
   app.post("/api/gemini/audit-check", async (req, res) => {

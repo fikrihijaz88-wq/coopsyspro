@@ -21,7 +21,10 @@ import {
   EInvoisLHDN,
   PaymentGatewayConfig,
   GatewayTransaction,
-  SettlementBatch
+  SettlementBatch,
+  NotificationTemplate,
+  NotificationLog,
+  NotificationConfig
 } from '../types';
 
 export const INITIAL_CARTA_AKAUN: CartaAkaun[] = [
@@ -2916,6 +2919,131 @@ export const INITIAL_SETTLEMENT_BATCHES: SettlementBatch[] = [
     tarikhPindahan: '2026-02-16 15:30:00',
     noRujukanBank: 'MBB-EFT-SETTLE-84910291',
     catatan: 'Pindahan kelompok bayaran modal syer dan jualan POS fasa 1 Feb 2026 telah disahkan diterima akaun koperasi.'
+  }
+];
+
+// -------------------------------------------------------------
+// WhatsApp & SMS Notification System Initial Data
+// -------------------------------------------------------------
+
+export const INITIAL_NOTIFICATION_CONFIG: NotificationConfig = {
+  autoSendPaymentReceipt: true,
+  autoSendPosReceipt: true,
+  autoSendAgmReminder: true,
+  autoSendDividendNotice: true,
+  autoSendLoanStatus: true,
+  whatsappProvider: 'DIRECT_WA_LINK',
+  whatsappPhoneNumberId: '109849102941029',
+  whatsappAccessToken: 'EAAOx_sample_token_verttere_wa_cloud_api',
+  whatsappBusinessAccountId: '1920491029410',
+  whatsappSenderNumber: '+60123456789',
+  smsProvider: 'SIMULATOR',
+  smsApiKey: 'sms_live_api_verttere_9481920',
+  smsSenderId: 'MYCOOP',
+  smsBalanceCredits: 850,
+  isSandbox: true,
+};
+
+export const INITIAL_NOTIFICATION_TEMPLATES: NotificationTemplate[] = [
+  {
+    id: 'TMPL-001',
+    kod: 'RECEIPT_GATEWAY',
+    nama: 'Resit Bayaran Online Gateway (SecurePay / ToyyibPay)',
+    saluran: 'WHATSAPP',
+    pencetus: 'BAYARAN_GATEWAY',
+    tajuk: 'Pengesahan Pembayaran Online Koperasi',
+    kandungan: `Salam sejahtera *{nama}* ({noAhli}),\n\nBayaran anda bagi *{perihal}* sebanyak *RM {jumlah}* telah BERJAYA disahkan melalui gerbang pembayaran rasmi {koperasi}.\n\n🧾 *No. Pesanan:* {noResit}\n📅 *Tarikh:* {tarikh}\n\nTerima kasih atas sokongan anda kepada koperasi kita. Resit rasmi boleh dimuat turun di: {linkResit}`,
+    aktif: true,
+    pembolehUbah: ['{nama}', '{noAhli}', '{perihal}', '{jumlah}', '{koperasi}', '{noResit}', '{tarikh}', '{linkResit}']
+  },
+  {
+    id: 'TMPL-002',
+    kod: 'RECEIPT_POS',
+    nama: 'E-Resit Jualan POS Kedai Koperasi',
+    saluran: 'WHATSAPP',
+    pencetus: 'JUALAN_POS',
+    tajuk: 'E-Resit Pembelian Kedai Koperasi',
+    kandungan: `Terima kasih *{nama}* atas pembelian anda di Kedai Koperasi {koperasi}.\n\n🛒 *No. Resit POS:* {noResit}\n💵 *Jumlah:* RM {jumlah}\n💳 *Kaedah:* {kaedahBayaran}\n📅 *Tarikh:* {tarikh}\n\nRebat belian ahli anda telah dikemaskini dalam lejar koperasi.`,
+    aktif: true,
+    pembolehUbah: ['{nama}', '{koperasi}', '{noResit}', '{jumlah}', '{kaedahBayaran}', '{tarikh}']
+  },
+  {
+    id: 'TMPL-003',
+    kod: 'NOTICE_AGM',
+    nama: 'Pemberitahuan & Peringatan Mesyuarat Agung (AGM)',
+    saluran: 'BOTH',
+    pencetus: 'HEBAHAN_AGM',
+    tajuk: 'Notis Mesyuarat Agung Tahunan Koperasi',
+    kandungan: `Pemberitahuan Rasmi Anggota {koperasi}:\n\nMesyuarat Agung Tahunan (AGM) ke-{bilangan} akan diadakan pada:\n🗓️ *Tarikh:* {tarikh}\n⏰ *Masa:* {masa}\n📍 *Lokasi:* {lokasi}\n\nKehadiran *{nama}* ({noAhli}) amat dihargai demi memartabatkan tadbir urus koperasi. Pautan penyata kewangan & minit: {linkDokumen}`,
+    aktif: true,
+    pembolehUbah: ['{koperasi}', '{bilangan}', '{tarikh}', '{masa}', '{lokasi}', '{nama}', '{noAhli}', '{linkDokumen}']
+  },
+  {
+    id: 'TMPL-004',
+    kod: 'DIVIDEND_PAYOUT',
+    nama: 'Notis Pengkreditan Dividen Tahunan',
+    saluran: 'WHATSAPP',
+    pencetus: 'AGIHAN_DIVIDEN',
+    tajuk: 'Pemberitahuan Agihan Dividen & Statutori',
+    kandungan: `Tahniah *{nama}* ({noAhli})!\n\nLembaga Pengarah {koperasi} mengumumkan dividen modal syer tahun kewangan {tahun} sebanyak *RM {jumlah}* telah dikreditkan ke akaun bank berdaftar anda.\n\n📊 *Kadar Dividen:* {kadarDividen}%\n🏦 *Bank Rujukan:* {maklumatBank}\n📅 *Tarikh Pembayaran:* {tarikh}`,
+    aktif: true,
+    pembolehUbah: ['{nama}', '{noAhli}', '{koperasi}', '{tahun}', '{jumlah}', '{kadarDividen}', '{maklumatBank}', '{tarikh}']
+  },
+  {
+    id: 'TMPL-005',
+    kod: 'LOAN_APPROVAL',
+    nama: 'Notifikasi Status Kelulusan Pembiayaan Anggota',
+    saluran: 'SMS',
+    pencetus: 'KELULUSAN_PINJAMAN',
+    tajuk: 'Status Kelulusan Permohonan Pembiayaan',
+    kandungan: `{koperasi}: Permohonan pembiayaan anda ({noRujukan}) berjumlah RM{jumlah} telah DILULUSKAN oleh Jawatankuasa Pembiayaan ALK. Sila semak portal koperasi atau hubungi pentadbiran untuk urusan pengeluaran.`,
+    aktif: true,
+    pembolehUbah: ['{koperasi}', '{noRujukan}', '{jumlah}']
+  }
+];
+
+export const INITIAL_NOTIFICATION_LOGS: NotificationLog[] = [
+  {
+    id: 'NOTIF-LOG-001',
+    tarikhMasa: '2026-02-18 09:31:05',
+    namaPenerima: 'Ahmad Faiz Bin Rosli',
+    noAhli: 'KOP-2022-005',
+    noTelefon: '013-4455667',
+    saluran: 'WHATSAPP',
+    pencetus: 'BAYARAN_GATEWAY',
+    tajuk: 'Resit Bayaran Online SecurePay',
+    mesej: 'Salam sejahtera Ahmad Faiz Bin Rosli (KOP-2022-005), Bayaran anda bagi Penambahan Modal Syer Anggota 500 Unit sebanyak RM 500.00 telah BERJAYA disahkan melalui SecurePay. No. Pesanan: SP-891024-01.',
+    status: 'BERJAYA',
+    pembekal: 'WHATSAPP_CLOUD_API',
+    rujukanTransaksi: 'SP-891024-01'
+  },
+  {
+    id: 'NOTIF-LOG-002',
+    tarikhMasa: '2026-02-19 11:46:10',
+    namaPenerima: 'Siti Sarah Binti Ismail',
+    noAhli: 'KOP-2023-014',
+    noTelefon: '019-8877665',
+    saluran: 'WHATSAPP',
+    pencetus: 'JUALAN_POS',
+    tajuk: 'E-Resit Pembelian Kedai Koperasi',
+    mesej: 'Terima kasih Siti Sarah atas pembelian anda di Kedai Koperasi Warga Berdaya. No. Resit POS: POS-20260219-012, Jumlah: RM 180.00.',
+    status: 'BERJAYA',
+    pembekal: 'WHATSAPP_CLOUD_API',
+    rujukanTransaksi: 'POS-20260219-012'
+  },
+  {
+    id: 'NOTIF-LOG-003',
+    tarikhMasa: '2026-02-15 14:00:22',
+    namaPenerima: 'Dato\' Ahmad Razali Bin Zainal',
+    noAhli: 'KOP-2021-001',
+    noTelefon: '012-3456789',
+    saluran: 'SMS',
+    pencetus: 'HEBAHAN_AGM',
+    tajuk: 'Pemberitahuan AGM Koperasi 2026',
+    mesej: 'Koperasi Warga Berdaya: Mesyuarat Agung Tahunan ke-12 akan diadakan pada 28 Mac 2026, 9.00 pagi di Dewan Komuniti Cyberjaya. Minit: https://fikrihijaz.aila.my/agm',
+    status: 'BERJAYA',
+    pembekal: 'BULKSMS_MY',
+    rujukanTransaksi: 'AGM-2026-NOTIS'
   }
 ];
 

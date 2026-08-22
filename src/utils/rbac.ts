@@ -49,6 +49,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'automated-reports',
       'logs',
       'ai-audit',
+      'notifications',
     ],
   },
   PENGERUSI_ALK: {
@@ -75,6 +76,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'automated-reports',
       'logs',
       'ai-audit',
+      'notifications',
     ],
   },
   SETIAUSAHA: {
@@ -91,6 +93,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'compliance',
       'automated-reports',
       'logs',
+      'notifications',
     ],
   },
   AUDITOR_JAD: {
@@ -118,6 +121,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'automated-reports',
       'logs',
       'ai-audit',
+      'notifications',
     ],
   },
   JURUWANG_POS: {
@@ -128,6 +132,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'pos',
       'dashboard',
       'e-invoice',
+      'notifications',
     ],
   },
   AHLI_KOPERASI: {

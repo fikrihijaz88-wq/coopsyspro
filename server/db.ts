@@ -25,7 +25,10 @@ import {
   EInvoisLHDN,
   PaymentGatewayConfig,
   GatewayTransaction,
-  SettlementBatch
+  SettlementBatch,
+  NotificationTemplate,
+  NotificationLog,
+  NotificationConfig
 } from "../src/types";
 
 import { 
@@ -50,7 +53,10 @@ import {
   INITIAL_E_INVOICES,
   INITIAL_PAYMENT_GATEWAY_CONFIG,
   INITIAL_GATEWAY_TRANSACTIONS,
-  INITIAL_SETTLEMENT_BATCHES
+  INITIAL_SETTLEMENT_BATCHES,
+  INITIAL_NOTIFICATION_CONFIG,
+  INITIAL_NOTIFICATION_TEMPLATES,
+  INITIAL_NOTIFICATION_LOGS
 } from "../src/data/initialData";
 
 export interface UserAccount {
@@ -88,6 +94,9 @@ export interface KoperasiDatabaseSchema {
   gatewayConfig: PaymentGatewayConfig;
   gatewayTransactions: GatewayTransaction[];
   settlementBatches: SettlementBatch[];
+  notificationConfig: NotificationConfig;
+  notificationTemplates: NotificationTemplate[];
+  notificationLogs: NotificationLog[];
   logs: ActivityLog[];
   meta: {
     koperasiName: string;
@@ -196,6 +205,9 @@ class KoperasiDatabase {
       gatewayConfig: INITIAL_PAYMENT_GATEWAY_CONFIG,
       gatewayTransactions: INITIAL_GATEWAY_TRANSACTIONS,
       settlementBatches: INITIAL_SETTLEMENT_BATCHES,
+      notificationConfig: INITIAL_NOTIFICATION_CONFIG,
+      notificationTemplates: INITIAL_NOTIFICATION_TEMPLATES,
+      notificationLogs: INITIAL_NOTIFICATION_LOGS,
       logs: INITIAL_LOGS,
       meta: {
         koperasiName: "Koperasi Warga Berdaya Malaysia Berhad",
@@ -801,6 +813,57 @@ class KoperasiDatabase {
 
   public addLog(log: ActivityLog) {
     this.data.logs = [log, ...this.data.logs];
+    this.save();
+    return log;
+  }
+
+  // -------------------------------------------------------------
+  // Notification Methods
+  // -------------------------------------------------------------
+  public getNotificationConfig(): NotificationConfig {
+    return this.data.notificationConfig || INITIAL_NOTIFICATION_CONFIG;
+  }
+
+  public updateNotificationConfig(cfg: Partial<NotificationConfig>): NotificationConfig {
+    this.data.notificationConfig = { ...this.getNotificationConfig(), ...cfg };
+    this.save();
+    return this.data.notificationConfig;
+  }
+
+  public getNotificationTemplates(): NotificationTemplate[] {
+    return this.data.notificationTemplates || INITIAL_NOTIFICATION_TEMPLATES;
+  }
+
+  public addNotificationTemplate(tmpl: NotificationTemplate): NotificationTemplate {
+    this.data.notificationTemplates = [tmpl, ...(this.data.notificationTemplates || [])];
+    this.save();
+    return tmpl;
+  }
+
+  public updateNotificationTemplate(id: string, updates: Partial<NotificationTemplate>): NotificationTemplate | null {
+    const idx = (this.data.notificationTemplates || []).findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    this.data.notificationTemplates[idx] = { ...this.data.notificationTemplates[idx], ...updates };
+    this.save();
+    return this.data.notificationTemplates[idx];
+  }
+
+  public deleteNotificationTemplate(id: string): boolean {
+    const initialLen = (this.data.notificationTemplates || []).length;
+    this.data.notificationTemplates = (this.data.notificationTemplates || []).filter(t => t.id !== id);
+    this.save();
+    return this.data.notificationTemplates.length < initialLen;
+  }
+
+  public getNotificationLogs(): NotificationLog[] {
+    return this.data.notificationLogs || INITIAL_NOTIFICATION_LOGS;
+  }
+
+  public addNotificationLog(log: NotificationLog): NotificationLog {
+    this.data.notificationLogs = [log, ...(this.data.notificationLogs || [])];
+    if (log.saluran === 'SMS' && this.data.notificationConfig) {
+      this.data.notificationConfig.smsBalanceCredits = Math.max(0, (this.data.notificationConfig.smsBalanceCredits || 850) - 1);
+    }
     this.save();
     return log;
   }
