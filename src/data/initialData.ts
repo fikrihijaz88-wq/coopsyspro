@@ -2756,19 +2756,22 @@ export const INITIAL_E_INVOICES: EInvoisLHDN[] = [
 ];
 
 // -------------------------------------------------------------
-// Initial Data: Verttere Solutions Payment Gateway & Escrow Settlement
+// Initial Data: Verttere Solutions Payment Gateway & Escrow Settlement (SecurePay)
 // -------------------------------------------------------------
 
 export const INITIAL_PAYMENT_GATEWAY_CONFIG: PaymentGatewayConfig = {
-  provider: 'TOYYIBPAY',
-  userSecretKey: 'sec_verttere_live_948192048102941',
+  provider: 'SECUREPAY',
+  merchantUid: '7f4a9b2c-8821-49fa-91b3-verttere01',
+  authToken: 'sec_auth_verttere_live_948192048102941',
+  checksumToken: 'chk_verttere_sha256_secpay_883019',
+  userSecretKey: 'sec_auth_verttere_live_948192048102941',
   categoryCode: 'cat_verttere_coop_pay_01',
   platformFeeType: 'HYBRID',
-  fixedFeeRM: 1.00, // FPX direct charge RM 1.00
-  percentageFee: 0.50, // Verttere SaaS Platform Fee 0.5%
+  fixedFeeRM: 1.00, // SecurePay Direct Transaction Fee RM 1.00
+  percentageFee: 0.50, // Verttere SaaS Platform Escrow Fee 0.5%
   isSandbox: true,
   settlementCycle: 'T+1',
-  namaPlatform: 'Verttere Solutions Sdn Bhd (FinTech Aggregator)',
+  namaPlatform: 'Verttere Solutions Sdn Bhd (FinTech SecurePay Aggregator)',
   akaunBankPlatform: '5621-8849-1029 (Maybank Islamic)',
   namaBankPlatform: 'Maybank Berhad'
 };
@@ -2776,7 +2779,7 @@ export const INITIAL_PAYMENT_GATEWAY_CONFIG: PaymentGatewayConfig = {
 export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
   {
     id: 'TX-GW-2026-001',
-    billCode: 'TYB-891024-01',
+    billCode: 'SP-891024-01',
     kategoriTransaksi: 'TAMBAH_SYER',
     perihal: 'Penambahan Modal Syer Anggota 500 Unit',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2787,17 +2790,17 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     emel: 'faiz.rosli@gmail.com',
     noTelefon: '013-4455667',
     jumlahKasar: 500.00,
-    cajPlatformVerttere: 3.50, // RM1.00 FPX + RM2.50 (0.5%)
+    cajPlatformVerttere: 3.50, // RM1.00 SecurePay + RM2.50 (0.5%)
     jumlahBersihKoperasi: 496.50,
     status: 'BERJAYA',
     tarikhMasa: '2026-02-18 09:30:15',
     tarikhSelesai: '2026-02-18 09:31:02',
-    kaedahBayaran: 'FPX_TOYYIBPAY',
-    transaksiBankId: 'FPX-MBB-20260218-0912'
+    kaedahBayaran: 'SECUREPAY',
+    transaksiBankId: 'SP-MBB-20260218-0912'
   },
   {
     id: 'TX-GW-2026-002',
-    billCode: 'TYB-891024-02',
+    billCode: 'SP-891024-02',
     kategoriTransaksi: 'POS_STORE',
     perihal: 'Pembelian Barangan Runcit & Baja Koperasi',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2813,12 +2816,12 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     status: 'BERJAYA',
     tarikhMasa: '2026-02-19 11:45:20',
     tarikhSelesai: '2026-02-19 11:46:00',
-    kaedahBayaran: 'FPX_TOYYIBPAY',
-    transaksiBankId: 'FPX-CIMB-20260219-4819'
+    kaedahBayaran: 'SECUREPAY',
+    transaksiBankId: 'SP-CIMB-20260219-4819'
   },
   {
     id: 'TX-GW-2026-003',
-    billCode: 'TYB-891024-03',
+    billCode: 'SP-891024-03',
     kategoriTransaksi: 'SIMPANAN_KHAS',
     perihal: 'Deposit Simpanan Khas Anggota (Akaun 2050)',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2834,12 +2837,12 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     status: 'BERJAYA',
     tarikhMasa: '2026-02-20 14:10:00',
     tarikhSelesai: '2026-02-20 14:10:45',
-    kaedahBayaran: 'FPX_TOYYIBPAY',
-    transaksiBankId: 'FPX-RHB-20260220-9921'
+    kaedahBayaran: 'SECUREPAY',
+    transaksiBankId: 'SP-RHB-20260220-9921'
   },
   {
     id: 'TX-GW-2026-004',
-    billCode: 'TYB-891024-04',
+    billCode: 'SP-891024-04',
     kategoriTransaksi: 'TAMBAH_SYER',
     perihal: 'Pendaftaran Ahli Baru & Syer Minimum RM100',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2853,11 +2856,11 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     jumlahBersihKoperasi: 128.35,
     status: 'MENUNGGU',
     tarikhMasa: '2026-02-21 16:20:00',
-    kaedahBayaran: 'FPX_TOYYIBPAY'
+    kaedahBayaran: 'SECUREPAY'
   },
   {
     id: 'TX-GW-2026-005',
-    billCode: 'TYB-891024-05',
+    billCode: 'SP-891024-05',
     kategoriTransaksi: 'BAYARAN_PEMBIAYAAN',
     perihal: 'Ansuran Pembiayaan Peribadi Anggota Bulan Feb 2026',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2874,8 +2877,8 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
     tarikhMasa: '2026-02-15 10:00:00',
     tarikhSelesai: '2026-02-15 10:01:20',
     noBatchSettlement: 'SETTLE-2026-B01',
-    kaedahBayaran: 'FPX_TOYYIBPAY',
-    transaksiBankId: 'FPX-BIMB-20260215-3819'
+    kaedahBayaran: 'SECUREPAY',
+    transaksiBankId: 'SP-BIMB-20260215-3819'
   }
 ];
 

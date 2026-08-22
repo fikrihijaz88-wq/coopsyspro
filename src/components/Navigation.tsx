@@ -61,7 +61,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     { id: 'financing', category: 'KEWANGAN', label: isEN ? 'Member Financing' : 'Pembiayaan Ahli', icon: HandCoins },
     { id: 'skm-funds', category: 'KEWANGAN', label: isEN ? 'SKM Loans & Grants' : 'Dana Pinjaman & Geran SKM', icon: Landmark, highlight: true },
     { id: 'e-invoice', category: 'KEWANGAN', label: isEN ? 'e-Koperasi & e-Invoice' : 'e-Koperasi & e-Invois LHDN', icon: QrCode, highlight: true },
-    { id: 'gateway', category: 'KEWANGAN', label: isEN ? 'Gateway & Escrow FPX' : 'Gateway & Escrow FPX', icon: CreditCard, highlight: true },
+    { id: 'gateway', category: 'KEWANGAN', label: isEN ? 'Gateway & Escrow (SecurePay)' : 'Gateway & Escrow (SecurePay)', icon: CreditCard, highlight: true },
     { id: 'payroll', category: 'KEWANGAN', label: isEN ? 'Payroll Deductions' : 'Potongan Gaji', icon: Receipt },
     { id: 'financials', category: 'KEWANGAN', label: isEN ? 'SKM Financial Statements' : 'Penyata Kewangan SKM', icon: FileSpreadsheet },
     { id: 'documents', category: 'AUDIT', label: isEN ? 'Document Verification' : 'Pengesahan Dokumen', icon: FileCheck },

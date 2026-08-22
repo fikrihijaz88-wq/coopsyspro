@@ -351,7 +351,7 @@ export interface ItemCartPOS {
   jumlah: number;
 }
 
-export type CaraBayaranPOS = 'TUNAI' | 'DUITNOW_QR' | 'KAD' | 'POTONGAN_GAJI_AHLI' | 'FPX_TOYYIBPAY';
+export type CaraBayaranPOS = 'TUNAI' | 'DUITNOW_QR' | 'KAD' | 'POTONGAN_GAJI_AHLI' | 'SECUREPAY';
 
 export interface ItemJualanDetail {
   idProduk: string;
@@ -755,12 +755,15 @@ export interface DataExportEKoperasi {
 // -------------------------------------------------------------
 
 export interface PaymentGatewayConfig {
-  provider: 'TOYYIBPAY' | 'MANUAL_FPX' | string;
-  userSecretKey: string;
-  categoryCode: string;
+  provider: 'SECUREPAY' | 'TOYYIBPAY' | 'MANUAL_FPX' | string;
+  merchantUid: string; // SecurePay Merchant UID (e.g. 7f4a9b2c-...)
+  authToken: string; // SecurePay Authorization Token
+  checksumToken: string; // SecurePay Checksum Security Token
+  userSecretKey?: string;
+  categoryCode?: string;
   platformFeeType: 'FIXED' | 'PERCENTAGE' | 'HYBRID';
-  fixedFeeRM: number; // e.g. RM 1.50
-  percentageFee: number; // e.g. 1.5%
+  fixedFeeRM: number; // e.g. RM 1.00
+  percentageFee: number; // e.g. 0.5%
   isSandbox: boolean;
   settlementCycle: 'T+1' | 'T+2' | 'WEEKLY' | 'MANUAL';
   namaPlatform: string;
@@ -787,7 +790,7 @@ export interface GatewayTransaction {
   tarikhMasa: string;
   tarikhSelesai?: string;
   noBatchSettlement?: string;
-  kaedahBayaran: 'FPX_TOYYIBPAY' | 'DUITNOW_QR' | 'MANUAL';
+  kaedahBayaran: 'SECUREPAY' | 'DUITNOW_QR' | 'KAD' | 'MANUAL' | string;
   transaksiBankId?: string;
 }
 

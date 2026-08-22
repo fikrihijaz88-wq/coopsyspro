@@ -679,7 +679,7 @@ async function startServer() {
 
       const config = db.getGatewayConfig();
       
-      // Calculate Platform & FPX Fee
+      // Calculate Platform & SecurePay Fee
       let fee = config.fixedFeeRM || 1.00;
       if (config.platformFeeType === 'PERCENTAGE' || config.platformFeeType === 'HYBRID') {
         const percentFee = (jumlahKasar * (config.percentageFee || 0.5)) / 100;
@@ -688,12 +688,12 @@ async function startServer() {
       fee = Math.round(fee * 100) / 100;
       const netAmount = Math.max(0, Math.round((jumlahKasar - fee) * 100) / 100);
 
-      const billCode = `TYB-${Date.now().toString().slice(-6)}-${Math.floor(10 + Math.random() * 90)}`;
+      const billCode = `SP-${Date.now().toString().slice(-6)}-${Math.floor(10 + Math.random() * 90)}`;
       const newTx = db.addGatewayTransaction({
         id: `TX-GW-${Date.now()}`,
         billCode,
         kategoriTransaksi: kategoriTransaksi || 'TAMBAH_SYER',
-        perihal: perihal || 'Bayaran Online Koperasi via ToyyibPay',
+        perihal: perihal || 'Bayaran Online Koperasi via SecurePay',
         namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
         kodKoperasi: 'KOP-MY-001',
         namaPembayar: namaPembayar || 'Anggota Koperasi',
@@ -706,13 +706,13 @@ async function startServer() {
         jumlahBersihKoperasi: netAmount,
         status: 'MENUNGGU',
         tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        kaedahBayaran: 'FPX_TOYYIBPAY'
+        kaedahBayaran: 'SECUREPAY'
       });
 
-      // Simulation / Live Toyyibpay payment link
+      // Simulation / Live SecurePay payment checkout link
       const paymentUrl = config.isSandbox
-        ? `https://dev.toyyibpay.com/${billCode}`
-        : `https://toyyibpay.com/${billCode}`;
+        ? `https://sandbox.securepay.my/checkout?order_number=${billCode}&buyer_name=${encodeURIComponent(namaPembayar || 'Ahli')}&amount=${Number(jumlahKasar).toFixed(2)}`
+        : `https://payments.securepay.my/checkout?order_number=${billCode}&buyer_name=${encodeURIComponent(namaPembayar || 'Ahli')}&amount=${Number(jumlahKasar).toFixed(2)}`;
 
       res.status(201).json({
         success: true,
@@ -721,6 +721,7 @@ async function startServer() {
         transaction: newTx,
         cajPlatform: fee,
         jumlahBersih: netAmount,
+        provider: 'SECUREPAY'
       });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -729,17 +730,23 @@ async function startServer() {
 
   app.post("/api/gateway/callback", (req, res) => {
     try {
-      const { billCode, status_id, refno } = req.body;
+      const { billCode, status_id, payment_status, refno, transaction_id } = req.body;
       const tx = db.getGatewayTransactions().find(t => t.billCode === billCode);
       if (!tx) {
         return res.status(404).json({ error: "Transaksi tidak ditemui" });
       }
 
-      const isSuccess = String(status_id) === '1' || status_id === true || status_id === 'SUCCESS';
+      const isSuccess = 
+        String(status_id) === '1' || 
+        status_id === true || 
+        status_id === 'SUCCESS' || 
+        payment_status === 'paid' || 
+        payment_status === 'true';
+
       const updated = db.updateGatewayTransaction(tx.id, {
         status: isSuccess ? 'BERJAYA' : 'GAGAL',
         tarikhSelesai: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        transaksiBankId: refno || `FPX-PAY-${Date.now().toString().slice(-8)}`
+        transaksiBankId: transaction_id || refno || `SP-PAY-${Date.now().toString().slice(-8)}`
       });
 
       if (isSuccess) {
@@ -747,9 +754,9 @@ async function startServer() {
           id: `LOG-${Date.now()}`,
           tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
           kategori: 'PERAKAUNAN',
-          tindakan: `Penerimaan Bayaran Online FPX (${tx.kategoriTransaksi})`,
-          deskripsi: `Bayaran RM${tx.jumlahKasar} daripada ${tx.namaPembayar} disahkan. Caj platform Verttere: RM${tx.cajPlatformVerttere}, Bersih Escrow: RM${tx.jumlahBersihKoperasi}.`,
-          pengguna: 'ToyyibPay Webhook / Sistem Escrow',
+          tindakan: `Penerimaan Bayaran Online SecurePay (${tx.kategoriTransaksi})`,
+          deskripsi: `Bayaran RM${tx.jumlahKasar} daripada ${tx.namaPembayar} disahkan oleh SecurePay. Caj platform Verttere: RM${tx.cajPlatformVerttere}, Bersih Escrow: RM${tx.jumlahBersihKoperasi}.`,
+          pengguna: 'SecurePay Webhook / Sistem Escrow',
           status: 'BERJAYA',
           jumlahRM: tx.jumlahKasar,
           ipAlamat: '10.0.0.1'

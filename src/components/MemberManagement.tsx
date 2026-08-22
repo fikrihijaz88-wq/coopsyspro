@@ -884,11 +884,11 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                 />
               </div>
 
-              {/* FPX Toyyibpay Online Gateway Banner */}
+              {/* SecurePay Online Gateway Banner */}
               <div className="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/80 flex items-center justify-between">
                 <div>
-                  <div className="text-[11px] font-bold text-indigo-300">Bayar Online via FPX (ToyyibPay)</div>
-                  <div className="text-[10px] text-indigo-400/80">Penahanan transit & auto-resit gateway</div>
+                  <div className="text-[11px] font-bold text-indigo-300">Bayar Online via SecurePay</div>
+                  <div className="text-[10px] text-indigo-400/80">FPX, DuitNow QR & Kad (Transit Escrow)</div>
                 </div>
                 <button
                   type="button"
@@ -909,16 +909,16 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                         noTelefon: selectedAhli.noTelefon || '012-3456789',
                         jumlahKasar: total
                       });
-                      alert(`✅ Pautan FPX ToyyibPay Dijana!\n\nNo Bil: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
+                      alert(`✅ Pautan SecurePay Dijana!\n\nNo Pesanan: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
                       onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
                       setShowSyerModal(false);
                     } catch (err: any) {
-                      alert(`Ralat menjana bil online: ${err.message}`);
+                      alert(`Ralat menjana pesanan SecurePay: ${err.message}`);
                     }
                   }}
                   className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] rounded-lg shadow transition-all flex items-center gap-1 cursor-pointer"
                 >
-                  <CreditCard className="w-3.5 h-3.5" /> Bayar FPX
+                  <CreditCard className="w-3.5 h-3.5" /> Bayar SecurePay
                 </button>
               </div>
 

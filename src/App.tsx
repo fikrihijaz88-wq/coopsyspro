@@ -562,7 +562,7 @@ export default function App() {
       return res;
     } catch (err) {
       console.warn('Local gateway bill create:', err);
-      const billCode = `TYB-${Date.now().toString().slice(-6)}`;
+      const billCode = `SP-${Date.now().toString().slice(-6)}`;
       const fee = 1.00 + (payload.jumlahKasar * 0.005);
       const newTx: GatewayTransaction = {
         id: `TX-GW-${Date.now()}`,
@@ -581,7 +581,7 @@ export default function App() {
         jumlahBersihKoperasi: payload.jumlahKasar - fee,
         status: 'MENUNGGU',
         tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        kaedahBayaran: 'FPX_TOYYIBPAY'
+        kaedahBayaran: 'SECUREPAY'
       };
       setGatewayTransactions(prev => [newTx, ...prev]);
       return { success: true, billCode, transaction: newTx, cajPlatform: fee, jumlahBersih: newTx.jumlahBersihKoperasi };
@@ -600,9 +600,9 @@ export default function App() {
         if (t.billCode === billCode) {
           return {
             ...t,
-            status: String(status) === '1' ? 'BERJAYA' : 'GAGAL',
+            status: (String(status) === '1' || status === 'paid' || status === 'SUCCESS') ? 'BERJAYA' : 'GAGAL',
             tarikhSelesai: new Date().toISOString().replace('T', ' ').slice(0, 19),
-            transaksiBankId: `FPX-MOCK-${Date.now().toString().slice(-6)}`
+            transaksiBankId: `SP-MOCK-${Date.now().toString().slice(-6)}`
           };
         }
         return t;
@@ -642,7 +642,7 @@ export default function App() {
         jumlahCajVerttere: totalCaj,
         jumlahBersihPindahan: totalBersih,
         status: 'SELESAI_PINDAH',
-        dikeluarkanOleh: 'Verttere Escrow Manager',
+        dikeluarkanOleh: 'Verttere SecurePay Escrow Manager',
         tarikhPindahan: new Date().toISOString().replace('T', ' ').slice(0, 19),
         noRujukanBank: `MBB-EFT-${Date.now().toString().slice(-8)}`
       };

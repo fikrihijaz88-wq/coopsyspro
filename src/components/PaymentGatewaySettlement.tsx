@@ -216,14 +216,14 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               </span>
               <span className="inline-flex items-center gap-1 bg-emerald-950/80 text-emerald-300 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-800">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                ToyyibPay FPX {gatewayConfig.isSandbox ? '(Sandbox Mode)' : '(Live Production)'}
+                SecurePay Gateway {gatewayConfig.isSandbox ? '(Sandbox Mode)' : '(Live Production)'}
               </span>
             </div>
             <h1 className="text-2xl lg:text-3xl font-black text-white tracking-tight">
-              {isEN ? 'Payment Gateway & Escrow Settlement' : 'Pintu Gerbang FPX & Pengurusan Dana Escrow'}
+              {isEN ? 'Payment Gateway & Escrow Settlement (SecurePay)' : 'Gerbang Bayaran SecurePay & Dana Escrow'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl mt-1">
-              Pemudah cara kutipan bayaran online syer, yuran, dan jualan POS melalui ToyyibPay FPX dengan penahanan dana transit dan pelepasan berkala (*payout*) ke akaun bank koperasi.
+              Pemudah cara kutipan bayaran online syer, yuran, dan jualan POS melalui SecurePay (FPX, DuitNow QR & Kad) dengan penahanan dana transit dan pelepasan berkala (*payout*) ke akaun bank koperasi.
             </p>
           </div>
 
@@ -246,7 +246,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-xs flex items-center gap-2 shadow-lg shadow-indigo-900/30 transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
-              {isEN ? 'Test FPX Simulator' : 'Uji Simulasi FPX'}
+              {isEN ? 'Test SecurePay Simulator' : 'Uji Simulasi SecurePay'}
             </button>
           </div>
         </div>
@@ -625,7 +625,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
       )}
 
       {/* ------------------------------------------------------------- */}
-      {/* TAB 3: FPX PAYMENT SIMULATOR */}
+      {/* TAB 3: SECUREPAY PAYMENT SIMULATOR */}
       {/* ------------------------------------------------------------- */}
       {activeSubTab === 'SIMULATOR' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -634,10 +634,10 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
             <div>
               <span className="text-[10px] bg-indigo-950 text-indigo-300 font-bold px-2.5 py-0.5 rounded-full border border-indigo-800 uppercase tracking-wider">
-                Simulasi FPX Sandbox
+                Simulasi SecurePay Sandbox
               </span>
               <h3 className="text-lg font-black text-white mt-1">Uji Aliran Bayaran Ahli ke Gateway</h3>
-              <p className="text-xs text-slate-400">Pilih anggota dan jumlah bayaran untuk menguji pengiraan caj automatik dan penjanaan bil ToyyibPay.</p>
+              <p className="text-xs text-slate-400">Pilih anggota dan jumlah bayaran untuk menguji pengiraan caj automatik dan penjanaan pesanan SecurePay.</p>
             </div>
 
             <form onSubmit={handleSimulateCreateBill} className="space-y-4">
@@ -732,7 +732,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
                 className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-900/40 flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <CreditCard className="w-4 h-4" />
-                {isProcessing ? 'Menjana Bil...' : 'Cipta Bil Pembayaran ToyyibPay'}
+                {isProcessing ? 'Menjana Pesanan...' : 'Cipta Pesanan Pembayaran SecurePay'}
               </button>
 
             </form>
@@ -742,17 +742,17 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
             <div>
               <span className="text-[10px] bg-emerald-950 text-emerald-300 font-bold px-2.5 py-0.5 rounded-full border border-emerald-800 uppercase tracking-wider">
-                Paparan Gerbang Bayaran
+                Paparan Gerbang Bayaran SecurePay
               </span>
-              <h3 className="text-lg font-black text-white mt-1">Status Bil ToyyibPay</h3>
-              <p className="text-xs text-slate-400">Hasil panggilan API pendaftaran bil dari Toyyibpay server.</p>
+              <h3 className="text-lg font-black text-white mt-1">Status Pesanan SecurePay</h3>
+              <p className="text-xs text-slate-400">Hasil panggilan API pendaftaran pesanan dari SecurePay Malaysia server.</p>
 
               {simGeneratedBill ? (
                 <div className="mt-5 space-y-4 bg-slate-950 p-5 rounded-2xl border border-indigo-900/50">
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-mono text-indigo-400 font-bold">{simGeneratedBill.billCode}</span>
                     <span className="text-[10px] bg-amber-950 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-800">
-                      Menunggu Bayaran FPX
+                      Menunggu Bayaran (FPX / Kad / QR)
                     </span>
                   </div>
 
@@ -780,14 +780,14 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               ) : (
                 <div className="mt-12 text-center py-12 text-slate-500">
                   <CreditCard className="w-12 h-12 mx-auto mb-3 text-slate-700" />
-                  <p className="text-xs">Sila isi borang di sebelah untuk menjana pautan bayaran FPX Toyyibpay.</p>
+                  <p className="text-xs">Sila isi borang di sebelah untuk menjana pautan bayaran SecurePay.</p>
                 </div>
               )}
             </div>
 
             <div className="text-[11px] text-slate-500 border-t border-slate-800 pt-3 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              Sistem ini mematuhi spesifikasi ToyyibPay API v2 (FPX / Direct Debit).
+              Sistem ini mematuhi spesifikasi SecurePay API v1 (FPX Online Banking, DuitNow QR & Kad).
             </div>
 
           </div>
@@ -804,29 +804,40 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
             <span className="text-[10px] bg-indigo-950 text-indigo-300 font-bold px-2.5 py-0.5 rounded-full border border-indigo-800 uppercase tracking-wider">
               Tetapan Platform Verttere
             </span>
-            <h3 className="text-lg font-black text-white mt-1">Konfigurasi Gateway & Struktur Caj</h3>
-            <p className="text-xs text-slate-400">Tetapan API Key ToyyibPay dan formula komisen/yuran perkhidmatan platform Verttere Solutions.</p>
+            <h3 className="text-lg font-black text-white mt-1">Konfigurasi SecurePay & Struktur Caj</h3>
+            <p className="text-xs text-slate-400">Tetapan API Key SecurePay Malaysia dan formula komisen/yuran perkhidmatan platform Verttere Solutions.</p>
           </div>
 
           <form onSubmit={handleSaveConfig} className="space-y-4">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">User Secret Key ToyyibPay:</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Merchant UID SecurePay:</label>
                 <input
-                  type="password"
-                  value={editConfig.userSecretKey}
-                  onChange={e => setEditConfig({ ...editConfig, userSecretKey: e.target.value })}
+                  type="text"
+                  placeholder="7f4a9b2c-8821-49fa-91b3-..."
+                  value={editConfig.merchantUid || ''}
+                  onChange={e => setEditConfig({ ...editConfig, merchantUid: e.target.value })}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Category Code ToyyibPay:</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Auth Token SecurePay:</label>
                 <input
-                  type="text"
-                  value={editConfig.categoryCode}
-                  onChange={e => setEditConfig({ ...editConfig, categoryCode: e.target.value })}
+                  type="password"
+                  value={editConfig.authToken || ''}
+                  onChange={e => setEditConfig({ ...editConfig, authToken: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Checksum Token (SHA256):</label>
+                <input
+                  type="password"
+                  value={editConfig.checksumToken || ''}
+                  onChange={e => setEditConfig({ ...editConfig, checksumToken: e.target.value })}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
                 />
               </div>
@@ -847,7 +858,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Caj Tetap FPX (RM):</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Caj Tetap Gateway (RM):</label>
                 <input
                   type="number"
                   step="0.10"
@@ -909,7 +920,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
                 type="submit"
                 className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all"
               >
-                Simpan Tetapan Gateway
+                Simpan Tetapan SecurePay
               </button>
             </div>
 
@@ -935,7 +946,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
             </div>
 
             <p className="text-xs text-slate-300">
-              Sistem akan mengumpulkan <span className="font-bold text-white">{pendingTransactions.length} transaksi</span> FPX yang telah berjaya dan melepaskan dana bersih ke akaun bank operasi rasmi koperasi.
+              Sistem akan mengumpulkan <span className="font-bold text-white">{pendingTransactions.length} transaksi</span> SecurePay yang telah berjaya dan melepaskan dana bersih ke akaun bank operasi rasmi koperasi.
             </p>
 
             <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs font-mono">
@@ -1003,7 +1014,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
             {/* Title */}
             <div className="text-center">
               <h3 className="text-base font-bold uppercase tracking-wide text-slate-900">
-                Penyata Pelepasan Dana & Baucar Settlement (FPX Toyyibpay)
+                Penyata Pelepasan Dana & Baucar Settlement (SecurePay Gateway)
               </h3>
               <p className="text-xs text-slate-600">Pindahan Wang Bersih Transit ke Akaun Bank Operasi Koperasi</p>
             </div>
@@ -1033,7 +1044,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               </thead>
               <tbody className="divide-y divide-slate-200 font-mono">
                 <tr>
-                  <td className="p-2">Kutipan Kasar Melalui Gerbang FPX Toyyibpay</td>
+                  <td className="p-2">Kutipan Kasar Melalui Gerbang SecurePay</td>
                   <td className="p-2 text-center">{selectedBatchForPrint.jumlahTransaksi}</td>
                   <td className="p-2 text-right font-bold">{formatRM(selectedBatchForPrint.jumlahKasar)}</td>
                 </tr>
