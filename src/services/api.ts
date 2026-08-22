@@ -667,7 +667,7 @@ export const api = {
     } catch (e) {
       console.warn('api.triggerGatewayCallback offline fallback:', e);
     }
-    const isSuccess = String(status_id) === '1' || status_id === 'SUCCESS' || status_id === 'paid' || status_id === true;
+    const isSuccess = String(status_id) === '1' || status_id === 'SUCCESS' || status_id === 'paid' || String(status_id) === 'true';
     const isToyyib = billCode.startsWith('TYB');
     const mockTx: GatewayTransaction = {
       id: `TX-GW-${Date.now()}`,
