@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "aila": {
+      "serverUrl": "https://aila.my/mcp",
+      "headers": {
+        "User-Agent": "Antigravity/1.0"
+      }
+    }
+  }
+}

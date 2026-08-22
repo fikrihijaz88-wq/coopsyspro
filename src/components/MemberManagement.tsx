@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Ahli, StatusAhli } from '../types';
 import { excelExport } from '../utils/excelExport';
+import { api } from '../services/api';
 import { 
   Users, 
   UserPlus, 
@@ -883,6 +884,44 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                 />
               </div>
 
+              {/* FPX Toyyibpay Online Gateway Banner */}
+              <div className="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/80 flex items-center justify-between">
+                <div>
+                  <div className="text-[11px] font-bold text-indigo-300">Bayar Online via FPX (ToyyibPay)</div>
+                  <div className="text-[10px] text-indigo-400/80">Penahanan transit & auto-resit gateway</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const total = (syerTambah || 0) + (yuranTambah || 0);
+                    if (total <= 0) {
+                      alert('Sila masukkan jumlah syer atau yuran terlebih dahulu.');
+                      return;
+                    }
+                    try {
+                      const res = await api.createGatewayBill({
+                        kategoriTransaksi: 'TAMBAH_SYER',
+                        perihal: `Tambah Modal Syer / Yuran - ${selectedAhli.nama} (${selectedAhli.noAhli})`,
+                        namaPembayar: selectedAhli.nama,
+                        noKP: selectedAhli.noKp,
+                        noAhli: selectedAhli.noAhli,
+                        emel: selectedAhli.eMel || 'ahli@koperasi.my',
+                        noTelefon: selectedAhli.noTelefon || '012-3456789',
+                        jumlahKasar: total
+                      });
+                      alert(`✅ Pautan FPX ToyyibPay Dijana!\n\nNo Bil: ${res.billCode}\nJumlah: RM${res.transaction.jumlahKasar}\nCaj Platform Verttere: RM${res.cajPlatform}\nBersih Koperasi: RM${res.jumlahBersih}\n\nURL Pembayaran:\n${res.paymentUrl}`);
+                      onTambahSyerAhli(selectedAhli.id, syerTambah, yuranTambah);
+                      setShowSyerModal(false);
+                    } catch (err: any) {
+                      alert(`Ralat menjana bil online: ${err.message}`);
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] rounded-lg shadow transition-all flex items-center gap-1 cursor-pointer"
+                >
+                  <CreditCard className="w-3.5 h-3.5" /> Bayar FPX
+                </button>
+              </div>
+
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
@@ -895,7 +934,7 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                   type="submit"
                   className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold"
                 >
-                  {isEN ? 'Update & Record Receipt' : 'Kemaskini & Rekod Resit'}
+                  {isEN ? 'Update & Record Receipt' : 'Kemaskini (Tunai/Manual)'}
                 </button>
               </div>
             </form>

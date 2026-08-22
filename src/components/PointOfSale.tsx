@@ -950,8 +950,34 @@ export const PointOfSale: React.FC<PointOfSaleProps> = ({
                     <UserCheck className="w-3.5 h-3.5 text-amber-400" />
                     <span className="text-[11px] truncate">{isEN ? 'Payroll Deduct' : 'Potongan Gaji'}</span>
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('FPX_TOYYIBPAY')}
+                    className={`col-span-2 p-2 rounded-xl border text-center font-bold flex items-center justify-center gap-1.5 transition-all ${
+                      paymentMethod === 'FPX_TOYYIBPAY'
+                        ? 'bg-indigo-950 border-indigo-500 text-indigo-300 shadow-sm'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    <Building2 className="w-4 h-4 text-indigo-400" />
+                    <span>FPX Online Gateway (ToyyibPay)</span>
+                  </button>
                 </div>
               </div>
+
+              {/* FPX ToyyibPay Summary Info */}
+              {paymentMethod === 'FPX_TOYYIBPAY' && (
+                <div className="bg-indigo-950/60 border border-indigo-800/80 p-3 rounded-xl space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between text-indigo-200 font-bold">
+                    <span>Gerbang FPX ToyyibPay</span>
+                    <span className="text-[10px] bg-indigo-900 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-700">Automatik</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    Pelanggan akan membayar melalui perbankan internet FPX. Duit ditahan di akaun transit Verttere dan dilepaskan ke akaun bank koperasi mengikut kitaran payout.
+                  </p>
+                </div>
+              )}
 
               {/* Tunai Tender Input */}
               {paymentMethod === 'TUNAI' && (

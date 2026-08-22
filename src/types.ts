@@ -351,7 +351,7 @@ export interface ItemCartPOS {
   jumlah: number;
 }
 
-export type CaraBayaranPOS = 'TUNAI' | 'DUITNOW_QR' | 'KAD' | 'POTONGAN_GAJI_AHLI';
+export type CaraBayaranPOS = 'TUNAI' | 'DUITNOW_QR' | 'KAD' | 'POTONGAN_GAJI_AHLI' | 'FPX_TOYYIBPAY';
 
 export interface ItemJualanDetail {
   idProduk: string;
@@ -749,4 +749,66 @@ export interface DataExportEKoperasi {
     tempohKhidmat: string;
   }>;
 }
+
+// -------------------------------------------------------------
+// Verttere Solutions Payment Gateway & Escrow Settlement Types
+// -------------------------------------------------------------
+
+export interface PaymentGatewayConfig {
+  provider: 'TOYYIBPAY' | 'MANUAL_FPX' | string;
+  userSecretKey: string;
+  categoryCode: string;
+  platformFeeType: 'FIXED' | 'PERCENTAGE' | 'HYBRID';
+  fixedFeeRM: number; // e.g. RM 1.50
+  percentageFee: number; // e.g. 1.5%
+  isSandbox: boolean;
+  settlementCycle: 'T+1' | 'T+2' | 'WEEKLY' | 'MANUAL';
+  namaPlatform: string;
+  akaunBankPlatform: string;
+  namaBankPlatform: string;
+}
+
+export interface GatewayTransaction {
+  id: string;
+  billCode: string;
+  kategoriTransaksi: 'TAMBAH_SYER' | 'YURAN_BULANAN' | 'POS_STORE' | 'SIMPANAN_KHAS' | 'BAYARAN_PEMBIAYAAN' | string;
+  perihal: string;
+  namaKoperasi: string;
+  kodKoperasi: string;
+  namaPembayar: string;
+  noKP: string;
+  noAhli?: string;
+  emel?: string;
+  noTelefon?: string;
+  jumlahKasar: number;
+  cajPlatformVerttere: number;
+  jumlahBersihKoperasi: number;
+  status: 'MENUNGGU' | 'BERJAYA' | 'GAGAL' | 'DILEPASKAN_KE_KOPERASI';
+  tarikhMasa: string;
+  tarikhSelesai?: string;
+  noBatchSettlement?: string;
+  kaedahBayaran: 'FPX_TOYYIBPAY' | 'DUITNOW_QR' | 'MANUAL';
+  transaksiBankId?: string;
+}
+
+export interface SettlementBatch {
+  id: string;
+  batchNo: string;
+  namaKoperasi: string;
+  kodKoperasi: string;
+  noAkaunBankKoperasi: string;
+  namaBankKoperasi: string;
+  tarikhMula: string;
+  tarikhTamat: string;
+  jumlahTransaksi: number;
+  jumlahKasar: number;
+  jumlahCajVerttere: number;
+  jumlahBersihPindahan: number;
+  status: 'DRAF' | 'DALAM_PROSES' | 'SELESAI_PINDAH';
+  dikeluarkanOleh: string;
+  tarikhPindahan?: string;
+  noRujukanBank?: string;
+  catatan?: string;
+}
+
 

@@ -21,7 +21,10 @@ import {
   ItemPenyataBank,
   PenyataPenyesuaianBank,
   EInvoisLHDN,
-  DataExportEKoperasi
+  DataExportEKoperasi,
+  PaymentGatewayConfig,
+  GatewayTransaction,
+  SettlementBatch
 } from '../types';
 
 export const api = {
@@ -512,6 +515,85 @@ export const api = {
   // ==========================================
   async getEKoperasiExportData(): Promise<DataExportEKoperasi> {
     const res = await fetch('/api/export/e-koperasi');
+    return res.json();
+  },
+
+  // ==========================================
+  // Verttere Solutions Payment Gateway & Escrow
+  // ==========================================
+  async getGatewayConfig(): Promise<PaymentGatewayConfig> {
+    const res = await fetch('/api/gateway/config');
+    return res.json();
+  },
+
+  async updateGatewayConfig(config: Partial<PaymentGatewayConfig>): Promise<PaymentGatewayConfig> {
+    const res = await fetch('/api/gateway/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config),
+    });
+    return res.json();
+  },
+
+  async getGatewayTransactions(): Promise<GatewayTransaction[]> {
+    const res = await fetch('/api/gateway/transactions');
+    return res.json();
+  },
+
+  async createGatewayBill(payload: {
+    kategoriTransaksi: string;
+    perihal: string;
+    namaPembayar: string;
+    noKP: string;
+    noAhli?: string;
+    emel?: string;
+    noTelefon?: string;
+    jumlahKasar: number;
+  }): Promise<{
+    success: boolean;
+    billCode: string;
+    paymentUrl: string;
+    transaction: GatewayTransaction;
+    cajPlatform: number;
+    jumlahBersih: number;
+  }> {
+    const res = await fetch('/api/gateway/create-bill', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  },
+
+  async triggerGatewayCallback(billCode: string, status_id: number | string, refno?: string): Promise<{ success: boolean; transaction: GatewayTransaction }> {
+    const res = await fetch('/api/gateway/callback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ billCode, status_id, refno }),
+    });
+    return res.json();
+  },
+
+  async getSettlementBatches(): Promise<SettlementBatch[]> {
+    const res = await fetch('/api/gateway/settlements');
+    return res.json();
+  },
+
+  async createSettlementBatch(payload: {
+    namaKoperasi?: string;
+    kodKoperasi?: string;
+    noAkaunBankKoperasi?: string;
+    namaBankKoperasi?: string;
+    tarikhMula?: string;
+    tarikhTamat?: string;
+    catatan?: string;
+    dikeluarkanOleh?: string;
+  }): Promise<SettlementBatch> {
+    const res = await fetch('/api/gateway/settlements', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
     return res.json();
   },
 };

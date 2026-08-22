@@ -18,7 +18,10 @@ import {
   AkaunSimpananDeposit,
   ItemPenyataBank,
   PenyataPenyesuaianBank,
-  EInvoisLHDN
+  EInvoisLHDN,
+  PaymentGatewayConfig,
+  GatewayTransaction,
+  SettlementBatch
 } from '../types';
 
 export const INITIAL_CARTA_AKAUN: CartaAkaun[] = [
@@ -2751,6 +2754,153 @@ export const INITIAL_E_INVOICES: EInvoisLHDN[] = [
     ublVersion: 'UBL 2.1'
   }
 ];
+
+// -------------------------------------------------------------
+// Initial Data: Verttere Solutions Payment Gateway & Escrow Settlement
+// -------------------------------------------------------------
+
+export const INITIAL_PAYMENT_GATEWAY_CONFIG: PaymentGatewayConfig = {
+  provider: 'TOYYIBPAY',
+  userSecretKey: 'sec_verttere_live_948192048102941',
+  categoryCode: 'cat_verttere_coop_pay_01',
+  platformFeeType: 'HYBRID',
+  fixedFeeRM: 1.00, // FPX direct charge RM 1.00
+  percentageFee: 0.50, // Verttere SaaS Platform Fee 0.5%
+  isSandbox: true,
+  settlementCycle: 'T+1',
+  namaPlatform: 'Verttere Solutions Sdn Bhd (FinTech Aggregator)',
+  akaunBankPlatform: '5621-8849-1029 (Maybank Islamic)',
+  namaBankPlatform: 'Maybank Berhad'
+};
+
+export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
+  {
+    id: 'TX-GW-2026-001',
+    billCode: 'TYB-891024-01',
+    kategoriTransaksi: 'TAMBAH_SYER',
+    perihal: 'Penambahan Modal Syer Anggota 500 Unit',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    namaPembayar: 'Ahmad Faiz Bin Rosli',
+    noKP: '880315-10-5541',
+    noAhli: 'KOP-2022-005',
+    emel: 'faiz.rosli@gmail.com',
+    noTelefon: '013-4455667',
+    jumlahKasar: 500.00,
+    cajPlatformVerttere: 3.50, // RM1.00 FPX + RM2.50 (0.5%)
+    jumlahBersihKoperasi: 496.50,
+    status: 'BERJAYA',
+    tarikhMasa: '2026-02-18 09:30:15',
+    tarikhSelesai: '2026-02-18 09:31:02',
+    kaedahBayaran: 'FPX_TOYYIBPAY',
+    transaksiBankId: 'FPX-MBB-20260218-0912'
+  },
+  {
+    id: 'TX-GW-2026-002',
+    billCode: 'TYB-891024-02',
+    kategoriTransaksi: 'POS_STORE',
+    perihal: 'Pembelian Barangan Runcit & Baja Koperasi',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    namaPembayar: 'Siti Sarah Binti Ismail',
+    noKP: '900214-08-5122',
+    noAhli: 'KOP-2023-014',
+    emel: 'siti.sarah@yahoo.com',
+    noTelefon: '019-8877665',
+    jumlahKasar: 180.00,
+    cajPlatformVerttere: 1.90,
+    jumlahBersihKoperasi: 178.10,
+    status: 'BERJAYA',
+    tarikhMasa: '2026-02-19 11:45:20',
+    tarikhSelesai: '2026-02-19 11:46:00',
+    kaedahBayaran: 'FPX_TOYYIBPAY',
+    transaksiBankId: 'FPX-CIMB-20260219-4819'
+  },
+  {
+    id: 'TX-GW-2026-003',
+    billCode: 'TYB-891024-03',
+    kategoriTransaksi: 'SIMPANAN_KHAS',
+    perihal: 'Deposit Simpanan Khas Anggota (Akaun 2050)',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    namaPembayar: 'Dato\' Ahmad Razali Bin Zainal',
+    noKP: '750412-10-5231',
+    noAhli: 'KOP-2021-001',
+    emel: 'ahmad.razali@koperasi.my',
+    noTelefon: '012-3456789',
+    jumlahKasar: 1000.00,
+    cajPlatformVerttere: 6.00,
+    jumlahBersihKoperasi: 994.00,
+    status: 'BERJAYA',
+    tarikhMasa: '2026-02-20 14:10:00',
+    tarikhSelesai: '2026-02-20 14:10:45',
+    kaedahBayaran: 'FPX_TOYYIBPAY',
+    transaksiBankId: 'FPX-RHB-20260220-9921'
+  },
+  {
+    id: 'TX-GW-2026-004',
+    billCode: 'TYB-891024-04',
+    kategoriTransaksi: 'TAMBAH_SYER',
+    perihal: 'Pendaftaran Ahli Baru & Syer Minimum RM100',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    namaPembayar: 'Muhammad Amirul Bin Azman',
+    noKP: '960718-14-6119',
+    emel: 'amirul.azman@gmail.com',
+    noTelefon: '011-2345678',
+    jumlahKasar: 130.00,
+    cajPlatformVerttere: 1.65,
+    jumlahBersihKoperasi: 128.35,
+    status: 'MENUNGGU',
+    tarikhMasa: '2026-02-21 16:20:00',
+    kaedahBayaran: 'FPX_TOYYIBPAY'
+  },
+  {
+    id: 'TX-GW-2026-005',
+    billCode: 'TYB-891024-05',
+    kategoriTransaksi: 'BAYARAN_PEMBIAYAAN',
+    perihal: 'Ansuran Pembiayaan Peribadi Anggota Bulan Feb 2026',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    namaPembayar: 'Kamala a/p Subramaniam',
+    noKP: '820921-08-5674',
+    noAhli: 'KOP-2021-007',
+    emel: 'kamala.subra@outlook.com',
+    noTelefon: '016-9988776',
+    jumlahKasar: 350.00,
+    cajPlatformVerttere: 2.75,
+    jumlahBersihKoperasi: 347.25,
+    status: 'DILEPASKAN_KE_KOPERASI',
+    tarikhMasa: '2026-02-15 10:00:00',
+    tarikhSelesai: '2026-02-15 10:01:20',
+    noBatchSettlement: 'SETTLE-2026-B01',
+    kaedahBayaran: 'FPX_TOYYIBPAY',
+    transaksiBankId: 'FPX-BIMB-20260215-3819'
+  }
+];
+
+export const INITIAL_SETTLEMENT_BATCHES: SettlementBatch[] = [
+  {
+    id: 'SETTLE-001',
+    batchNo: 'SETTLE-2026-B01',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    noAkaunBankKoperasi: '8602-9918-2019 (CIMB Islamic)',
+    namaBankKoperasi: 'CIMB Islamic Bank Berhad',
+    tarikhMula: '2026-02-01',
+    tarikhTamat: '2026-02-15',
+    jumlahTransaksi: 12,
+    jumlahKasar: 4500.00,
+    jumlahCajVerttere: 32.50,
+    jumlahBersihPindahan: 4467.50,
+    status: 'SELESAI_PINDAH',
+    dikeluarkanOleh: 'Sistem Escrow Verttere',
+    tarikhPindahan: '2026-02-16 15:30:00',
+    noRujukanBank: 'MBB-EFT-SETTLE-84910291',
+    catatan: 'Pindahan kelompok bayaran modal syer dan jualan POS fasa 1 Feb 2026 telah disahkan diterima akaun koperasi.'
+  }
+];
+
 
 
 

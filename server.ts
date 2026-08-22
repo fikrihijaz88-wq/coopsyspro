@@ -2,8 +2,8 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
-import dotenv from "dotenv";
 import { db } from "./server/db";
+import { SettlementBatch, GatewayTransaction, PaymentGatewayConfig } from "./src/types";
 
 dotenv.config();
 
@@ -644,15 +644,185 @@ async function startServer() {
   });
 
   // -------------------------------------------------------------
-  // Activity Logs Endpoints
+  // Verttere Solutions Payment Gateway & Escrow Settlement Routes
   // -------------------------------------------------------------
-  app.get("/api/logs", (_req, res) => {
-    res.json(db.getLogs());
+  app.get("/api/gateway/config", (_req, res) => {
+    res.json(db.getGatewayConfig());
   });
 
-  app.post("/api/logs", (req, res) => {
+  app.post("/api/gateway/config", (req, res) => {
     try {
-      const saved = db.addLog(req.body);
+      const updated = db.updateGatewayConfig(req.body);
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/gateway/transactions", (_req, res) => {
+    res.json(db.getGatewayTransactions());
+  });
+
+  app.post("/api/gateway/create-bill", (req, res) => {
+    try {
+      const {
+        kategoriTransaksi,
+        perihal,
+        namaPembayar,
+        noKP,
+        noAhli,
+        emel,
+        noTelefon,
+        jumlahKasar,
+      } = req.body;
+
+      const config = db.getGatewayConfig();
+      
+      // Calculate Platform & FPX Fee
+      let fee = config.fixedFeeRM || 1.00;
+      if (config.platformFeeType === 'PERCENTAGE' || config.platformFeeType === 'HYBRID') {
+        const percentFee = (jumlahKasar * (config.percentageFee || 0.5)) / 100;
+        fee = config.platformFeeType === 'HYBRID' ? (config.fixedFeeRM + percentFee) : percentFee;
+      }
+      fee = Math.round(fee * 100) / 100;
+      const netAmount = Math.max(0, Math.round((jumlahKasar - fee) * 100) / 100);
+
+      const billCode = `TYB-${Date.now().toString().slice(-6)}-${Math.floor(10 + Math.random() * 90)}`;
+      const newTx = db.addGatewayTransaction({
+        id: `TX-GW-${Date.now()}`,
+        billCode,
+        kategoriTransaksi: kategoriTransaksi || 'TAMBAH_SYER',
+        perihal: perihal || 'Bayaran Online Koperasi via ToyyibPay',
+        namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+        kodKoperasi: 'KOP-MY-001',
+        namaPembayar: namaPembayar || 'Anggota Koperasi',
+        noKP: noKP || '880101-10-5555',
+        noAhli,
+        emel: emel || 'ahli@koperasi.my',
+        noTelefon: noTelefon || '012-3456789',
+        jumlahKasar: Number(jumlahKasar),
+        cajPlatformVerttere: fee,
+        jumlahBersihKoperasi: netAmount,
+        status: 'MENUNGGU',
+        tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        kaedahBayaran: 'FPX_TOYYIBPAY'
+      });
+
+      // Simulation / Live Toyyibpay payment link
+      const paymentUrl = config.isSandbox
+        ? `https://dev.toyyibpay.com/${billCode}`
+        : `https://toyyibpay.com/${billCode}`;
+
+      res.status(201).json({
+        success: true,
+        billCode,
+        paymentUrl,
+        transaction: newTx,
+        cajPlatform: fee,
+        jumlahBersih: netAmount,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/gateway/callback", (req, res) => {
+    try {
+      const { billCode, status_id, refno } = req.body;
+      const tx = db.getGatewayTransactions().find(t => t.billCode === billCode);
+      if (!tx) {
+        return res.status(404).json({ error: "Transaksi tidak ditemui" });
+      }
+
+      const isSuccess = String(status_id) === '1' || status_id === true || status_id === 'SUCCESS';
+      const updated = db.updateGatewayTransaction(tx.id, {
+        status: isSuccess ? 'BERJAYA' : 'GAGAL',
+        tarikhSelesai: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        transaksiBankId: refno || `FPX-PAY-${Date.now().toString().slice(-8)}`
+      });
+
+      if (isSuccess) {
+        db.addLog({
+          id: `LOG-${Date.now()}`,
+          tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+          kategori: 'PERAKAUNAN',
+          tindakan: `Penerimaan Bayaran Online FPX (${tx.kategoriTransaksi})`,
+          deskripsi: `Bayaran RM${tx.jumlahKasar} daripada ${tx.namaPembayar} disahkan. Caj platform Verttere: RM${tx.cajPlatformVerttere}, Bersih Escrow: RM${tx.jumlahBersihKoperasi}.`,
+          pengguna: 'ToyyibPay Webhook / Sistem Escrow',
+          status: 'BERJAYA',
+          jumlahRM: tx.jumlahKasar,
+          ipAlamat: '10.0.0.1'
+        });
+      }
+
+      res.json({ success: true, transaction: updated });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/gateway/settlements", (_req, res) => {
+    res.json(db.getSettlementBatches());
+  });
+
+  app.post("/api/gateway/settlements", (req, res) => {
+    try {
+      const {
+        namaKoperasi,
+        kodKoperasi,
+        noAkaunBankKoperasi,
+        namaBankKoperasi,
+        tarikhMula,
+        tarikhTamat,
+        catatan,
+        dikeluarkanOleh
+      } = req.body;
+
+      // Filter eligible successful transactions without prior batch
+      const eligibleTx = db.getGatewayTransactions().filter(t => 
+        t.status === 'BERJAYA' && !t.noBatchSettlement
+      );
+
+      const totalKasar = eligibleTx.reduce((acc, t) => acc + t.jumlahKasar, 0);
+      const totalCaj = eligibleTx.reduce((acc, t) => acc + t.cajPlatformVerttere, 0);
+      const totalBersih = eligibleTx.reduce((acc, t) => acc + t.jumlahBersihKoperasi, 0);
+
+      const batchNo = `SETTLE-${new Date().getFullYear()}-B${String(db.getSettlementBatches().length + 1).padStart(2, '0')}`;
+      
+      const newBatch: SettlementBatch = {
+        id: `SETTLE-${Date.now()}`,
+        batchNo,
+        namaKoperasi: namaKoperasi || 'Koperasi Warga Berdaya Malaysia Berhad',
+        kodKoperasi: kodKoperasi || 'KOP-MY-001',
+        noAkaunBankKoperasi: noAkaunBankKoperasi || '8602-9918-2019 (CIMB Islamic)',
+        namaBankKoperasi: namaBankKoperasi || 'CIMB Islamic Bank Berhad',
+        tarikhMula: tarikhMula || new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10),
+        tarikhTamat: tarikhTamat || new Date().toISOString().slice(0, 10),
+        jumlahTransaksi: eligibleTx.length,
+        jumlahKasar: totalKasar,
+        jumlahCajVerttere: totalCaj,
+        jumlahBersihPindahan: totalBersih,
+        status: 'SELESAI_PINDAH',
+        dikeluarkanOleh: dikeluarkanOleh || 'Pengurus Escrow Verttere',
+        tarikhPindahan: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        noRujukanBank: `MBB-EFT-${Date.now().toString().slice(-8)}`,
+        catatan: catatan || 'Pelepasan dana kutipan gateway FPX ke akaun bank operasi rasmi koperasi.'
+      };
+
+      const saved = db.createSettlementBatch(newBatch);
+
+      db.addLog({
+        id: `LOG-${Date.now()}`,
+        tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        kategori: 'PERAKAUNAN',
+        tindakan: `Pelepasan Dana Escrow (${saved.batchNo})`,
+        deskripsi: `Pindahan bersih RM${saved.jumlahBersihPindahan} (${saved.jumlahTransaksi} transaksi) dilepaskan kepada ${saved.namaKoperasi}. Fee platform dijana: RM${saved.jumlahCajVerttere}.`,
+        pengguna: dikeluarkanOleh || 'Pengurus Escrow Verttere',
+        status: 'BERJAYA',
+        jumlahRM: saved.jumlahBersihPindahan,
+        ipAlamat: '127.0.0.1'
+      });
+
       res.status(201).json(saved);
     } catch (err: any) {
       res.status(500).json({ error: err.message });

@@ -27,6 +27,7 @@ import { FixedAssetManagement } from './components/FixedAssetManagement';
 import { MemberSavingsDeposit } from './components/MemberSavingsDeposit';
 import { BankReconciliation } from './components/BankReconciliation';
 import { SKMAndEInvoiceBridge } from './components/SKMAndEInvoiceBridge';
+import { PaymentGatewaySettlement } from './components/PaymentGatewaySettlement';
 import { LoginScreen } from './components/LoginScreen';
 import { SessionTimeoutModal } from './components/SessionTimeoutModal';
 import { api } from './services/api';
@@ -58,7 +59,10 @@ import {
   ItemPenyataBank,
   PenyataPenyesuaianBank,
   EInvoisLHDN,
-  DataExportEKoperasi
+  DataExportEKoperasi,
+  PaymentGatewayConfig,
+  GatewayTransaction,
+  SettlementBatch
 } from './types';
 import { 
   INITIAL_AHLI, 
@@ -71,15 +75,18 @@ import {
   INITIAL_PRODUK_POS, 
   INITIAL_TRANSAKSI_POS, 
   INITIAL_ALK_JAD, 
-  INITIAL_REKOD_KEWANGAN_TAHUNAN,
-  INITIAL_DANA_GERAN_SKM,
-  INITIAL_TUNTUTAN_KEBAJIKAN,
-  INITIAL_TABUNG_KEBAJIKAN,
-  INITIAL_ASET_TETAP,
-  INITIAL_SIMPANAN_DEPOSIT,
-  INITIAL_BANK_STATEMENT_ITEMS,
-  INITIAL_BANK_RECON_SUMMARY,
-  INITIAL_E_INVOICES
+  INITIAL_REKOD_KEWANGAN_TAHUNAN, 
+  INITIAL_DANA_GERAN_SKM, 
+  INITIAL_TUNTUTAN_KEBAJIKAN, 
+  INITIAL_TABUNG_KEBAJIKAN, 
+  INITIAL_ASET_TETAP, 
+  INITIAL_SIMPANAN_DEPOSIT, 
+  INITIAL_BANK_STATEMENT_ITEMS, 
+  INITIAL_BANK_RECON_SUMMARY, 
+  INITIAL_E_INVOICES,
+  INITIAL_PAYMENT_GATEWAY_CONFIG,
+  INITIAL_GATEWAY_TRANSACTIONS,
+  INITIAL_SETTLEMENT_BATCHES
 } from './data/initialData';
 
 export default function App() {
@@ -121,6 +128,9 @@ export default function App() {
   const [bankItems, setBankItems] = useState<ItemPenyataBank[]>(INITIAL_BANK_STATEMENT_ITEMS);
   const [bankReconSummary, setBankReconSummary] = useState<PenyataPenyesuaianBank>(INITIAL_BANK_RECON_SUMMARY);
   const [eInvoiceList, setEInvoiceList] = useState<EInvoisLHDN[]>(INITIAL_E_INVOICES);
+  const [gatewayConfig, setGatewayConfig] = useState<PaymentGatewayConfig>(INITIAL_PAYMENT_GATEWAY_CONFIG);
+  const [gatewayTransactions, setGatewayTransactions] = useState<GatewayTransaction[]>(INITIAL_GATEWAY_TRANSACTIONS);
+  const [settlementBatches, setSettlementBatches] = useState<SettlementBatch[]>(INITIAL_SETTLEMENT_BATCHES);
 
   // Initial persistent database fetch
   useEffect(() => {
@@ -145,6 +155,9 @@ export default function App() {
         if (data.bankStatements) setBankItems(data.bankStatements);
         if (data.bankReconSummary) setBankReconSummary(data.bankReconSummary);
         if (data.eInvoices) setEInvoiceList(data.eInvoices);
+        if (data.gatewayConfig) setGatewayConfig(data.gatewayConfig);
+        if (data.gatewayTransactions) setGatewayTransactions(data.gatewayTransactions);
+        if (data.settlementBatches) setSettlementBatches(data.settlementBatches);
         if (data.logs) setLogs(data.logs);
       } catch (err) {
         console.warn('API sync unavailable, running with initial local data:', err);
@@ -527,6 +540,121 @@ export default function App() {
       kategori: 'PENTADBIRAN',
       status: 'AMARAN',
     });
+  };
+
+  // Payment Gateway & Escrow Handlers
+  const handleUpdateGatewayConfig = async (cfg: Partial<PaymentGatewayConfig>) => {
+    try {
+      const updated = await api.updateGatewayConfig(cfg);
+      setGatewayConfig(updated);
+    } catch (err) {
+      console.warn('Local gateway config update:', err);
+      setGatewayConfig(prev => ({ ...prev, ...cfg }));
+    }
+  };
+
+  const handleCreateGatewayBill = async (payload: any) => {
+    try {
+      const res = await api.createGatewayBill(payload);
+      if (res.transaction) {
+        setGatewayTransactions(prev => [res.transaction, ...prev]);
+      }
+      return res;
+    } catch (err) {
+      console.warn('Local gateway bill create:', err);
+      const billCode = `TYB-${Date.now().toString().slice(-6)}`;
+      const fee = 1.00 + (payload.jumlahKasar * 0.005);
+      const newTx: GatewayTransaction = {
+        id: `TX-GW-${Date.now()}`,
+        billCode,
+        kategoriTransaksi: payload.kategoriTransaksi,
+        perihal: payload.perihal,
+        namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+        kodKoperasi: 'KOP-MY-001',
+        namaPembayar: payload.namaPembayar,
+        noKP: payload.noKP,
+        noAhli: payload.noAhli,
+        emel: payload.emel,
+        noTelefon: payload.noTelefon,
+        jumlahKasar: payload.jumlahKasar,
+        cajPlatformVerttere: fee,
+        jumlahBersihKoperasi: payload.jumlahKasar - fee,
+        status: 'MENUNGGU',
+        tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        kaedahBayaran: 'FPX_TOYYIBPAY'
+      };
+      setGatewayTransactions(prev => [newTx, ...prev]);
+      return { success: true, billCode, transaction: newTx, cajPlatform: fee, jumlahBersih: newTx.jumlahBersihKoperasi };
+    }
+  };
+
+  const handleTriggerGatewayCallback = async (billCode: string, status: number | string) => {
+    try {
+      const res = await api.triggerGatewayCallback(billCode, status);
+      if (res.transaction) {
+        setGatewayTransactions(prev => prev.map(t => t.billCode === billCode ? res.transaction : t));
+      }
+      return res;
+    } catch (err) {
+      setGatewayTransactions(prev => prev.map(t => {
+        if (t.billCode === billCode) {
+          return {
+            ...t,
+            status: String(status) === '1' ? 'BERJAYA' : 'GAGAL',
+            tarikhSelesai: new Date().toISOString().replace('T', ' ').slice(0, 19),
+            transaksiBankId: `FPX-MOCK-${Date.now().toString().slice(-6)}`
+          };
+        }
+        return t;
+      }));
+      return { success: true };
+    }
+  };
+
+  const handleCreateSettlementBatch = async (payload: any) => {
+    try {
+      const res = await api.createSettlementBatch(payload);
+      setSettlementBatches(prev => [res, ...prev]);
+      setGatewayTransactions(prev => prev.map(t => {
+        if (t.status === 'BERJAYA' && !t.noBatchSettlement) {
+          return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: res.batchNo };
+        }
+        return t;
+      }));
+      return res;
+    } catch (err) {
+      const batchNo = `SETTLE-2026-B${String(settlementBatches.length + 1).padStart(2, '0')}`;
+      const eligible = gatewayTransactions.filter(t => t.status === 'BERJAYA' && !t.noBatchSettlement);
+      const totalKasar = eligible.reduce((a, t) => a + t.jumlahKasar, 0);
+      const totalCaj = eligible.reduce((a, t) => a + t.cajPlatformVerttere, 0);
+      const totalBersih = eligible.reduce((a, t) => a + t.jumlahBersihKoperasi, 0);
+      const newB: SettlementBatch = {
+        id: `SETTLE-${Date.now()}`,
+        batchNo,
+        namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+        kodKoperasi: 'KOP-MY-001',
+        noAkaunBankKoperasi: '8602-9918-2019 (CIMB Islamic)',
+        namaBankKoperasi: 'CIMB Islamic Bank Berhad',
+        tarikhMula: new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10),
+        tarikhTamat: new Date().toISOString().slice(0, 10),
+        jumlahTransaksi: eligible.length,
+        jumlahKasar: totalKasar,
+        jumlahCajVerttere: totalCaj,
+        jumlahBersihPindahan: totalBersih,
+        status: 'SELESAI_PINDAH',
+        dikeluarkanOleh: 'Verttere Escrow Manager',
+        tarikhPindahan: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        noRujukanBank: `MBB-EFT-${Date.now().toString().slice(-8)}`
+      };
+      setSettlementBatches(prev => [newB, ...prev]);
+      setGatewayTransactions(prev => prev.map(t => {
+        if (t.status === 'BERJAYA' && !t.noBatchSettlement) {
+          return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: batchNo };
+        }
+        return t;
+      }));
+      return newB;
+    }
   };
 
   // Direct modal triggers
@@ -1159,6 +1287,21 @@ export default function App() {
             onAddEInvoice={handleAddEInvoice}
             onUpdateEInvoice={handleUpdateEInvoice}
             onFetchEKoperasiData={api.getEKoperasiExportData}
+            language={language}
+            userRole={currentUser?.role}
+          />
+        )}
+
+        {activeTab === 'gateway' && (
+          <PaymentGatewaySettlement
+            gatewayConfig={gatewayConfig}
+            transactions={gatewayTransactions}
+            settlements={settlementBatches}
+            ahliList={ahliList}
+            onUpdateConfig={handleUpdateGatewayConfig}
+            onCreateBill={handleCreateGatewayBill}
+            onTriggerCallback={handleTriggerGatewayCallback}
+            onCreateSettlement={handleCreateSettlementBatch}
             language={language}
             userRole={currentUser?.role}
           />

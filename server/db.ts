@@ -22,7 +22,10 @@ import {
   TransaksiSimpanan,
   ItemPenyataBank,
   PenyataPenyesuaianBank,
-  EInvoisLHDN
+  EInvoisLHDN,
+  PaymentGatewayConfig,
+  GatewayTransaction,
+  SettlementBatch
 } from "../src/types";
 
 import { 
@@ -44,7 +47,10 @@ import {
   INITIAL_SIMPANAN_DEPOSIT,
   INITIAL_BANK_STATEMENT_ITEMS,
   INITIAL_BANK_RECON_SUMMARY,
-  INITIAL_E_INVOICES
+  INITIAL_E_INVOICES,
+  INITIAL_PAYMENT_GATEWAY_CONFIG,
+  INITIAL_GATEWAY_TRANSACTIONS,
+  INITIAL_SETTLEMENT_BATCHES
 } from "../src/data/initialData";
 
 export interface UserAccount {
@@ -79,6 +85,9 @@ export interface KoperasiDatabaseSchema {
   bankStatements: ItemPenyataBank[];
   bankReconSummary: PenyataPenyesuaianBank;
   eInvoices: EInvoisLHDN[];
+  gatewayConfig: PaymentGatewayConfig;
+  gatewayTransactions: GatewayTransaction[];
+  settlementBatches: SettlementBatch[];
   logs: ActivityLog[];
   meta: {
     koperasiName: string;
@@ -184,6 +193,9 @@ class KoperasiDatabase {
       bankStatements: INITIAL_BANK_STATEMENT_ITEMS,
       bankReconSummary: INITIAL_BANK_RECON_SUMMARY,
       eInvoices: INITIAL_E_INVOICES,
+      gatewayConfig: INITIAL_PAYMENT_GATEWAY_CONFIG,
+      gatewayTransactions: INITIAL_GATEWAY_TRANSACTIONS,
+      settlementBatches: INITIAL_SETTLEMENT_BATCHES,
       logs: INITIAL_LOGS,
       meta: {
         koperasiName: "Koperasi Warga Berdaya Malaysia Berhad",
@@ -234,6 +246,14 @@ class KoperasiDatabase {
           ? parsed.eInvoices
           : INITIAL_E_INVOICES;
 
+        const mergedGatewayTransactions = (parsed.gatewayTransactions && parsed.gatewayTransactions.length >= INITIAL_GATEWAY_TRANSACTIONS.length)
+          ? parsed.gatewayTransactions
+          : INITIAL_GATEWAY_TRANSACTIONS;
+
+        const mergedSettlementBatches = (parsed.settlementBatches && parsed.settlementBatches.length >= INITIAL_SETTLEMENT_BATCHES.length)
+          ? parsed.settlementBatches
+          : INITIAL_SETTLEMENT_BATCHES;
+
         const mergedData: KoperasiDatabaseSchema = {
           ...this.getInitialData(),
           ...parsed,
@@ -247,6 +267,9 @@ class KoperasiDatabase {
           bankStatements: mergedBankStatements,
           bankReconSummary: parsed.bankReconSummary || INITIAL_BANK_RECON_SUMMARY,
           eInvoices: mergedEInvoices,
+          gatewayConfig: parsed.gatewayConfig || INITIAL_PAYMENT_GATEWAY_CONFIG,
+          gatewayTransactions: mergedGatewayTransactions,
+          settlementBatches: mergedSettlementBatches,
         };
 
         // Persist the updated complete dataset
@@ -709,6 +732,71 @@ class KoperasiDatabase {
     this.data.eInvoices[idx] = { ...this.data.eInvoices[idx], ...updates };
     this.save();
     return this.data.eInvoices[idx];
+  }
+
+  // ==========================================
+  // PAYMENT GATEWAY & ESCROW SETTLEMENT (VERTTERE)
+  // ==========================================
+  public getGatewayConfig(): PaymentGatewayConfig {
+    return this.data.gatewayConfig || INITIAL_PAYMENT_GATEWAY_CONFIG;
+  }
+
+  public updateGatewayConfig(updates: Partial<PaymentGatewayConfig>): PaymentGatewayConfig {
+    this.data.gatewayConfig = {
+      ...(this.data.gatewayConfig || INITIAL_PAYMENT_GATEWAY_CONFIG),
+      ...updates
+    };
+    this.save();
+    return this.data.gatewayConfig;
+  }
+
+  public getGatewayTransactions(): GatewayTransaction[] {
+    return this.data.gatewayTransactions || [];
+  }
+
+  public addGatewayTransaction(tx: GatewayTransaction): GatewayTransaction {
+    this.data.gatewayTransactions = [tx, ...(this.data.gatewayTransactions || [])];
+    this.save();
+    return tx;
+  }
+
+  public updateGatewayTransaction(id: string, updates: Partial<GatewayTransaction>): GatewayTransaction | null {
+    const idx = (this.data.gatewayTransactions || []).findIndex(t => t.id === id || t.billCode === id);
+    if (idx === -1) return null;
+    this.data.gatewayTransactions[idx] = { ...this.data.gatewayTransactions[idx], ...updates };
+    this.save();
+    return this.data.gatewayTransactions[idx];
+  }
+
+  public getSettlementBatches(): SettlementBatch[] {
+    return this.data.settlementBatches || [];
+  }
+
+  public createSettlementBatch(batch: SettlementBatch): SettlementBatch {
+    this.data.settlementBatches = [batch, ...(this.data.settlementBatches || [])];
+    // Mark associated transactions as DILEPASKAN_KE_KOPERASI
+    if (this.data.gatewayTransactions) {
+      this.data.gatewayTransactions = this.data.gatewayTransactions.map(tx => {
+        if (tx.status === 'BERJAYA' && !tx.noBatchSettlement) {
+          return {
+            ...tx,
+            status: 'DILEPASKAN_KE_KOPERASI',
+            noBatchSettlement: batch.batchNo
+          };
+        }
+        return tx;
+      });
+    }
+    this.save();
+    return batch;
+  }
+
+  public updateSettlementBatch(id: string, updates: Partial<SettlementBatch>): SettlementBatch | null {
+    const idx = (this.data.settlementBatches || []).findIndex(b => b.id === id || b.batchNo === id);
+    if (idx === -1) return null;
+    this.data.settlementBatches[idx] = { ...this.data.settlementBatches[idx], ...updates };
+    this.save();
+    return this.data.settlementBatches[idx];
   }
 
   public addLog(log: ActivityLog) {
