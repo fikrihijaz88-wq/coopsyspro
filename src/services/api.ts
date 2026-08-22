@@ -522,12 +522,6 @@ export const api = {
   // Verttere Solutions Payment Gateway & Escrow
   // ==========================================
   async getGatewayConfig(): Promise<PaymentGatewayConfig> {
-    const res = await fetch('/api/gateway/config');
-    return res.json();
-  },
-
-  async updateGatewayConfig(config: Partial<PaymentGatewayConfig>): Promise<PaymentGatewayConfig> {
-  async getGatewayConfig(): Promise<PaymentGatewayConfig> {
     try {
       const res = await fetch('/api/gateway/config');
       if (res.ok) {
