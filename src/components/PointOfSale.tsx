@@ -7,7 +7,8 @@ import {
   Transaksi, 
   ItemCartPOS,
   CaraBayaranPOS,
-  ActivityLog
+  ActivityLog,
+  PaymentGatewayConfig
 } from '../types';
 import { POSAnalyticsDashboard } from './POSAnalyticsDashboard';
 import { excelExport } from '../utils/excelExport';
