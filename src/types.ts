@@ -937,3 +937,38 @@ export interface CoopBasicProfile {
   statusLangganan: 'AKTIF_ENTERPRISE' | 'PRO' | 'PERCUBAAN';
   pelanVerttere: string;
 }
+
+// -------------------------------------------------------------
+// System Support & Request Ticketing Types (Staff -> Super Admin)
+// -------------------------------------------------------------
+
+export type KategoriTiket = 
+  | 'RALAT_SISTEM' 
+  | 'PENAMBAHAN_FUNGSI' 
+  | 'PENGURANGAN_KEMASKINI' 
+  | 'PEMBETULAN_DATA' 
+  | 'AKSES_KESELAMATAN' 
+  | 'LAIN_LAIN';
+
+export type KeutamaanTiket = 'KRITIKAL' | 'TINGGI' | 'SEDERHANA' | 'RENDAH';
+
+export type StatusTiket = 'MENUNGGU_TINDAKAN' | 'SEDANG_DISEMAK' | 'SELESAI_DIBETULKAN' | 'DITOLAK';
+
+export interface SystemSupportTicket {
+  id: string;
+  noTiket: string;
+  kategori: KategoriTiket;
+  keutamaan: KeutamaanTiket;
+  tajuk: string;
+  deskripsi: string;
+  modulTerlibat: string;
+  status: StatusTiket;
+  tarikhCipta: string;
+  pemohonNama: string;
+  pemohonEmel: string;
+  pemohonPeranan: string;
+  pemohonTelefon?: string;
+  tindakanAdminOleh?: string;
+  tarikhTindakan?: string;
+  catatanPenyelesaian?: string;
+}

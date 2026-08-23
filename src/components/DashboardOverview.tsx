@@ -43,7 +43,8 @@ import {
   RefreshCw,
   HandCoins,
   X,
-  Radio
+  Radio,
+  HelpCircle
 } from 'lucide-react';
 
 interface NotificationItem {
@@ -348,6 +349,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 <Sparkles className="w-4 h-4" /> Buka Pelepasan Payout
               </button>
               <button
+                onClick={() => setActiveTab('support-tickets')}
+                className="px-4 py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-amber-950/50 flex items-center gap-2 cursor-pointer transition-all"
+              >
+                <HelpCircle className="w-4 h-4" /> Tiket Aduan &amp; Ralat
+              </button>
+              <button
                 onClick={() => setActiveTab('system-admin')}
                 className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 cursor-pointer transition-all"
               >
@@ -373,7 +380,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
 
         {/* Super Admin Action Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           <div 
             onClick={() => setActiveTab('gateway')}
             className="bg-slate-900 border border-slate-800 hover:border-purple-500/60 p-5 rounded-2xl transition-all cursor-pointer shadow-lg group"
@@ -388,6 +395,24 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               <div className="text-xl font-black text-white">Kuasa Payout EFT</div>
               <p className="text-xs text-purple-300 mt-1 flex items-center gap-1">
                 Luluskan permohonan bendahari <ArrowRight className="w-3 h-3" />
+              </p>
+            </div>
+          </div>
+
+          <div 
+            onClick={() => setActiveTab('support-tickets')}
+            className="bg-slate-900 border border-slate-800 hover:border-amber-500/60 p-5 rounded-2xl transition-all cursor-pointer shadow-lg group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-400">Tiket Aduan &amp; Ralat</span>
+              <div className="w-9 h-9 rounded-xl bg-amber-950 text-amber-400 flex items-center justify-center border border-amber-800/50 group-hover:scale-110 transition-transform">
+                <HelpCircle className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-xl font-black text-white">Inbox Permohonan</div>
+              <p className="text-xs text-amber-300 mt-1 flex items-center gap-1">
+                Semak &amp; buat pembetulan <ArrowRight className="w-3 h-3" />
               </p>
             </div>
           </div>
@@ -479,15 +504,21 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={onOpenNewMemberModal}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl shadow-lg shadow-emerald-900/40 flex items-center gap-1.5 transition-all"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl shadow-lg shadow-emerald-900/40 flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" /> {isEN ? 'Register New Member' : 'Daftar Ahli Baru'}
             </button>
             <button
               onClick={onOpenNewTxModal}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold rounded-xl border border-slate-600 flex items-center gap-1.5 transition-all"
+              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold rounded-xl border border-slate-600 flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <Receipt className="w-4 h-4" /> {isEN ? 'Record Transaction' : 'Rekod Transaksi'}
+            </button>
+            <button
+              onClick={() => setActiveTab('support-tickets')}
+              className="px-4 py-2 bg-indigo-950 hover:bg-indigo-900 text-indigo-300 border border-indigo-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <HelpCircle className="w-4 h-4" /> {isEN ? 'System Support & Requests' : 'Tiket Bantuan & Ralat'}
             </button>
           </div>
         </div>

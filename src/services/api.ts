@@ -27,7 +27,9 @@ import {
   SettlementBatch,
   NotificationTemplate,
   NotificationLog,
-  NotificationConfig
+  NotificationConfig,
+  SystemSupportTicket,
+  StatusTiket
 } from '../types';
 
 export const api = {
@@ -908,5 +910,72 @@ export const api = {
       directWaUrl,
       remainingSmsCredits: 849
     };
+  },
+
+  // -------------------------------------------------------------
+  // Support & System Request Tickets Endpoints
+  // -------------------------------------------------------------
+  async getSupportTickets(): Promise<SystemSupportTicket[]> {
+    try {
+      const res = await fetch('/api/tickets');
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.getSupportTickets offline fallback');
+    }
+    return [];
+  },
+
+  async createSupportTicket(ticket: SystemSupportTicket): Promise<SystemSupportTicket> {
+    try {
+      const res = await fetch('/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ticket),
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.createSupportTicket offline fallback');
+    }
+    return ticket;
+  },
+
+  async resolveSupportTicket(id: string, status: StatusTiket, notes: string, adminName: string): Promise<SystemSupportTicket> {
+    try {
+      const res = await fetch(`/api/tickets/${id}/resolve`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, notes, adminName }),
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('api.resolveSupportTicket offline fallback');
+    }
+    return {
+      id,
+      noTiket: id,
+      kategori: 'RALAT_SISTEM',
+      keutamaan: 'SEDERHANA',
+      tajuk: '',
+      deskripsi: '',
+      modulTerlibat: '',
+      status,
+      tarikhCipta: new Date().toISOString(),
+      pemohonNama: '',
+      pemohonEmel: '',
+      pemohonPeranan: '',
+      catatanPenyelesaian: notes,
+      tindakanAdminOleh: adminName,
+      tarikhTindakan: new Date().toISOString()
+    };
+  },
+
+  async deleteSupportTicket(id: string): Promise<boolean> {
+    try {
+      const res = await fetch(`/api/tickets/${id}`, { method: 'DELETE' });
+      return res.ok;
+    } catch (e) {
+      console.warn('api.deleteSupportTicket offline fallback');
+    }
+    return true;
   }
 };

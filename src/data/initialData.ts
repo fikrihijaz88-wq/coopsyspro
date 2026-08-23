@@ -26,7 +26,8 @@ import {
   NotificationLog,
   NotificationConfig,
   SystemUser,
-  CoopBasicProfile
+  CoopBasicProfile,
+  SystemSupportTicket
 } from '../types';
 
 export const INITIAL_CARTA_AKAUN: CartaAkaun[] = [
@@ -3180,6 +3181,60 @@ export const INITIAL_COOP_PROFILE: CoopBasicProfile = {
   pelanVerttere: 'Verttere FinTech Core Multi-Tenant Enterprise Edition'
 };
 
+// -------------------------------------------------------------
+// System Support & Request Tickets (User/Staff -> Super Admin)
+// -------------------------------------------------------------
 
-
-
+export const INITIAL_SUPPORT_TICKETS: SystemSupportTicket[] = [
+  {
+    id: 'TCK-2026-001',
+    noTiket: 'TICKET-2026-001',
+    kategori: 'RALAT_SISTEM',
+    keutamaan: 'TINGGI',
+    tajuk: 'Resit Cetakan POS Tidak Keluar Kod QR DuitNow Pada Thermal Printer',
+    deskripsi: 'Juruwang POS mendapati resit belian kedai koperasi tidak memaparkan imej kod QR DuitNow secara jelas apabila dicetak pada mesin resit thermal 58mm.',
+    modulTerlibat: 'POS & Kaunter Jualan',
+    status: 'MENUNGGU_TINDAKAN',
+    tarikhCipta: '2026-08-23 14:15:00',
+    pemohonNama: 'Cik Farah Nabilah',
+    pemohonEmel: 'pos@koperasi.my',
+    pemohonPeranan: 'Juruwang Kaunter POS',
+    pemohonTelefon: '011-2233445'
+  },
+  {
+    id: 'TCK-2026-002',
+    noTiket: 'TICKET-2026-002',
+    kategori: 'PENAMBAHAN_FUNGSI',
+    keutamaan: 'SEDERHANA',
+    tajuk: 'Mohon Tambah Fungsi Eksport Penyata Penyesuaian Bank Format Excel .xlsx',
+    deskripsi: 'Pihak Bendahari memohon tambahan butang muat turun format Excel untuk lembaran Penyesuaian Bank bulanan bagi pembentangan mesyuarat jawatankuasa audit.',
+    modulTerlibat: 'Penyesuaian Bank & Lejar',
+    status: 'SEDANG_DISEMAK',
+    tarikhCipta: '2026-08-22 16:40:00',
+    pemohonNama: 'Haji Ahmad Zaki',
+    pemohonEmel: 'bendahari@koperasi.my',
+    pemohonPeranan: 'Bendahari Koperasi',
+    pemohonTelefon: '012-3344556',
+    tindakanAdminOleh: 'Fikri Hijaz (Super Admin Verttere)',
+    tarikhTindakan: '2026-08-23 09:30:00',
+    catatanPenyelesaian: 'Permohonan diterima dan sedang dibangunkan untuk kemaskini perisian versi 2.4.'
+  },
+  {
+    id: 'TCK-2026-003',
+    noTiket: 'TICKET-2026-003',
+    kategori: 'PEMBETULAN_DATA',
+    keutamaan: 'KRITIKAL',
+    tajuk: 'Pembetulan No. Pendaftaran SKM Pada Header Templat Laporan AGM',
+    deskripsi: 'Terdapat sedikit kesilapan digit pada templat laporan berautomatik AGM. Nombor pendaftaran sepatutnya W-4-0982/2014.',
+    modulTerlibat: 'Laporan Berautomatik AGM',
+    status: 'SELESAI_DIBETULKAN',
+    tarikhCipta: '2026-08-21 10:20:00',
+    pemohonNama: 'Puan Noraini Hashim',
+    pemohonEmel: 'setiausaha@koperasi.my',
+    pemohonPeranan: 'Setiausaha Pentadbiran',
+    pemohonTelefon: '013-9988776',
+    tindakanAdminOleh: 'Fikri Hijaz (Super Admin Verttere)',
+    tarikhTindakan: '2026-08-21 11:45:00',
+    catatanPenyelesaian: 'No pendaftaran SKM telah diperbetulkan kepada W-4-0982/2014 pada pangkalan data dan templat laporan.'
+  }
+];

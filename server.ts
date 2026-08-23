@@ -1240,6 +1240,81 @@ ${warningsList}
 3. **Pengesahan Minit & Resolusi:** Sediakan draf minit berkanun Agenda 1 hingga 11 mengikut format GP23 SKM dan lantik 6 orang penentusah minit dalam MAT.`;
   }
 
+  // -------------------------------------------------------------
+  // System Support & Request Tickets API Endpoints
+  // -------------------------------------------------------------
+  app.get("/api/tickets", (_req, res) => {
+    try {
+      res.json(db.getSupportTickets());
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/tickets", (req, res) => {
+    try {
+      const ticket = req.body;
+      const created = db.addSupportTicket(ticket);
+      
+      db.addLog({
+        id: `LOG-${Date.now()}`,
+        tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        kategori: 'PENTADBIRAN',
+        tindakan: `Hantar Tiket Bantuan (${created.noTiket})`,
+        deskripsi: `Tiket permohonan "${created.tajuk}" diterima daripada ${created.pemohonNama} (${created.pemohonPeranan}).`,
+        pengguna: created.pemohonNama,
+        status: 'BERJAYA',
+        ipAlamat: '127.0.0.1'
+      });
+
+      res.json(created);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.put("/api/tickets/:id/resolve", (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status, notes, adminName } = req.body;
+      const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
+      const updated = db.updateSupportTicket(id, {
+        status,
+        catatanPenyelesaian: notes,
+        tindakanAdminOleh: adminName || 'Fikri Hijaz (Super Admin Verttere)',
+        tarikhTindakan: now
+      });
+
+      if (!updated) return res.status(404).json({ error: 'Tiket tidak dijumpai' });
+
+      db.addLog({
+        id: `LOG-${Date.now()}`,
+        tarikhMasa: now,
+        kategori: 'PENTADBIRAN',
+        tindakan: `Kemaskini Tiket Bantuan (${updated.noTiket})`,
+        deskripsi: `Status tiket dikemaskini kepada "${status}" oleh ${adminName || 'Super Admin Verttere'}.`,
+        pengguna: adminName || 'Super Admin Verttere',
+        status: status === 'SELESAI_DIBETULKAN' ? 'BERJAYA' : 'INFO',
+        ipAlamat: '127.0.0.1'
+      });
+
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.delete("/api/tickets/:id", (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = db.deleteSupportTicket(id);
+      res.json({ success: deleted });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // Vite middleware or Static serving
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

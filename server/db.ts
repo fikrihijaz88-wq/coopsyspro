@@ -28,7 +28,8 @@ import {
   SettlementBatch,
   NotificationTemplate,
   NotificationLog,
-  NotificationConfig
+  NotificationConfig,
+  SystemSupportTicket
 } from "../src/types";
 
 import { 
@@ -56,7 +57,8 @@ import {
   INITIAL_SETTLEMENT_BATCHES,
   INITIAL_NOTIFICATION_CONFIG,
   INITIAL_NOTIFICATION_TEMPLATES,
-  INITIAL_NOTIFICATION_LOGS
+  INITIAL_NOTIFICATION_LOGS,
+  INITIAL_SUPPORT_TICKETS
 } from "../src/data/initialData";
 
 export interface UserAccount {
@@ -97,6 +99,7 @@ export interface KoperasiDatabaseSchema {
   notificationConfig: NotificationConfig;
   notificationTemplates: NotificationTemplate[];
   notificationLogs: NotificationLog[];
+  supportTickets: SystemSupportTicket[];
   logs: ActivityLog[];
   meta: {
     koperasiName: string;
@@ -208,6 +211,7 @@ class KoperasiDatabase {
       notificationConfig: INITIAL_NOTIFICATION_CONFIG,
       notificationTemplates: INITIAL_NOTIFICATION_TEMPLATES,
       notificationLogs: INITIAL_NOTIFICATION_LOGS,
+      supportTickets: INITIAL_SUPPORT_TICKETS,
       logs: INITIAL_LOGS,
       meta: {
         koperasiName: "Koperasi Warga Berdaya Malaysia Berhad",
@@ -866,6 +870,32 @@ class KoperasiDatabase {
     }
     this.save();
     return log;
+  }
+
+  // Support Tickets Methods
+  public getSupportTickets(): SystemSupportTicket[] {
+    return this.data.supportTickets || INITIAL_SUPPORT_TICKETS;
+  }
+
+  public addSupportTicket(ticket: SystemSupportTicket): SystemSupportTicket {
+    this.data.supportTickets = [ticket, ...(this.data.supportTickets || [])];
+    this.save();
+    return ticket;
+  }
+
+  public updateSupportTicket(id: string, updates: Partial<SystemSupportTicket>): SystemSupportTicket | null {
+    const idx = (this.data.supportTickets || []).findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    this.data.supportTickets[idx] = { ...this.data.supportTickets[idx], ...updates };
+    this.save();
+    return this.data.supportTickets[idx];
+  }
+
+  public deleteSupportTicket(id: string): boolean {
+    const initialLen = (this.data.supportTickets || []).length;
+    this.data.supportTickets = (this.data.supportTickets || []).filter(t => t.id !== id);
+    this.save();
+    return this.data.supportTickets.length < initialLen;
   }
 
   public authenticate(email: string, pass: string): UserAccount | null {

@@ -30,6 +30,7 @@ import { SKMAndEInvoiceBridge } from './components/SKMAndEInvoiceBridge';
 import { PaymentGatewaySettlement } from './components/PaymentGatewaySettlement';
 import { WhatsAppSmsNotification } from './components/WhatsAppSmsNotification';
 import { SystemAdminSettings } from './components/SystemAdminSettings';
+import { SystemSupportTickets } from './components/SystemSupportTickets';
 import { LoginScreen } from './components/LoginScreen';
 import { SessionTimeoutModal } from './components/SessionTimeoutModal';
 import { api } from './services/api';
@@ -69,7 +70,9 @@ import {
   NotificationLog,
   NotificationConfig,
   SystemUser,
-  CoopBasicProfile
+  CoopBasicProfile,
+  SystemSupportTicket,
+  StatusTiket
 } from './types';
 import { 
   INITIAL_AHLI, 
@@ -98,7 +101,8 @@ import {
   INITIAL_NOTIFICATION_TEMPLATES,
   INITIAL_NOTIFICATION_LOGS,
   INITIAL_SYSTEM_USERS,
-  INITIAL_COOP_PROFILE
+  INITIAL_COOP_PROFILE,
+  INITIAL_SUPPORT_TICKETS
 } from './data/initialData';
 
 export default function App() {
@@ -118,6 +122,9 @@ export default function App() {
   // System Users & Basic Co-op Settings
   const [systemUsers, setSystemUsers] = useState<SystemUser[]>(INITIAL_SYSTEM_USERS);
   const [coopProfile, setCoopProfile] = useState<CoopBasicProfile>(INITIAL_COOP_PROFILE);
+
+  // System Support & Request Tickets (User/Staff -> Super Admin)
+  const [supportTickets, setSupportTickets] = useState<SystemSupportTicket[]>(INITIAL_SUPPORT_TICKETS);
 
   // 15-Minute Auto-Logout Timer & Inactivity Detection
   const [lastActivityTime, setLastActivityTime] = useState<number>(Date.now());
@@ -894,6 +901,67 @@ export default function App() {
     });
   };
 
+  // -------------------------------------------------------------
+  // System Support & Request Tickets Handlers (Staff -> Super Admin)
+  // -------------------------------------------------------------
+  const handleCreateSupportTicket = (ticketData: Omit<SystemSupportTicket, 'id' | 'noTiket' | 'tarikhCipta' | 'status'>) => {
+    const nextSeq = supportTickets.length + 1;
+    const newTicket: SystemSupportTicket = {
+      ...ticketData,
+      id: `TCK-${Date.now()}`,
+      noTiket: `TICKET-${new Date().getFullYear()}-${String(nextSeq).padStart(3, '0')}`,
+      tarikhCipta: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      status: 'MENUNGGU_TINDAKAN',
+    };
+
+    setSupportTickets(prev => [newTicket, ...prev]);
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      kategori: 'PENTADBIRAN',
+      tindakan: `Hantar Tiket Bantuan Sistem (${newTicket.noTiket})`,
+      deskripsi: `Tiket permohonan/ralat "${newTicket.tajuk}" dihantar oleh ${newTicket.pemohonNama} (${newTicket.pemohonPeranan}) ke Super Admin Verttere.`,
+      pengguna: newTicket.pemohonNama,
+      status: 'BERJAYA',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
+  const handleUpdateTicketStatus = (
+    id: string, 
+    status: StatusTiket, 
+    resolutionNotes?: string, 
+    adminName?: string
+  ) => {
+    setSupportTickets(prev => prev.map(t => {
+      if (t.id === id) {
+        return {
+          ...t,
+          status,
+          catatanPenyelesaian: resolutionNotes,
+          tindakanAdminOleh: adminName || 'Super Admin Verttere',
+          tarikhTindakan: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        };
+      }
+      return t;
+    }));
+
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      kategori: 'PENTADBIRAN',
+      tindakan: `Kemaskini Status Tiket (${id})`,
+      deskripsi: `Tiket ${id} dikemaskini kepada status ${status} dengan nota: "${resolutionNotes || 'Tiada nota'}".`,
+      pengguna: adminName || currentUser?.name || 'Super Admin Verttere',
+      status: status === 'SELESAI_DIBETULKAN' ? 'BERJAYA' : 'INFO',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
+  const handleDeleteSupportTicket = (id: string) => {
+    setSupportTickets(prev => prev.filter(t => t.id !== id));
+  };
+
   // Direct modal triggers
   const [showNewMemberModalDirect, setShowNewMemberModalDirect] = useState<boolean>(false);
   const [showNewTxModalDirect, setShowNewTxModalDirect] = useState<boolean>(false);
@@ -1665,6 +1733,18 @@ export default function App() {
             onUpdateUser={handleUpdateSystemUser}
             onDeleteUser={handleDeleteSystemUser}
             onUpdateCoopProfile={handleUpdateCoopProfile}
+            language={language}
+            userRole={currentUser?.role}
+            currentUser={currentUser}
+          />
+        )}
+
+        {activeTab === 'support-tickets' && (
+          <SystemSupportTickets
+            tickets={supportTickets}
+            onCreateTicket={handleCreateSupportTicket}
+            onUpdateTicketStatus={handleUpdateTicketStatus}
+            onDeleteTicket={handleDeleteSupportTicket}
             language={language}
             userRole={currentUser?.role}
             currentUser={currentUser}

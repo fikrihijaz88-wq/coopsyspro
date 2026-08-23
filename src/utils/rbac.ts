@@ -25,19 +25,20 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
 }> = {
   SUPER_ADMIN_VERTTERE: {
     label: 'Super Admin Platform (Verttere Solutions)',
-    description: 'Pentadbir Induk Platform & Keselamatan Verttere Solutions. Memegang kuasa eksklusif pelepasan pembayaran escrow (Payment Release), pengurusan pengguna sistem (Add/Remove User & Role), pembetulan tetapan asas profil koperasi, konfigurasi gateway dwi-pembekal, dan audit keselamatan. Selaras dengan dasar privasi SKM & PDPA, maklumat perakaunan sulit, lejar, pinjaman, dan rekod peribadi ahli adalah dilindungi dan tidak didedahkan kepada vendor.',
+    description: 'Pentadbir Induk Platform & Keselamatan Verttere Solutions. Memegang kuasa eksklusif pelepasan pembayaran escrow (Payment Release), pengurusan pengguna sistem (Add/Remove User & Role), penyelesaian tiket aduan/ralat sistem, pembetulan tetapan asas profil koperasi, konfigurasi gateway dwi-pembekal, dan audit keselamatan. Selaras dengan dasar privasi SKM & PDPA, maklumat perakaunan sulit, lejar, pinjaman, dan rekod peribadi ahli adalah dilindungi dan tidak didedahkan kepada vendor.',
     badgeColor: 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black ring-2 ring-purple-400/50 shadow-md shadow-purple-950/50',
     allowedTabs: [
       'dashboard',
       'gateway',
       'system-admin',
+      'support-tickets',
       'logs',
       'notifications',
     ],
   },
   BENDAHARI: {
     label: 'Bendahari Koperasi',
-    description: 'Akses penuh kewangan, lejar, dividen, pembiayaan, simpanan khas, penyesuaian bank, e-invois, POS dan dokumen. Boleh mengemukakan permohonan pelepasan dana gateway (Request Payout).',
+    description: 'Akses penuh kewangan, lejar, dividen, pembiayaan, simpanan khas, penyesuaian bank, e-invois, POS dan dokumen. Boleh mengemukakan permohonan pelepasan dana gateway (Request Payout) dan tiket bantuan sistem.',
     badgeColor: 'bg-emerald-500 text-slate-950',
     allowedTabs: [
       'dashboard',
@@ -64,6 +65,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'ai-audit',
       'notifications',
       'system-admin',
+      'support-tickets',
     ],
   },
   PENGERUSI_ALK: {
@@ -92,6 +94,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'ai-audit',
       'notifications',
       'system-admin',
+      'support-tickets',
     ],
   },
   SETIAUSAHA: {
@@ -110,6 +113,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'logs',
       'notifications',
       'system-admin',
+      'support-tickets',
     ],
   },
   AUDITOR_JAD: {
@@ -138,6 +142,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'logs',
       'ai-audit',
       'notifications',
+      'support-tickets',
     ],
   },
   JURUWANG_POS: {
@@ -149,6 +154,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'dashboard',
       'e-invoice',
       'notifications',
+      'support-tickets',
     ],
   },
   AHLI_KOPERASI: {
@@ -165,6 +171,7 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
       'gateway',
       'dividend',
       'pos',
+      'support-tickets',
     ],
   },
 };
