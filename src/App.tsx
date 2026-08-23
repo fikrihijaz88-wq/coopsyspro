@@ -629,12 +629,14 @@ export default function App() {
     try {
       const res = await api.createSettlementBatch(payload);
       setSettlementBatches(prev => [res, ...prev]);
-      setGatewayTransactions(prev => prev.map(t => {
-        if (t.status === 'BERJAYA' && !t.noBatchSettlement) {
-          return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: res.batchNo };
-        }
-        return t;
-      }));
+      if (res.status === 'DILULUSKAN_DILEPASKAN' || res.status === 'SELESAI_PINDAH') {
+        setGatewayTransactions(prev => prev.map(t => {
+          if (t.status === 'BERJAYA' && !t.noBatchSettlement) {
+            return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: res.batchNo };
+          }
+          return t;
+        }));
+      }
       return res;
     } catch (err) {
       const batchNo = `SETTLE-2026-B${String(settlementBatches.length + 1).padStart(2, '0')}`;
@@ -642,6 +644,10 @@ export default function App() {
       const totalKasar = eligible.reduce((a, t) => a + t.jumlahKasar, 0);
       const totalCaj = eligible.reduce((a, t) => a + t.cajPlatformVerttere, 0);
       const totalBersih = eligible.reduce((a, t) => a + t.jumlahBersihKoperasi, 0);
+      
+      const isSuperAdmin = currentUser?.role === 'SUPER_ADMIN_VERTTERE';
+      const status = isSuperAdmin ? 'DILULUSKAN_DILEPASKAN' : 'MENUNGGU_KELULUSAN_VERTTERE';
+
       const newB: SettlementBatch = {
         id: `SETTLE-${Date.now()}`,
         batchNo,
@@ -655,20 +661,105 @@ export default function App() {
         jumlahKasar: totalKasar,
         jumlahCajVerttere: totalCaj,
         jumlahBersihPindahan: totalBersih,
-        status: 'SELESAI_PINDAH',
-        dikeluarkanOleh: 'Verttere SecurePay Escrow Manager',
-        tarikhPindahan: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        noRujukanBank: `MBB-EFT-${Date.now().toString().slice(-8)}`
+        status: status,
+        statusKelulusan: status,
+        dimohonOleh: payload.dimohonOleh || currentUser?.name || 'Haji Ahmad Zaki (Bendahari)',
+        jawatanPemohon: currentUser?.role || 'Bendahari Koperasi',
+        tarikhPermohonan: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        dokumenSokonganPengesahan: payload.dokumenSokonganPengesahan || 'Resit Jualan & Baucar Pembayaran (Disahkan)',
+        catatanPermohonan: payload.catatan || 'Permohonan pelepasan dana jualan & syer mingguan.',
+        dikeluarkanOleh: isSuperAdmin ? (currentUser?.name || 'Fikri Hijaz (Super Admin Verttere)') : (currentUser?.name || 'Haji Ahmad Zaki (Bendahari)'),
+        tarikhPindahan: isSuperAdmin ? new Date().toISOString().replace('T', ' ').slice(0, 19) : undefined,
+        noRujukanBank: isSuperAdmin ? `MBB-EFT-${Date.now().toString().slice(-8)}` : undefined,
+        noRujukanBankEFT: isSuperAdmin ? `MBB-EFT-${Date.now().toString().slice(-8)}` : undefined,
+        diluluskanOlehVerttere: isSuperAdmin ? (currentUser?.name || 'Fikri Hijaz (Super Admin Verttere)') : undefined,
+        tarikhKelulusanVerttere: isSuperAdmin ? new Date().toISOString().replace('T', ' ').slice(0, 19) : undefined,
+        catatan: payload.catatan
       };
       setSettlementBatches(prev => [newB, ...prev]);
-      setGatewayTransactions(prev => prev.map(t => {
-        if (t.status === 'BERJAYA' && !t.noBatchSettlement) {
-          return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: batchNo };
-        }
-        return t;
-      }));
+
+      if (isSuperAdmin) {
+        setGatewayTransactions(prev => prev.map(t => {
+          if (t.status === 'BERJAYA' && !t.noBatchSettlement) {
+            return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: batchNo };
+          }
+          return t;
+        }));
+      }
+
       return newB;
     }
+  };
+
+  const handleApproveSettlementBatch = async (batchId: string, eftRef: string, notes: string) => {
+    const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    const superAdminName = currentUser?.name || 'Fikri Hijaz (Super Admin Verttere)';
+
+    setSettlementBatches(prev => prev.map(b => {
+      if (b.id === batchId || b.batchNo === batchId) {
+        return {
+          ...b,
+          status: 'DILULUSKAN_DILEPASKAN',
+          statusKelulusan: 'DILULUSKAN_DILEPASKAN',
+          diluluskanOlehVerttere: superAdminName,
+          tarikhKelulusanVerttere: now,
+          tarikhPindahan: now,
+          noRujukanBank: eftRef,
+          noRujukanBankEFT: eftRef,
+          catatanVerttere: notes
+        };
+      }
+      return b;
+    }));
+
+    // Release all transactions
+    setGatewayTransactions(prev => prev.map(t => {
+      if (t.status === 'BERJAYA') {
+        return { ...t, status: 'DILEPASKAN_KE_KOPERASI', noBatchSettlement: batchId };
+      }
+      return t;
+    }));
+
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: now,
+      kategori: 'PENTADBIRAN',
+      tindakan: `Kelulusan Pelepasan Payout (${batchId})`,
+      deskripsi: `Super Admin Verttere (${superAdminName}) meluluskan pelepasan dana payout dengan No Rujukan EFT: ${eftRef}.`,
+      pengguna: superAdminName,
+      status: 'BERJAYA',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
+  const handleRejectSettlementBatch = async (batchId: string, reason: string) => {
+    const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    const superAdminName = currentUser?.name || 'Fikri Hijaz (Super Admin Verttere)';
+
+    setSettlementBatches(prev => prev.map(b => {
+      if (b.id === batchId || b.batchNo === batchId) {
+        return {
+          ...b,
+          status: 'DITOLAK_VERTTERE',
+          statusKelulusan: 'DITOLAK_VERTTERE',
+          diluluskanOlehVerttere: superAdminName,
+          tarikhKelulusanVerttere: now,
+          catatanVerttere: reason
+        };
+      }
+      return b;
+    }));
+
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: now,
+      kategori: 'PENTADBIRAN',
+      tindakan: `Penolakan Permohonan Payout (${batchId})`,
+      deskripsi: `Super Admin Verttere menolak permohonan pelepasan dana: ${reason}`,
+      pengguna: superAdminName,
+      status: 'AMARAN',
+      ipAlamat: '127.0.0.1'
+    });
   };
 
   // -------------------------------------------------------------
@@ -1375,6 +1466,8 @@ export default function App() {
             onCreateBill={handleCreateGatewayBill}
             onTriggerCallback={handleTriggerGatewayCallback}
             onCreateSettlement={handleCreateSettlementBatch}
+            onApproveSettlement={handleApproveSettlementBatch}
+            onRejectSettlement={handleRejectSettlementBatch}
             language={language}
             userRole={currentUser?.role}
           />

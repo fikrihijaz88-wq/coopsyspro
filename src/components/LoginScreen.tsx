@@ -49,7 +49,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       // Fallback local auth for instant resilience
       console.warn('API login failed, falling back to local verification:', err);
       let userName = 'Haji Ahmad Zaki';
-      if (role === 'PENGERUSI_ALK') userName = "Dato' Hj. Razali Ismail";
+      if (role === 'SUPER_ADMIN_VERTTERE') userName = 'Fikri Hijaz (Super Admin Verttere)';
+      else if (role === 'PENGERUSI_ALK') userName = "Dato' Hj. Razali Ismail";
       else if (role === 'SETIAUSAHA') userName = 'Puan Noraini Hashim';
       else if (role === 'AUDITOR_JAD') userName = 'En. Tan Chee Keong';
       else if (role === 'JURUWANG_POS') userName = 'Cik Farah Nabilah';
@@ -234,6 +235,29 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               <span className="font-semibold text-slate-300">{isEN ? 'Quick 1-Click Role Access:' : 'Akses Pantas Mengikut Peranan (1-Klik):'}</span>
               <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-emerald-400 font-mono">Demo Ready</span>
             </div>
+
+            {/* Super Admin Verttere Dedicated Banner Button */}
+            <button
+              type="button"
+              onClick={() => handleQuickDemo('SUPER_ADMIN_VERTTERE', 'fikri@verttere.my', 'Fikri Hijaz (Super Admin Verttere)')}
+              className="w-full p-2.5 bg-gradient-to-r from-purple-950/80 via-indigo-950/80 to-slate-900 hover:from-purple-900/90 hover:to-indigo-900/90 border border-purple-500/50 hover:border-purple-400 rounded-xl text-left text-xs transition-all shadow-md shadow-purple-950/40 flex items-center justify-between group cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-purple-600/30 border border-purple-400/60 flex items-center justify-center text-purple-300 font-bold">
+                  👑
+                </div>
+                <div>
+                  <div className="font-extrabold text-white flex items-center gap-1.5 text-xs">
+                    <span>Super Admin Platform</span>
+                    <span className="text-[10px] bg-purple-500/30 text-purple-300 px-1.5 py-0.2 rounded font-mono font-bold border border-purple-400/40">
+                      Verttere Solutions
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-purple-200/80">Fikri Hijaz (Kuasa Mutlak Release Payment)</div>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-purple-300 group-hover:translate-x-1 transition-transform" />
+            </button>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <button

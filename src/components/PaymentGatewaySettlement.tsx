@@ -38,6 +38,8 @@ interface PaymentGatewaySettlementProps {
   onCreateBill: (payload: any) => Promise<any>;
   onTriggerCallback: (billCode: string, status: number | string) => Promise<any>;
   onCreateSettlement: (payload: any) => Promise<any>;
+  onApproveSettlement?: (batchId: string, eftRef: string, notes: string) => Promise<any>;
+  onRejectSettlement?: (batchId: string, reason: string) => Promise<any>;
   language?: 'BM' | 'EN';
   userRole?: string;
 }
@@ -51,10 +53,13 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
   onCreateBill,
   onTriggerCallback,
   onCreateSettlement,
+  onApproveSettlement,
+  onRejectSettlement,
   language = 'BM',
   userRole,
 }) => {
   const isEN = language === 'EN';
+  const isSuperAdmin = userRole === 'SUPER_ADMIN_VERTTERE';
   const [activeSubTab, setActiveSubTab] = useState<'TRANSACTIONS' | 'SETTLEMENTS' | 'SIMULATOR' | 'SETTINGS'>('TRANSACTIONS');
   
   // Filters & Search
@@ -67,6 +72,17 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
   const [selectedBatchForPrint, setSelectedBatchForPrint] = useState<SettlementBatch | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [successToast, setSuccessToast] = useState<string | null>(null);
+
+  // Bendahari Request Payout Form State
+  const [payoutNotes, setPayoutNotes] = useState('Pelepasan kutipan modal syer dan jualan POS untuk operasi koperasi.');
+  const [payoutDocChecked, setPayoutDocChecked] = useState(true);
+
+  // Super Admin Approval / Reject Form State
+  const [selectedBatchForApproval, setSelectedBatchForApproval] = useState<SettlementBatch | null>(null);
+  const [approvalEftRef, setApprovalEftRef] = useState(`MBB-EFT-${Date.now().toString().slice(-8)}`);
+  const [approvalNotes, setApprovalNotes] = useState('Dokumen resit disahkan lengkap. Bayaran diproses melalui Maybank BizChannel.');
+  const [selectedBatchForReject, setSelectedBatchForReject] = useState<SettlementBatch | null>(null);
+  const [rejectReason, setRejectReason] = useState('Penyata bank atau resit transaksi belum dimuat naik secara lengkap.');
 
   // Simulator State
   const [simProvider, setSimProvider] = useState<'SECUREPAY' | 'TOYYIBPAY'>('SECUREPAY');
@@ -161,7 +177,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
     }
   };
 
-  // Handle Create Payout Settlement Batch
+  // Handle Create Payout Settlement Batch (Request if Bendahari, Direct if Super Admin)
   const handleCreatePayoutBatch = async () => {
     if (pendingTransactions.length === 0) {
       alert('Tiada transaksi menunggu pelepasan pada masa ini.');
@@ -175,13 +191,62 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
         kodKoperasi: 'KOP-MY-001',
         noAkaunBankKoperasi: '8602-9918-2019 (CIMB Islamic)',
         namaBankKoperasi: 'CIMB Islamic Bank Berhad',
-        dikeluarkanOleh: 'Verttere Solutions FinTech Escrow',
-        catatan: `Pelepasan ${pendingTransactions.length} transaksi kutipan FPX Toyyibpay.`
+        dimohonOleh: isSuperAdmin ? 'Fikri Hijaz (Super Admin Verttere)' : 'Haji Ahmad Zaki (Bendahari Koperasi)',
+        dokumenSokonganPengesahan: payoutDocChecked ? 'Resit Jualan & Penyata Bank CIMB Disahkan' : 'Resit Pending Semakan',
+        catatan: payoutNotes || `Permohonan pelepasan ${pendingTransactions.length} transaksi kutipan FPX.`
       });
       setShowPayoutModal(false);
-      showToast(`Kelompok Payout bernilai ${formatRM(totalBakiPendingSettlement)} berjaya dilepaskan ke akaun bank koperasi!`);
+      if (isSuperAdmin) {
+        showToast(`✅ Kelompok Payout bernilai ${formatRM(totalBakiPendingSettlement)} berjaya dilepaskan ke akaun bank koperasi!`);
+      } else {
+        showToast(`📩 Permohonan pelepasan dana bernilai ${formatRM(totalBakiPendingSettlement)} telah dihantar kepada Super Admin Verttere untuk kelulusan.`);
+      }
     } catch (err: any) {
-      alert(`Ralat pelepasan payout: ${err.message}`);
+      alert(`Ralat permohonan payout: ${err.message}`);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Super Admin: Handle Approve Settlement Batch
+  const handleApproveBatchSubmit = async () => {
+    if (!selectedBatchForApproval) return;
+    if (!approvalEftRef.trim()) {
+      alert('Sila masukkan No Rujukan Bank EFT pindahan.');
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      if (onApproveSettlement) {
+        await onApproveSettlement(selectedBatchForApproval.id || selectedBatchForApproval.batchNo, approvalEftRef, approvalNotes);
+      }
+      setSelectedBatchForApproval(null);
+      showToast(`👑 Kelompok ${selectedBatchForApproval.batchNo} telah DILULUSKAN dan dipindahkan ke akaun bank koperasi!`);
+    } catch (err: any) {
+      alert(`Ralat kelulusan: ${err.message}`);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Super Admin: Handle Reject Settlement Batch
+  const handleRejectBatchSubmit = async () => {
+    if (!selectedBatchForReject) return;
+    if (!rejectReason.trim()) {
+      alert('Sila nyatakan sebab penolakan.');
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      if (onRejectSettlement) {
+        await onRejectSettlement(selectedBatchForReject.id || selectedBatchForReject.batchNo, rejectReason);
+      }
+      setSelectedBatchForReject(null);
+      showToast(`❌ Permohonan ${selectedBatchForReject.batchNo} telah DITOLAK.`);
+    } catch (err: any) {
+      alert(`Ralat: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
@@ -220,12 +285,23 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 {gatewayConfig.activeProvider === 'BOTH' ? 'SecurePay + ToyyibPay' : gatewayConfig.activeProvider || 'SECUREPAY'} ({gatewayConfig.isSandbox ? 'Sandbox Mode' : 'Live Mode'})
               </span>
+              {isSuperAdmin ? (
+                <span className="inline-flex items-center gap-1 bg-purple-950 text-purple-300 text-xs font-extrabold px-3 py-1 rounded-full border border-purple-600 ring-2 ring-purple-400/30">
+                  👑 Super Admin Verttere (Kuasa Release Payment)
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 bg-slate-900 text-slate-300 text-xs font-bold px-2.5 py-1 rounded-full border border-slate-700">
+                  🏦 Bendahari Koperasi (Mod Permohonan Payout)
+                </span>
+              )}
             </div>
             <h1 className="text-2xl lg:text-3xl font-black text-white tracking-tight">
               {isEN ? 'Payment Gateway & Escrow Settlement (SecurePay & ToyyibPay)' : 'Gerbang Pembayaran & Pengurusan Escrow'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl mt-1">
-              Kutipan automatik bayaran syer, yuran, dan POS melalui SecurePay (FPX, DuitNow QR, Kad) & ToyyibPay dengan penahanan dana transit dan pelepasan berkala (*payout*) ke akaun bank koperasi.
+              {isSuperAdmin
+                ? 'Panel Kawalan Super Admin Verttere Solutions: Kuasa mutlak meluluskan dan memindahkan bayaran pelepasan dana escrow ke akaun bank koperasi rasmi.'
+                : 'Kutipan automatik bayaran syer, yuran, dan POS. Bendahari boleh mengemukakan permohonan pelepasan dana (Request Payout) kepada Super Admin Verttere untuk pindahan ke akaun bank.'}
             </p>
           </div>
 
@@ -235,12 +311,16 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               disabled={pendingTransactions.length === 0}
               className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-lg transition-all ${
                 pendingTransactions.length > 0
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/40 cursor-pointer'
+                  ? isSuperAdmin
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-purple-950/60 cursor-pointer ring-2 ring-purple-400/40'
+                    : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/40 cursor-pointer'
                   : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
               }`}
             >
               <BadgeDollarSign className="w-4 h-4" />
-              {isEN ? 'Release Payout to Co-op' : 'Lepaskan Payout ke Koperasi'} ({pendingTransactions.length})
+              {isSuperAdmin
+                ? `👑 Sahkan & Lepaskan Payout (${pendingTransactions.length})`
+                : `📩 Mohon Pelepasan Payout (${pendingTransactions.length})`}
             </button>
 
             <button
@@ -552,84 +632,189 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
       {/* TAB 2: SETTLEMENT BATCHES & PAYOUTS */}
       {/* ------------------------------------------------------------- */}
       {activeSubTab === 'SETTLEMENTS' && (
-        <div className="space-y-4">
+        <div className="space-y-5">
           
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h3 className="text-base font-bold text-white">Kelompok Pelepasan Dana (*Payout Batches*)</h3>
-              <p className="text-xs text-slate-400">Rekod pemindahan dana bersih dari akaun kutipan Verttere ke akaun bank operasi rasmi koperasi.</p>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <span>Kelompok Pelepasan Dana (*Payout Batches*)</span>
+                {settlements.filter(s => s.status === 'MENUNGGU_KELULUSAN_VERTTERE').length > 0 && (
+                  <span className="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full animate-pulse">
+                    {settlements.filter(s => s.status === 'MENUNGGU_KELULUSAN_VERTTERE').length} Menunggu Kelulusan
+                  </span>
+                )}
+              </h3>
+              <p className="text-xs text-slate-400">
+                {isSuperAdmin
+                  ? 'Panel Super Admin: Semak dokumen permohonan bendahari dan luluskan pindahan dana EFT ke akaun bank koperasi.'
+                  : 'Rekod pemindahan dana bersih dari akaun kutipan Verttere ke akaun bank operasi rasmi koperasi.'}
+              </p>
             </div>
             
             <button
               onClick={() => setShowPayoutModal(true)}
               disabled={pendingTransactions.length === 0}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-lg"
+              className={`px-4 py-2 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-lg cursor-pointer ${
+                isSuperAdmin
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500'
+                  : 'bg-emerald-600 hover:bg-emerald-500'
+              } disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed`}
             >
               <PlusCircle className="w-4 h-4" />
-              Jana Kelompok Payout Baru
+              {isSuperAdmin ? 'Jana Pelepasan Payout Terus' : 'Mohon Kelompok Payout Baru'}
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {settlements.map(b => (
-              <div key={b.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4 relative">
-                
-                <div className="flex justify-between items-start">
-                  <div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800">
-                      {b.batchNo}
-                    </span>
-                    <h4 className="text-sm font-bold text-white mt-1.5">{b.namaKoperasi}</h4>
-                    <p className="text-[11px] text-slate-400 font-mono mt-0.5">{b.noAkaunBankKoperasi}</p>
-                  </div>
-
-                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" /> Pindahan Selesai
-                  </span>
+          {/* Super Admin Notice / Callout if Pending Batches exist */}
+          {isSuperAdmin && settlements.filter(s => s.status === 'MENUNGGU_KELULUSAN_VERTTERE').length > 0 && (
+            <div className="p-4 bg-gradient-to-r from-amber-950/60 via-purple-950/40 to-slate-900 border border-amber-500/50 rounded-2xl flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 font-bold text-lg">
+                  ⚠️
                 </div>
-
-                <div className="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded-xl border border-slate-800/80 text-center font-mono">
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase">Kutipan Kasar</span>
-                    <div className="text-xs font-bold text-white">{formatRM(b.jumlahKasar)}</div>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase">Caj Verttere</span>
-                    <div className="text-xs font-bold text-indigo-300">- {formatRM(b.jumlahCajVerttere)}</div>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-emerald-400 uppercase">Bersih Dipindah</span>
-                    <div className="text-xs font-bold text-emerald-400">{formatRM(b.jumlahBersihPindahan)}</div>
-                  </div>
+                <div>
+                  <h4 className="text-xs font-black text-amber-300 uppercase tracking-wide">
+                    Tindakan Super Admin Diperlukan:
+                  </h4>
+                  <p className="text-[11px] text-slate-300">
+                    Terdapat permohonan pelepasan dana dari Bendahari Koperasi yang telah disahkan resit dan menunggu kelulusan pindahan EFT daripada pihak Verttere Solutions.
+                  </p>
                 </div>
-
-                <div className="text-[11px] text-slate-400 space-y-1">
-                  <div className="flex justify-between">
-                    <span>Tempoh Kutipan:</span>
-                    <span className="text-slate-200 font-mono">{b.tarikhMula} hingga {b.tarikhTamat}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Jumlah Transaksi:</span>
-                    <span className="text-slate-200 font-bold">{b.jumlahTransaksi} transaksi FPX</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>No Rujukan Pindahan EFT:</span>
-                    <span className="text-indigo-300 font-mono">{b.noRujukanBank || 'MBB-EFT-AUTO'}</span>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-800 flex justify-end gap-2">
-                  <button
-                    onClick={() => setSelectedBatchForPrint(b)}
-                    className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-all"
-                  >
-                    <Printer className="w-3.5 h-3.5 text-indigo-400" />
-                    Cetak Penyata Settlement A4
-                  </button>
-                </div>
-
               </div>
-            ))}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {settlements.map(b => {
+              const isPendingApproval = b.status === 'MENUNGGU_KELULUSAN_VERTTERE';
+              const isApproved = b.status === 'DILULUSKAN_DILEPASKAN' || b.status === 'SELESAI_PINDAH';
+              const isRejected = b.status === 'DITOLAK_VERTTERE';
+
+              return (
+                <div 
+                  key={b.id} 
+                  className={`bg-slate-900 border rounded-2xl p-5 shadow-lg space-y-4 relative transition-all ${
+                    isPendingApproval 
+                      ? 'border-amber-500/60 ring-1 ring-amber-500/20 bg-gradient-to-b from-amber-950/20 to-slate-900' 
+                      : isRejected
+                      ? 'border-rose-900/50 opacity-80'
+                      : 'border-slate-800'
+                  }`}
+                >
+                  
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800 font-mono">
+                          {b.batchNo}
+                        </span>
+                        {isPendingApproval && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800 animate-pulse">
+                            ⏳ Menunggu Kelulusan Verttere
+                          </span>
+                        )}
+                        {isApproved && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" /> Pindahan EFT Selesai
+                          </span>
+                        )}
+                        {isRejected && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-800">
+                            ❌ Ditolak oleh Verttere
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="text-sm font-bold text-white mt-1.5">{b.namaKoperasi}</h4>
+                      <p className="text-[11px] text-slate-400 font-mono mt-0.5">{b.noAkaunBankKoperasi}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded-xl border border-slate-800/80 text-center font-mono">
+                    <div>
+                      <span className="text-[10px] text-slate-500 uppercase">Kutipan Kasar</span>
+                      <div className="text-xs font-bold text-white">{formatRM(b.jumlahKasar)}</div>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-500 uppercase">Caj Verttere</span>
+                      <div className="text-xs font-bold text-indigo-300">- {formatRM(b.jumlahCajVerttere)}</div>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-400 uppercase">Bersih Dipindah</span>
+                      <div className="text-xs font-bold text-emerald-400">{formatRM(b.jumlahBersihPindahan)}</div>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-slate-400 space-y-1.5 border-t border-slate-800/60 pt-2">
+                    <div className="flex justify-between">
+                      <span>Pemohon / Pengesahan:</span>
+                      <span className="text-slate-200 font-semibold">{b.dimohonOleh || b.dikeluarkanOleh || 'Haji Ahmad Zaki (Bendahari)'}</span>
+                    </div>
+                    {b.tarikhPermohonan && (
+                      <div className="flex justify-between">
+                        <span>Tarikh Permohonan:</span>
+                        <span className="text-slate-300 font-mono">{b.tarikhPermohonan}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span>Dokumen Disahkan:</span>
+                      <span className="text-emerald-400 font-medium">✓ {b.dokumenSokonganPengesahan || 'Resit & Penyata Bank Sah'}</span>
+                    </div>
+                    {b.diluluskanOlehVerttere && (
+                      <div className="flex justify-between text-purple-300 bg-purple-950/40 px-2 py-1 rounded-lg border border-purple-900/50">
+                        <span>Diluluskan Oleh:</span>
+                        <span className="font-bold">{b.diluluskanOlehVerttere}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span>No Rujukan Pindahan EFT:</span>
+                      <span className="text-indigo-300 font-mono">{b.noRujukanBankEFT || b.noRujukanBank || 'Menunggu Kelulusan'}</span>
+                    </div>
+                    {b.catatanVerttere && (
+                      <div className="text-[10px] text-slate-400 italic bg-slate-950 p-2 rounded-lg border border-slate-800">
+                        Catatan Verttere: "{b.catatanVerttere}"
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actions Bar */}
+                  <div className="pt-2 border-t border-slate-800 flex flex-wrap justify-between items-center gap-2">
+                    {/* Super Admin Approval Actions */}
+                    {isSuperAdmin && isPendingApproval ? (
+                      <div className="flex gap-2 w-full">
+                        <button
+                          onClick={() => {
+                            setSelectedBatchForApproval(b);
+                            setApprovalEftRef(`MBB-EFT-${Date.now().toString().slice(-8)}`);
+                          }}
+                          className="flex-1 px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/50 cursor-pointer"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Luluskan &amp; Pindah (Release)
+                        </button>
+                        <button
+                          onClick={() => setSelectedBatchForReject(b)}
+                          className="px-3 py-2 bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 font-bold text-xs rounded-xl flex items-center gap-1 cursor-pointer"
+                        >
+                          <X className="w-4 h-4" />
+                          Tolak
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex justify-end w-full">
+                        <button
+                          onClick={() => setSelectedBatchForPrint(b)}
+                          className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
+                        >
+                          <Printer className="w-3.5 h-3.5 text-indigo-400" />
+                          Cetak Penyata Settlement A4
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+              );
+            })}
           </div>
 
         </div>
@@ -1203,23 +1388,25 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
       )}
 
       {/* ------------------------------------------------------------- */}
-      {/* MODAL: RELEASE PAYOUT TO CO-OP */}
+      {/* MODAL 1: REQUEST / RELEASE PAYOUT */}
       {/* ------------------------------------------------------------- */}
       {showPayoutModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
+          <div className="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <BadgeDollarSign className="w-5 h-5 text-emerald-400" />
-                Pelepasan Dana Payout ke Koperasi
+                {isSuperAdmin ? '👑 Pelepasan Dana Payout (Super Admin Verttere)' : '📩 Permohonan Pelepasan Payout (Bendahari Koperasi)'}
               </h3>
-              <button onClick={() => setShowPayoutModal(false)} className="text-slate-500 hover:text-white">
+              <button onClick={() => setShowPayoutModal(false)} className="text-slate-500 hover:text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <p className="text-xs text-slate-300">
-              Sistem akan mengumpulkan <span className="font-bold text-white">{pendingTransactions.length} transaksi</span> SecurePay yang telah berjaya dan melepaskan dana bersih ke akaun bank operasi rasmi koperasi.
+              {isSuperAdmin
+                ? `Sebagai Super Admin Platform, anda akan meluluskan dan melepaskan dana bersih bagi ${pendingTransactions.length} transaksi ke akaun bank operasi koperasi.`
+                : `Bendahari mengemukakan permohonan pelepasan dana bagi ${pendingTransactions.length} transaksi yang telah disahkan resit kepada Super Admin Verttere Solutions.`}
             </p>
 
             <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs font-mono">
@@ -1228,7 +1415,7 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
                 <span className="text-white font-bold">{formatRM(pendingTransactions.reduce((a, t) => a + t.jumlahKasar, 0))}</span>
               </div>
               <div className="flex justify-between text-indigo-300">
-                <span>Fee Platform Verttere:</span>
+                <span>Fee Platform Verttere (RM1.00 + 0.5%):</span>
                 <span>- {formatRM(pendingTransactions.reduce((a, t) => a + t.cajPlatformVerttere, 0))}</span>
               </div>
               <div className="flex justify-between text-emerald-400 font-bold border-t border-slate-800 pt-2 text-sm">
@@ -1237,24 +1424,197 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               </div>
             </div>
 
-            <div className="text-xs text-slate-400 space-y-1">
+            <div className="text-xs text-slate-400 space-y-1 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
               <div><strong>Penerima:</strong> Koperasi Warga Berdaya Malaysia Berhad</div>
-              <div><strong>Akaun Bank:</strong> 8602-9918-2019 (CIMB Islamic)</div>
+              <div><strong>Akaun Bank:</strong> 8602-9918-2019 (CIMB Islamic Bank Berhad)</div>
             </div>
+
+            {/* Bendahari Verification Checklist */}
+            {!isSuperAdmin && (
+              <div className="space-y-3 bg-emerald-950/30 p-3.5 rounded-2xl border border-emerald-800/40 text-xs">
+                <label className="flex items-start gap-2 cursor-pointer text-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={payoutDocChecked}
+                    onChange={e => setPayoutDocChecked(e.target.checked)}
+                    className="w-4 h-4 mt-0.5 rounded text-emerald-600 bg-slate-900 border-slate-700"
+                  />
+                  <span>
+                    Saya mengesahkan semua resit jualan/modal syer telah disemak &amp; akaun bank CIMB Koperasi adalah tepat.
+                  </span>
+                </label>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">Catatan Permohonan (Untuk Super Admin):</label>
+                  <textarea
+                    rows={2}
+                    value={payoutNotes}
+                    onChange={e => setPayoutNotes(e.target.value)}
+                    placeholder="Contoh: Pelepasan untuk pembayaran pembekal minggu ke-3..."
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowPayoutModal(false)}
-                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all"
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all cursor-pointer"
               >
                 Batal
               </button>
               <button
                 onClick={handleCreatePayoutBatch}
-                disabled={isProcessing}
-                className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all"
+                disabled={isProcessing || (!isSuperAdmin && !payoutDocChecked)}
+                className={`flex-1 py-2.5 text-white text-xs font-bold rounded-xl shadow-lg transition-all cursor-pointer ${
+                  isSuperAdmin
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-purple-950/50'
+                    : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/50'
+                } disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed`}
               >
-                {isProcessing ? 'Memproses...' : 'Sahkan & Pindah'}
+                {isProcessing 
+                  ? 'Memproses...' 
+                  : isSuperAdmin 
+                  ? '👑 Sahkan & Lepaskan Payout' 
+                  : '📩 Hantar Permohonan ke Verttere'}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* MODAL 2: SUPER ADMIN APPROVAL & EFT RELEASE MODAL */}
+      {/* ------------------------------------------------------------- */}
+      {selectedBatchForApproval && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="max-w-lg w-full bg-slate-900 border border-purple-500/50 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-purple-600/30 border border-purple-400 flex items-center justify-center text-purple-300">
+                  👑
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-white">Kelulusan Pelepasan Dana (Super Admin)</h3>
+                  <p className="text-[11px] text-purple-300 font-mono">Kelompok: {selectedBatchForApproval.batchNo}</p>
+                </div>
+              </div>
+              <button onClick={() => setSelectedBatchForApproval(null)} className="text-slate-500 hover:text-white cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs font-mono">
+              <div className="flex justify-between text-slate-400">
+                <span>Pemohon (Bendahari):</span>
+                <span className="text-white font-bold">{selectedBatchForApproval.dimohonOleh}</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>Akaun Bank Koperasi:</span>
+                <span className="text-white font-bold">{selectedBatchForApproval.noAkaunBankKoperasi}</span>
+              </div>
+              <div className="flex justify-between text-emerald-400 font-bold border-t border-slate-800 pt-2 text-sm">
+                <span>Jumlah Bersih EFT:</span>
+                <span>{formatRM(selectedBatchForApproval.jumlahBersihPindahan)}</span>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-300 mb-1">
+                  Nombor Rujukan Bank EFT (Maybank BizChannel / CIMB): *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={approvalEftRef}
+                  onChange={e => setApprovalEftRef(e.target.value)}
+                  placeholder="MBB-EFT-2026-992102"
+                  className="w-full bg-slate-950 border border-purple-500/50 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-300 mb-1">
+                  Catatan Kelulusan Super Admin:
+                </label>
+                <textarea
+                  rows={2}
+                  value={approvalNotes}
+                  onChange={e => setApprovalNotes(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => setSelectedBatchForApproval(null)}
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleApproveBatchSubmit}
+                disabled={isProcessing}
+                className="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-950/60 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                {isProcessing ? 'Memproses...' : 'Luluskan & Lepaskan Dana'}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* MODAL 3: SUPER ADMIN REJECTION MODAL */}
+      {/* ------------------------------------------------------------- */}
+      {selectedBatchForReject && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-slate-900 border border-rose-500/50 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-base font-bold text-rose-300 flex items-center gap-2">
+                <X className="w-5 h-5 text-rose-400" />
+                Tolak Permohonan Payout ({selectedBatchForReject.batchNo})
+              </h3>
+              <button onClick={() => setSelectedBatchForReject(null)} className="text-slate-500 hover:text-white cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-300">
+              Sila nyatakan sebab permohonan pelepasan dana ini ditolak supaya pihak Bendahari Koperasi boleh membuat pembetulan dokumen.
+            </p>
+
+            <div className="text-xs">
+              <label className="block text-[11px] font-bold text-slate-300 mb-1">Sebab Penolakan: *</label>
+              <textarea
+                rows={3}
+                required
+                value={rejectReason}
+                onChange={e => setRejectReason(e.target.value)}
+                placeholder="Contoh: Resit jualan tidak tally dengan jumlah tuntutan..."
+                className="w-full bg-slate-950 border border-rose-700/60 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-500"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => setSelectedBatchForReject(null)}
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleRejectBatchSubmit}
+                disabled={isProcessing}
+                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all cursor-pointer"
+              >
+                {isProcessing ? 'Memproses...' : 'Sahkan Penolakan'}
               </button>
             </div>
 

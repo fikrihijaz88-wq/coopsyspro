@@ -2905,6 +2905,28 @@ export const INITIAL_GATEWAY_TRANSACTIONS: GatewayTransaction[] = [
 
 export const INITIAL_SETTLEMENT_BATCHES: SettlementBatch[] = [
   {
+    id: 'SETTLE-002',
+    batchNo: 'SETTLE-2026-B02',
+    namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+    kodKoperasi: 'KOP-MY-001',
+    noAkaunBankKoperasi: '8602-9918-2019 (CIMB Islamic)',
+    namaBankKoperasi: 'CIMB Islamic Bank Berhad',
+    tarikhMula: '2026-02-16',
+    tarikhTamat: '2026-02-23',
+    jumlahTransaksi: 3,
+    jumlahKasar: 1535.00,
+    jumlahCajVerttere: 10.68,
+    jumlahBersihPindahan: 1524.32,
+    status: 'MENUNGGU_KELULUSAN_VERTTERE',
+    statusKelulusan: 'MENUNGGU_KELULUSAN_VERTTERE',
+    dimohonOleh: 'Haji Ahmad Zaki (Bendahari Koperasi)',
+    jawatanPemohon: 'Bendahari Koperasi',
+    tarikhPermohonan: '2026-02-23 10:15:00',
+    dokumenSokonganPengesahan: 'Resit Jualan POS & Pengesahan Bank CIMB Koperasi (Sah)',
+    catatanPermohonan: 'Mohon pelepasan dana escrow jualan POS & modal syer minggu ke-3 Februari bagi pembayaran inventori pembekal.',
+    dikeluarkanOleh: 'Haji Ahmad Zaki (Bendahari)'
+  },
+  {
     id: 'SETTLE-001',
     batchNo: 'SETTLE-2026-B01',
     namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
@@ -2917,10 +2939,20 @@ export const INITIAL_SETTLEMENT_BATCHES: SettlementBatch[] = [
     jumlahKasar: 4500.00,
     jumlahCajVerttere: 32.50,
     jumlahBersihPindahan: 4467.50,
-    status: 'SELESAI_PINDAH',
-    dikeluarkanOleh: 'Sistem Escrow Verttere',
+    status: 'DILULUSKAN_DILEPASKAN',
+    statusKelulusan: 'DILULUSKAN_DILEPASKAN',
+    dimohonOleh: 'Haji Ahmad Zaki (Bendahari)',
+    jawatanPemohon: 'Bendahari Koperasi',
+    tarikhPermohonan: '2026-02-15 11:00:00',
+    dokumenSokonganPengesahan: 'Baucar Bayaran & Penyata Bank Disahkan ALK',
+    catatanPermohonan: 'Pelepasan kutipan modal syer fasa 1.',
+    diluluskanOlehVerttere: 'Fikri Hijaz (Super Admin Verttere Solutions)',
+    tarikhKelulusanVerttere: '2026-02-16 15:30:00',
+    catatanVerttere: 'Dokumen resit dan akaun bank disahkan sah. Payout diproses melalui Maybank BizChannel EFT.',
+    dikeluarkanOleh: 'Fikri Hijaz (Super Admin Verttere)',
     tarikhPindahan: '2026-02-16 15:30:00',
     noRujukanBank: 'MBB-EFT-SETTLE-84910291',
+    noRujukanBankEFT: 'MBB-EFT-SETTLE-84910291',
     catatan: 'Pindahan kelompok bayaran modal syer dan jualan POS fasa 1 Feb 2026 telah disahkan diterima akaun koperasi.'
   }
 ];

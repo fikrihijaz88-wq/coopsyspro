@@ -827,10 +827,16 @@ async function startServer() {
         jumlahCajVerttere: totalCaj,
         jumlahBersihPindahan: totalBersih,
         status: 'SELESAI_PINDAH',
-        dikeluarkanOleh: dikeluarkanOleh || 'Pengurus Escrow Verttere',
-        tarikhPindahan: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        noRujukanBank: `MBB-EFT-${Date.now().toString().slice(-8)}`,
-        catatan: catatan || 'Pelepasan dana kutipan gateway FPX ke akaun bank operasi rasmi koperasi.'
+        dikeluarkanOleh: dikeluarkanOleh || 'Haji Ahmad Zaki (Bendahari)',
+        dimohonOleh: req.body.dimohonOleh || 'Haji Ahmad Zaki (Bendahari)',
+        tarikhPermohonan: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        dokumenSokonganPengesahan: req.body.dokumenSokonganPengesahan || 'Resit Jualan & Penyata Bank CIMB Disahkan',
+        status: req.body.status || 'MENUNGGU_KELULUSAN_VERTTERE',
+        statusKelulusan: req.body.status || 'MENUNGGU_KELULUSAN_VERTTERE',
+        tarikhPindahan: req.body.status === 'DILULUSKAN_DILEPASKAN' ? new Date().toISOString().replace('T', ' ').slice(0, 19) : undefined,
+        noRujukanBank: req.body.status === 'DILULUSKAN_DILEPASKAN' ? `MBB-EFT-${Date.now().toString().slice(-8)}` : undefined,
+        noRujukanBankEFT: req.body.status === 'DILULUSKAN_DILEPASKAN' ? `MBB-EFT-${Date.now().toString().slice(-8)}` : undefined,
+        catatan: catatan || 'Permohonan pelepasan dana kutipan gateway FPX ke akaun bank operasi rasmi koperasi.'
       };
 
       const saved = db.createSettlementBatch(newBatch);
@@ -839,15 +845,85 @@ async function startServer() {
         id: `LOG-${Date.now()}`,
         tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
         kategori: 'PERAKAUNAN',
-        tindakan: `Pelepasan Dana Escrow (${saved.batchNo})`,
-        deskripsi: `Pindahan bersih RM${saved.jumlahBersihPindahan} (${saved.jumlahTransaksi} transaksi) dilepaskan kepada ${saved.namaKoperasi}. Fee platform dijana: RM${saved.jumlahCajVerttere}.`,
-        pengguna: dikeluarkanOleh || 'Pengurus Escrow Verttere',
-        status: 'BERJAYA',
+        tindakan: `Permohonan Pelepasan Payout (${saved.batchNo})`,
+        deskripsi: `Permohonan pelepasan dana bersih RM${saved.jumlahBersihPindahan} (${saved.jumlahTransaksi} transaksi) dihantar kepada Super Admin Verttere Solutions.`,
+        pengguna: req.body.dimohonOleh || 'Bendahari Koperasi',
+        status: 'INFO',
         jumlahRM: saved.jumlahBersihPindahan,
         ipAlamat: '127.0.0.1'
       });
 
       res.status(201).json(saved);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/gateway/settlement/:id/approve", (req, res) => {
+    try {
+      const { id } = req.params;
+      const { eftRef, notes, approverName } = req.body;
+      const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
+      const updated = db.updateSettlementBatch(id, {
+        status: 'DILULUSKAN_DILEPASKAN',
+        statusKelulusan: 'DILULUSKAN_DILEPASKAN',
+        diluluskanOlehVerttere: approverName || 'Fikri Hijaz (Super Admin Verttere Solutions)',
+        tarikhKelulusanVerttere: now,
+        tarikhPindahan: now,
+        noRujukanBank: eftRef || `MBB-EFT-${Date.now().toString().slice(-8)}`,
+        noRujukanBankEFT: eftRef || `MBB-EFT-${Date.now().toString().slice(-8)}`,
+        catatanVerttere: notes
+      });
+
+      if (!updated) return res.status(404).json({ error: 'Kelompok settlement tidak dijumpai' });
+
+      db.addLog({
+        id: `LOG-${Date.now()}`,
+        tarikhMasa: now,
+        kategori: 'PENTADBIRAN',
+        tindakan: `Kelulusan Pelepasan Payout (${updated.batchNo})`,
+        deskripsi: `Super Admin Verttere meluluskan pindahan dana RM${updated.jumlahBersihPindahan} dengan No Rujukan EFT: ${eftRef}.`,
+        pengguna: approverName || 'Fikri Hijaz (Super Admin Verttere)',
+        status: 'BERJAYA',
+        jumlahRM: updated.jumlahBersihPindahan,
+        ipAlamat: '127.0.0.1'
+      });
+
+      res.json(updated);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post("/api/gateway/settlement/:id/reject", (req, res) => {
+    try {
+      const { id } = req.params;
+      const { reason, approverName } = req.body;
+      const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
+      const updated = db.updateSettlementBatch(id, {
+        status: 'DITOLAK_VERTTERE',
+        statusKelulusan: 'DITOLAK_VERTTERE',
+        diluluskanOlehVerttere: approverName || 'Fikri Hijaz (Super Admin Verttere Solutions)',
+        tarikhKelulusanVerttere: now,
+        catatanVerttere: reason
+      });
+
+      if (!updated) return res.status(404).json({ error: 'Kelompok settlement tidak dijumpai' });
+
+      db.addLog({
+        id: `LOG-${Date.now()}`,
+        tarikhMasa: now,
+        kategori: 'PENTADBIRAN',
+        tindakan: `Penolakan Permohonan Payout (${updated.batchNo})`,
+        deskripsi: `Super Admin Verttere menolak permohonan pelepasan dana: ${reason}`,
+        pengguna: approverName || 'Fikri Hijaz (Super Admin Verttere)',
+        status: 'AMARAN',
+        ipAlamat: '127.0.0.1'
+      });
+
+      res.json(updated);
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }

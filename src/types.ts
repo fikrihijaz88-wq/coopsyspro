@@ -822,10 +822,22 @@ export interface SettlementBatch {
   jumlahKasar: number;
   jumlahCajVerttere: number;
   jumlahBersihPindahan: number;
-  status: 'DRAF' | 'DALAM_PROSES' | 'SELESAI_PINDAH';
-  dikeluarkanOleh: string;
+  status: 'MENUNGGU_KELULUSAN_VERTTERE' | 'DILULUSKAN_DILEPASKAN' | 'DITOLAK_VERTTERE' | 'DRAF' | 'DALAM_PROSES' | 'SELESAI_PINDAH';
+  // Request by Bendahari
+  dimohonOleh: string; // e.g. 'Haji Ahmad Zaki (Bendahari)'
+  jawatanPemohon?: string;
+  tarikhPermohonan: string;
+  dokumenSokonganPengesahan?: string; // e.g. 'Penyata Bank & Baucar Sah'
+  catatanPermohonan?: string;
+  // Super Admin Verttere Approval & Release
+  statusKelulusan?: 'MENUNGGU_KELULUSAN_VERTTERE' | 'DILULUSKAN_DILEPASKAN' | 'DITOLAK_VERTTERE';
+  diluluskanOlehVerttere?: string; // e.g. 'Fikri Hijaz (Super Admin Verttere Solutions)'
+  tarikhKelulusanVerttere?: string;
+  catatanVerttere?: string;
+  dikeluarkanOleh?: string;
   tarikhPindahan?: string;
   noRujukanBank?: string;
+  noRujukanBankEFT?: string;
   catatan?: string;
 }
 

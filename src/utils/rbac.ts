@@ -1,4 +1,5 @@
 export type UserRole = 
+  | 'SUPER_ADMIN_VERTTERE'
   | 'BENDAHARI' 
   | 'PENGERUSI_ALK' 
   | 'SETIAUSAHA' 
@@ -22,9 +23,39 @@ export const ROLE_DEFINITIONS: Record<UserRole, {
   badgeColor: string;
   allowedTabs: string[];
 }> = {
+  SUPER_ADMIN_VERTTERE: {
+    label: 'Super Admin Platform (Verttere Solutions)',
+    description: 'Pengasas & Pentadbir Induk Platform Verttere Solutions. Memegang kuasa mutlak meluluskan & melepaskan pembayaran dana escrow (Payment Release), konfigurasi API gateway dwi-pembekal, dan pengurusan multi-tenant koperasi.',
+    badgeColor: 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black ring-2 ring-purple-400/50 shadow-md shadow-purple-950/50',
+    allowedTabs: [
+      'dashboard',
+      'members',
+      'savings',
+      'governance',
+      'welfare',
+      'meetings',
+      'pos',
+      'accounting',
+      'bank-recon',
+      'fixed-assets',
+      'financing',
+      'skm-funds',
+      'e-invoice',
+      'gateway',
+      'payroll',
+      'financials',
+      'documents',
+      'dividend',
+      'compliance',
+      'automated-reports',
+      'logs',
+      'ai-audit',
+      'notifications',
+    ],
+  },
   BENDAHARI: {
     label: 'Bendahari Koperasi',
-    description: 'Akses penuh kewangan, lejar, dividen, pembiayaan, simpanan khas, penyesuaian bank, e-invois, POS dan dokumen.',
+    description: 'Akses penuh kewangan, lejar, dividen, pembiayaan, simpanan khas, penyesuaian bank, e-invois, POS dan dokumen. Boleh mengemukakan permohonan pelepasan dana gateway (Request Payout).',
     badgeColor: 'bg-emerald-500 text-slate-950',
     allowedTabs: [
       'dashboard',
