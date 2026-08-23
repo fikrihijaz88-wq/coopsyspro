@@ -716,6 +716,8 @@ export const api = {
     tarikhTamat?: string;
     catatan?: string;
     dikeluarkanOleh?: string;
+    dimohonOleh?: string;
+    dokumenSokonganPengesahan?: string;
   }): Promise<SettlementBatch> {
     try {
       const res = await fetch('/api/gateway/settlements', {
@@ -728,6 +730,7 @@ export const api = {
       console.warn('api.createSettlementBatch offline fallback:', e);
     }
     const batchNo = `SETTLE-2026-B${Math.floor(10 + Math.random() * 90)}`;
+    const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
     return {
       id: `SETTLE-${Date.now()}`,
       batchNo,
@@ -741,11 +744,13 @@ export const api = {
       jumlahKasar: 100,
       jumlahCajVerttere: 1.50,
       jumlahBersihPindahan: 98.50,
-      status: 'SELESAI_PINDAH',
-      dikeluarkanOleh: payload.dikeluarkanOleh || 'Verttere FinTech Escrow Manager',
-      tarikhPindahan: new Date().toISOString().replace('T', ' ').slice(0, 19),
-      noRujukanBank: `MBB-EFT-${Date.now().toString().slice(-8)}`,
-      catatan: payload.catatan || 'Pelepasan kutipan gateway ke akaun koperasi.'
+      status: 'MENUNGGU_KELULUSAN_VERTTERE',
+      statusKelulusan: 'MENUNGGU_KELULUSAN_VERTTERE',
+      dimohonOleh: payload.dimohonOleh || 'Haji Ahmad Zaki (Bendahari)',
+      tarikhPermohonan: now,
+      dokumenSokonganPengesahan: payload.dokumenSokonganPengesahan || 'Resit Jualan Disahkan',
+      dikeluarkanOleh: payload.dikeluarkanOleh || 'Haji Ahmad Zaki (Bendahari)',
+      catatan: payload.catatan || 'Permohonan pelepasan kutipan gateway ke akaun koperasi.'
     };
   },
 

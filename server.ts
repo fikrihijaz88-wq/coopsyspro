@@ -826,7 +826,6 @@ async function startServer() {
         jumlahKasar: totalKasar,
         jumlahCajVerttere: totalCaj,
         jumlahBersihPindahan: totalBersih,
-        status: 'SELESAI_PINDAH',
         dikeluarkanOleh: dikeluarkanOleh || 'Haji Ahmad Zaki (Bendahari)',
         dimohonOleh: req.body.dimohonOleh || 'Haji Ahmad Zaki (Bendahari)',
         tarikhPermohonan: new Date().toISOString().replace('T', ' ').slice(0, 19),
