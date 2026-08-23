@@ -24,7 +24,9 @@ import {
   SettlementBatch,
   NotificationTemplate,
   NotificationLog,
-  NotificationConfig
+  NotificationConfig,
+  SystemUser,
+  CoopBasicProfile
 } from '../types';
 
 export const INITIAL_CARTA_AKAUN: CartaAkaun[] = [
@@ -3081,6 +3083,102 @@ export const INITIAL_NOTIFICATION_LOGS: NotificationLog[] = [
     rujukanTransaksi: 'AGM-2026-NOTIS'
   }
 ];
+
+// -------------------------------------------------------------
+// System Users & Role Administration
+// -------------------------------------------------------------
+
+export const INITIAL_SYSTEM_USERS: SystemUser[] = [
+  {
+    id: 'USR-001',
+    nama: 'Fikri Hijaz (Super Admin Verttere)',
+    emel: 'fikri@verttere.my',
+    noTelefon: '019-8765432',
+    peranan: 'SUPER_ADMIN_VERTTERE',
+    statusAkaun: 'AKTIF',
+    tarikhDaftar: '2024-01-01',
+    terakhirLogMasuk: '2026-08-23 15:45:00',
+    catatan: 'Pengasas & Pentadbir Utama Platform Verttere Solutions (Kuasa Payout & Keselamatan)'
+  },
+  {
+    id: 'USR-002',
+    nama: 'Haji Ahmad Zaki',
+    emel: 'bendahari@koperasi.my',
+    noTelefon: '012-3344556',
+    peranan: 'BENDAHARI',
+    statusAkaun: 'AKTIF',
+    tarikhDaftar: '2024-01-15',
+    terakhirLogMasuk: '2026-08-23 14:20:10',
+    catatan: 'Pegawai Kewangan & Bendahari Utama Koperasi'
+  },
+  {
+    id: 'USR-003',
+    nama: 'Dato\' Hj. Razali Ismail',
+    emel: 'pengerusi@koperasi.my',
+    noTelefon: '019-2233445',
+    peranan: 'PENGERUSI_ALK',
+    statusAkaun: 'AKTIF',
+    tarikhDaftar: '2024-01-15',
+    terakhirLogMasuk: '2026-08-22 10:15:30',
+    catatan: 'Pengerusi Lembaga Koperasi (ALK)'
+  },
+  {
+    id: 'USR-004',
+    nama: 'Puan Noraini Hashim',
+    emel: 'setiausaha@koperasi.my',
+    noTelefon: '013-9988776',
+    peranan: 'SETIAUSAHA',
+    statusAkaun: 'AKTIF',
+    tarikhDaftar: '2024-01-15',
+    terakhirLogMasuk: '2026-08-21 16:40:00',
+    catatan: 'Setiausaha Pentadbiran & Pengurusan Minit AGM'
+  },
+  {
+    id: 'USR-005',
+    nama: 'En. Tan Chee Keong',
+    emel: 'auditor@koperasi.my',
+    noTelefon: '017-5544332',
+    peranan: 'AUDITOR_JAD',
+    statusAkaun: 'AKTIF',
+    tarikhDaftar: '2024-02-01',
+    terakhirLogMasuk: '2026-08-20 09:30:15',
+    catatan: 'Jawatankuasa Audit Dalaman (JAD)'
+  },
+  {
+    id: 'USR-006',
+    nama: 'Cik Farah Nabilah',
+    emel: 'pos@koperasi.my',
+    noTelefon: '011-2233445',
+    peranan: 'JURUWANG_POS',
+    statusAkaun: 'AKTIF',
+    tarikhDaftar: '2024-03-01',
+    terakhirLogMasuk: '2026-08-23 15:10:00',
+    catatan: 'Juruwang Kaunter Kedai Koperasi'
+  }
+];
+
+// -------------------------------------------------------------
+// Basic Co-op Profile (Public & Basic Admin Scope)
+// -------------------------------------------------------------
+
+export const INITIAL_COOP_PROFILE: CoopBasicProfile = {
+  namaKoperasi: 'Koperasi Warga Berdaya Malaysia Berhad',
+  kodKoperasi: 'KOP-MY-001',
+  noPendaftaranSKM: 'W-4-0982/2014',
+  tarikhPenubuhan: '2014-06-18',
+  alamatPerniagaan: 'Aras 3, Bangunan Menara Koperasi, Jalan Tun Razak',
+  poskod: '50400',
+  bandar: 'Kuala Lumpur',
+  negeri: 'Wilayah Persekutuan Kuala Lumpur',
+  noTelefonRasmi: '03-2166 8899',
+  emelRasmi: 'pentadbiran@koperasiwargaberdaya.my',
+  lamanWeb: 'https://fikrihijaz.aila.my',
+  namaBankOperasi: 'CIMB Islamic Bank Berhad',
+  noAkaunBankOperasi: '8602-9918-2019',
+  namaPemegangAkaunBank: 'Koperasi Warga Berdaya Malaysia Berhad',
+  statusLangganan: 'AKTIF_ENTERPRISE',
+  pelanVerttere: 'Verttere FinTech Core Multi-Tenant Enterprise Edition'
+};
 
 
 

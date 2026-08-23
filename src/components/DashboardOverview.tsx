@@ -70,6 +70,7 @@ interface DashboardOverviewProps {
   onOpenNewTxModal: () => void;
   language?: 'BM' | 'EN';
   setLanguage?: (lang: 'BM' | 'EN') => void;
+  userRole?: string;
 }
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
@@ -83,6 +84,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onOpenNewTxModal,
   language = 'BM',
   setLanguage,
+  userRole,
 }) => {
   const isEN = language === 'EN';
   const [chartType, setChartType] = useState<'AREA' | 'BAR'>('AREA');
@@ -313,6 +315,140 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     if (filterAlertCategory === 'COMPLIANCE') return n.type === 'COMPLIANCE';
     return true;
   });
+
+  if (userRole === 'SUPER_ADMIN_VERTTERE') {
+    return (
+      <div className="space-y-6">
+        {/* Super Admin Welcome Banner */}
+        <div className="bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 text-white rounded-3xl p-6 border border-purple-800/50 shadow-2xl relative overflow-hidden">
+          <div className="absolute -right-8 -bottom-8 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-purple-900 text-purple-300 border border-purple-600 text-xs font-black px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md">
+                  👑 Super Admin Platform (Verttere Solutions)
+                </span>
+                <span className="bg-emerald-950/80 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full border border-emerald-800 font-bold">
+                  🛡️ Privacy Shield Aktif
+                </span>
+              </div>
+              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
+                Pusat Kawalan Platform &amp; Pelepasan Dana Escrow
+              </h2>
+              <p className="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                Panel khas pentadbiran platform Verttere Solutions bagi menguruskan pelepasan bayaran escrow, pengurusan akaun pengguna sistem, tetapan profil asas koperasi, dan log audit keselamatan.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => setActiveTab('gateway')}
+                className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-purple-950/50 flex items-center gap-2 cursor-pointer transition-all"
+              >
+                <Sparkles className="w-4 h-4" /> Buka Pelepasan Payout
+              </button>
+              <button
+                onClick={() => setActiveTab('system-admin')}
+                className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 cursor-pointer transition-all"
+              >
+                <Users className="w-4 h-4 text-emerald-400" /> Urus Pengguna
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Privacy Notice Alert */}
+        <div className="p-4 bg-slate-900/80 border border-purple-500/30 rounded-2xl flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-lg">
+            🔒
+          </div>
+          <div>
+            <h4 className="text-xs font-black text-purple-300 uppercase tracking-wider">
+              Polisi Perlindungan Privasi Koperasi &amp; Pematuhan PDPA
+            </h4>
+            <p className="text-[11px] text-slate-300">
+              Data perakaunan dalaman koperasi (Buku Tunai, Lejar Am, Untung Rugi), permohonan pinjaman peribadi anggota, dan agihan dividen dilindungi dan diasingkan secara automatik daripada paparan vendor/Super Admin.
+            </p>
+          </div>
+        </div>
+
+        {/* Super Admin Action Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div 
+            onClick={() => setActiveTab('gateway')}
+            className="bg-slate-900 border border-slate-800 hover:border-purple-500/60 p-5 rounded-2xl transition-all cursor-pointer shadow-lg group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-400">Pelepasan Dana Escrow</span>
+              <div className="w-9 h-9 rounded-xl bg-purple-950 text-purple-400 flex items-center justify-center border border-purple-800/50 group-hover:scale-110 transition-transform">
+                <Coins className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-xl font-black text-white">Kuasa Payout EFT</div>
+              <p className="text-xs text-purple-300 mt-1 flex items-center gap-1">
+                Luluskan permohonan bendahari <ArrowRight className="w-3 h-3" />
+              </p>
+            </div>
+          </div>
+
+          <div 
+            onClick={() => setActiveTab('system-admin')}
+            className="bg-slate-900 border border-slate-800 hover:border-emerald-500/60 p-5 rounded-2xl transition-all cursor-pointer shadow-lg group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-400">Pengguna &amp; Peranan</span>
+              <div className="w-9 h-9 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center border border-emerald-800/50 group-hover:scale-110 transition-transform">
+                <Users className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-xl font-black text-white">Urus Pengguna</div>
+              <p className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+                Tambah / Padam / Kunci User <ArrowRight className="w-3 h-3" />
+              </p>
+            </div>
+          </div>
+
+          <div 
+            onClick={() => setActiveTab('system-admin')}
+            className="bg-slate-900 border border-slate-800 hover:border-indigo-500/60 p-5 rounded-2xl transition-all cursor-pointer shadow-lg group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-400">Profil &amp; Bank Koperasi</span>
+              <div className="w-9 h-9 rounded-xl bg-indigo-950 text-indigo-400 flex items-center justify-center border border-indigo-800/50 group-hover:scale-110 transition-transform">
+                <Building2 className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-xl font-black text-white">Tetapan Profil</div>
+              <p className="text-xs text-indigo-300 mt-1 flex items-center gap-1">
+                CIMB 8602-9918-2019 <ArrowRight className="w-3 h-3" />
+              </p>
+            </div>
+          </div>
+
+          <div 
+            onClick={() => setActiveTab('logs')}
+            className="bg-slate-900 border border-slate-800 hover:border-cyan-500/60 p-5 rounded-2xl transition-all cursor-pointer shadow-lg group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-400">Log Audit &amp; Keselamatan</span>
+              <div className="w-9 h-9 rounded-xl bg-cyan-950 text-cyan-400 flex items-center justify-center border border-cyan-800/50 group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-xl font-black text-white">Audit Trail</div>
+              <p className="text-xs text-cyan-300 mt-1 flex items-center gap-1">
+                Semak Log Sistem <ArrowRight className="w-3 h-3" />
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

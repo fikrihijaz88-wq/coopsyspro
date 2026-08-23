@@ -71,6 +71,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     { id: 'automated-reports', category: 'AUDIT', label: isEN ? 'Automated AGM Reports' : 'Laporan Berautomatik AGM', icon: FileText, highlight: true },
     { id: 'logs', category: 'AUDIT', label: isEN ? 'Activity Logs & Audit' : 'Log Aktiviti & Audit', icon: ShieldCheck },
     { id: 'notifications', category: 'KOMUNIKASI', label: isEN ? 'WhatsApp & SMS Notifications' : 'Notifikasi WhatsApp & SMS', icon: MessageSquare, highlight: true },
+    { id: 'system-admin', category: 'PENTADBIRAN', label: isEN ? 'System Admin & Users' : 'Pengguna & Tetapan Asas', icon: ShieldCheck, highlight: true },
     { id: 'ai-audit', category: 'AUDIT', label: isEN ? 'AI Audit Advisor' : 'Penasihat Audit AI', icon: Sparkles, highlight: true },
   ];
 

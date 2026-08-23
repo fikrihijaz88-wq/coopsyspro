@@ -29,6 +29,7 @@ import { BankReconciliation } from './components/BankReconciliation';
 import { SKMAndEInvoiceBridge } from './components/SKMAndEInvoiceBridge';
 import { PaymentGatewaySettlement } from './components/PaymentGatewaySettlement';
 import { WhatsAppSmsNotification } from './components/WhatsAppSmsNotification';
+import { SystemAdminSettings } from './components/SystemAdminSettings';
 import { LoginScreen } from './components/LoginScreen';
 import { SessionTimeoutModal } from './components/SessionTimeoutModal';
 import { api } from './services/api';
@@ -66,7 +67,9 @@ import {
   SettlementBatch,
   NotificationTemplate,
   NotificationLog,
-  NotificationConfig
+  NotificationConfig,
+  SystemUser,
+  CoopBasicProfile
 } from './types';
 import { 
   INITIAL_AHLI, 
@@ -93,7 +96,9 @@ import {
   INITIAL_SETTLEMENT_BATCHES,
   INITIAL_NOTIFICATION_CONFIG,
   INITIAL_NOTIFICATION_TEMPLATES,
-  INITIAL_NOTIFICATION_LOGS
+  INITIAL_NOTIFICATION_LOGS,
+  INITIAL_SYSTEM_USERS,
+  INITIAL_COOP_PROFILE
 } from './data/initialData';
 
 export default function App() {
@@ -109,6 +114,10 @@ export default function App() {
     email: 'bendahari@koperasi.my',
   });
   const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
+
+  // System Users & Basic Co-op Settings
+  const [systemUsers, setSystemUsers] = useState<SystemUser[]>(INITIAL_SYSTEM_USERS);
+  const [coopProfile, setCoopProfile] = useState<CoopBasicProfile>(INITIAL_COOP_PROFILE);
 
   // 15-Minute Auto-Logout Timer & Inactivity Detection
   const [lastActivityTime, setLastActivityTime] = useState<number>(Date.now());
@@ -818,6 +827,73 @@ export default function App() {
     setNotificationTemplates(prev => prev.filter(t => t.id !== id));
   };
 
+  // -------------------------------------------------------------
+  // System User & Basic Co-op Settings Handlers (Super Admin / Admin Scope)
+  // -------------------------------------------------------------
+  const handleAddSystemUser = (user: Omit<SystemUser, 'id' | 'tarikhDaftar'>) => {
+    const newUser: SystemUser = {
+      ...user,
+      id: `USR-${Date.now().toString().slice(-4)}`,
+      tarikhDaftar: new Date().toISOString().split('T')[0],
+    };
+    setSystemUsers(prev => [newUser, ...prev]);
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      kategori: 'PENTADBIRAN',
+      tindakan: `Pendaftaran Pengguna Baru (${newUser.nama})`,
+      deskripsi: `Pengguna ${newUser.nama} (${newUser.emel}) didaftarkan dengan peranan ${newUser.peranan} oleh ${currentUser?.name || 'Super Admin'}.`,
+      pengguna: currentUser?.name || 'Super Admin Verttere',
+      status: 'BERJAYA',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
+  const handleUpdateSystemUser = (id: string, updates: Partial<SystemUser>) => {
+    setSystemUsers(prev => prev.map(u => u.id === id ? { ...u, ...updates } : u));
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      kategori: 'PENTADBIRAN',
+      tindakan: `Kemaskini Pengguna (${id})`,
+      deskripsi: `Profil/status pengguna ${id} dikemaskini oleh ${currentUser?.name || 'Super Admin'}.`,
+      pengguna: currentUser?.name || 'Super Admin Verttere',
+      status: 'INFO',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
+  const handleDeleteSystemUser = (id: string) => {
+    const target = systemUsers.find(u => u.id === id);
+    setSystemUsers(prev => prev.filter(u => u.id !== id));
+    if (target) {
+      handleAddLog({
+        id: `LOG-${Date.now()}`,
+        tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        kategori: 'PENTADBIRAN',
+        tindakan: `Pemadaman Pengguna (${target.nama})`,
+        deskripsi: `Akaun pengguna ${target.nama} (${target.emel}) dipadam oleh ${currentUser?.name || 'Super Admin'}.`,
+        pengguna: currentUser?.name || 'Super Admin Verttere',
+        status: 'AMARAN',
+        ipAlamat: '127.0.0.1'
+      });
+    }
+  };
+
+  const handleUpdateCoopProfile = (profileUpdates: Partial<CoopBasicProfile>) => {
+    setCoopProfile(prev => ({ ...prev, ...profileUpdates }));
+    handleAddLog({
+      id: `LOG-${Date.now()}`,
+      tarikhMasa: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      kategori: 'PENTADBIRAN',
+      tindakan: 'Kemaskini Profil Asas Koperasi',
+      deskripsi: `Maklumat profil & akaun bank operasi koperasi dikemaskini oleh ${currentUser?.name || 'Super Admin'}.`,
+      pengguna: currentUser?.name || 'Super Admin Verttere',
+      status: 'BERJAYA',
+      ipAlamat: '127.0.0.1'
+    });
+  };
+
   // Direct modal triggers
   const [showNewMemberModalDirect, setShowNewMemberModalDirect] = useState<boolean>(false);
   const [showNewTxModalDirect, setShowNewTxModalDirect] = useState<boolean>(false);
@@ -1296,6 +1372,7 @@ export default function App() {
             }}
             language={language}
             setLanguage={setLanguage}
+            userRole={currentUser?.role}
           />
         )}
 
@@ -1577,6 +1654,20 @@ export default function App() {
             onDeleteTemplate={handleDeleteNotificationTemplate}
             language={language}
             userRole={currentUser?.role}
+          />
+        )}
+
+        {activeTab === 'system-admin' && (
+          <SystemAdminSettings
+            users={systemUsers}
+            coopProfile={coopProfile}
+            onAddUser={handleAddSystemUser}
+            onUpdateUser={handleUpdateSystemUser}
+            onDeleteUser={handleDeleteSystemUser}
+            onUpdateCoopProfile={handleUpdateCoopProfile}
+            language={language}
+            userRole={currentUser?.role}
+            currentUser={currentUser}
           />
         )}
 

@@ -903,4 +903,37 @@ export interface NotificationConfig {
   isSandbox: boolean;
 }
 
+// -------------------------------------------------------------
+// System User & Basic Co-op Settings (Super Admin / Admin Scope)
+// -------------------------------------------------------------
 
+export interface SystemUser {
+  id: string;
+  nama: string;
+  emel: string;
+  noTelefon?: string;
+  peranan: 'SUPER_ADMIN_VERTTERE' | 'BENDAHARI' | 'PENGERUSI_ALK' | 'SETIAUSAHA' | 'AUDITOR_JAD' | 'JURUWANG_POS' | 'AHLI_KOPERASI';
+  statusAkaun: 'AKTIF' | 'DISEKAT' | 'MENUNGGU_VERIFIKASI';
+  tarikhDaftar: string;
+  terakhirLogMasuk?: string;
+  catatan?: string;
+}
+
+export interface CoopBasicProfile {
+  namaKoperasi: string;
+  kodKoperasi: string;
+  noPendaftaranSKM: string;
+  tarikhPenubuhan: string;
+  alamatPerniagaan: string;
+  poskod: string;
+  bandar: string;
+  negeri: string;
+  noTelefonRasmi: string;
+  emelRasmi: string;
+  lamanWeb?: string;
+  namaBankOperasi: string;
+  noAkaunBankOperasi: string;
+  namaPemegangAkaunBank: string;
+  statusLangganan: 'AKTIF_ENTERPRISE' | 'PRO' | 'PERCUBAAN';
+  pelanVerttere: string;
+}
