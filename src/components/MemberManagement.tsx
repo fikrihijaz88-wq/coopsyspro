@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Ahli, StatusAhli } from '../types';
+import { Ahli, StatusAhli, PaymentGatewayConfig } from '../types';
 import { excelExport } from '../utils/excelExport';
 import { api } from '../services/api';
 import { 
@@ -33,6 +33,7 @@ interface MemberManagementProps {
   onUpdateStatusAhli: (id: string, newStatus: StatusAhli) => void;
   onTambahSyerAhli: (id: string, jumlahSyer: number, jumlahYuran: number) => void;
   onCreateGatewayBill?: (payload: any) => Promise<any>;
+  gatewayConfig?: PaymentGatewayConfig;
   searchQuery: string;
   language?: 'BM' | 'EN';
   setLanguage?: (lang: 'BM' | 'EN') => void;
@@ -45,6 +46,7 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
   onUpdateStatusAhli,
   onTambahSyerAhli,
   onCreateGatewayBill,
+  gatewayConfig,
   searchQuery,
   language = 'BM',
   setLanguage,

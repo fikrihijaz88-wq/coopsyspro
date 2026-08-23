@@ -58,6 +58,7 @@ interface PointOfSaleProps {
   onAddTransaksiLejar: (tx: Transaksi) => void;
   onAddLog: (newLog: ActivityLog) => void;
   currentUser: { name: string; role: string; email: string } | null;
+  gatewayConfig?: PaymentGatewayConfig;
   language?: 'BM' | 'EN';
   setLanguage?: (lang: 'BM' | 'EN') => void;
 }
@@ -73,6 +74,7 @@ export const PointOfSale: React.FC<PointOfSaleProps> = ({
   onAddTransaksiLejar,
   onAddLog,
   currentUser,
+  gatewayConfig,
   language = 'BM',
   setLanguage,
 }) => {
@@ -127,7 +129,22 @@ export const PointOfSale: React.FC<PointOfSaleProps> = ({
   // Cart Calculations
   const cartSubtotal = cart.reduce((acc, item) => acc + item.jumlah, 0);
   const finalDiscount = customDiscountRM > cartSubtotal ? cartSubtotal : customDiscountRM;
-  const cartGrandTotal = Math.max(0, cartSubtotal - finalDiscount);
+  
+  // Strategy & Auto-Markup Calculations
+  const isOnlinePayment = paymentMethod === 'SECUREPAY' || paymentMethod === 'TOYYIBPAY';
+  const isAutoMarkupActive = (gatewayConfig?.feeChargeStrategy || 'ABSORB_MARKUP') === 'ABSORB_MARKUP' && (gatewayConfig?.autoMarkupPercentage || 0) > 0;
+  
+  // Auto-Markup RM
+  const autoMarkupRM = (isAutoMarkupActive && (gatewayConfig?.markupApplyTo === 'ALL_PRODUCTS' || isOnlinePayment))
+    ? (cartSubtotal * (gatewayConfig?.autoMarkupPercentage || 1.5)) / 100
+    : 0;
+
+  // Pass-Through Surcharge RM (if Surcharge strategy chosen and paying online)
+  const passThroughSurchargeRM = (gatewayConfig?.feeChargeStrategy === 'PASSTHROUGH_SURCHARGE' && isOnlinePayment)
+    ? (gatewayConfig.fixedFeeRM || 1.00) + (cartSubtotal * (gatewayConfig.percentageFee || 0.50)) / 100
+    : 0;
+
+  const cartGrandTotal = Math.max(0, cartSubtotal + autoMarkupRM + passThroughSurchargeRM - finalDiscount);
 
   const tenderedAmountNumber = parseFloat(cashTendered) || 0;
   const cashChangeRM = paymentMethod === 'TUNAI' ? Math.max(0, tenderedAmountNumber - cartGrandTotal) : 0;
@@ -883,6 +900,28 @@ export const PointOfSale: React.FC<PointOfSaleProps> = ({
                     className="w-20 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs text-amber-300 font-bold"
                   />
                 </div>
+
+                {/* Auto-Markup Breakdown line item if active */}
+                {autoMarkupRM > 0 && (
+                  <div className="flex items-center justify-between text-teal-300 bg-teal-950/40 px-2 py-1 rounded-lg border border-teal-800/40">
+                    <span className="flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-teal-400" />
+                      <span>Auto-Markup Gerbang (+{gatewayConfig?.autoMarkupPercentage || 1.5}%)</span>
+                    </span>
+                    <span className="font-bold">+{formatRM(autoMarkupRM)}</span>
+                  </div>
+                )}
+
+                {/* Pass-Through Surcharge line item if active */}
+                {passThroughSurchargeRM > 0 && (
+                  <div className="flex items-center justify-between text-blue-300 bg-blue-950/40 px-2 py-1 rounded-lg border border-blue-800/40">
+                    <span className="flex items-center gap-1">
+                      <CreditCard className="w-3 h-3 text-blue-400" />
+                      <span>Caj Gateway FPX (+RM{gatewayConfig?.fixedFeeRM?.toFixed(2) || '1.00'} + {gatewayConfig?.percentageFee || 0.5}%)</span>
+                    </span>
+                    <span className="font-bold">+{formatRM(passThroughSurchargeRM)}</span>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between text-base font-black text-white pt-2 border-t border-slate-800">
                   <span>{isEN ? 'Total Payable:' : 'Jumlah Jualan:'}</span>

@@ -2777,11 +2777,14 @@ export const INITIAL_PAYMENT_GATEWAY_CONFIG: PaymentGatewayConfig = {
   authToken: 'sec_auth_verttere_live_948192048102941',
   checksumToken: 'chk_verttere_sha256_secpay_883019',
   userSecretKey: 'sec_verttere_live_948192048102941',
-  categoryCode: 'cat_verttere_coop_pay_01',
   // Platform & Fee Structure
   platformFeeType: 'HYBRID',
   fixedFeeRM: 1.00, // Gateway Transaction Fee RM 1.00
   percentageFee: 0.50, // Verttere SaaS Platform Escrow Fee 0.5%
+  // Strategy & Auto-Markup Settings
+  feeChargeStrategy: 'ABSORB_MARKUP',
+  autoMarkupPercentage: 1.5, // 1.5% Auto Markup on POS
+  markupApplyTo: 'ONLINE_PAYMENT_ONLY',
   isSandbox: true,
   settlementCycle: 'T+1',
   namaPlatform: 'Verttere Solutions Sdn Bhd (FinTech Payment Aggregator)',

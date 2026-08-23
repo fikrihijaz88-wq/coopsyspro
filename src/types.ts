@@ -774,6 +774,10 @@ export interface PaymentGatewayConfig {
   platformFeeType: 'FIXED' | 'PERCENTAGE' | 'HYBRID';
   fixedFeeRM: number; // e.g. RM 1.00
   percentageFee: number; // e.g. 0.5%
+  // Strategy & Auto-Markup Settings
+  feeChargeStrategy: 'ABSORB_MARKUP' | 'PASSTHROUGH_SURCHARGE';
+  autoMarkupPercentage: number; // e.g. 1.5 (%)
+  markupApplyTo: 'ALL_PRODUCTS' | 'ONLINE_PAYMENT_ONLY';
   isSandbox: boolean;
   settlementCycle: 'T+1' | 'T+2' | 'WEEKLY' | 'MANUAL';
   namaPlatform: string;

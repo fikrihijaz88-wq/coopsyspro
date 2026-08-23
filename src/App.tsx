@@ -1215,6 +1215,7 @@ export default function App() {
             onUpdateStatusAhli={handleUpdateStatusAhli}
             onTambahSyerAhli={handleTambahSyerAhli}
             onCreateGatewayBill={handleCreateGatewayBill}
+            gatewayConfig={gatewayConfig}
             searchQuery={searchQuery}
             language={language}
             setLanguage={setLanguage}
@@ -1282,6 +1283,7 @@ export default function App() {
             onAddTransaksiLejar={handleAddTransaksi}
             onAddLog={handleAddLog}
             currentUser={currentUser}
+            gatewayConfig={gatewayConfig}
             language={language}
             setLanguage={setLanguage}
           />

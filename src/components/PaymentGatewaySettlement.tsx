@@ -1002,10 +1002,154 @@ export const PaymentGatewaySettlement: React.FC<PaymentGatewaySettlementProps> =
               </div>
             </div>
 
-            {/* Section 4: Escrow Bank Account */}
+            {/* Section 4: Fee Absorption Strategy & Auto-Markup */}
+            <div className="bg-slate-950/80 p-5 rounded-2xl border border-teal-900/50 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse" />
+                  <h4 className="text-xs font-black text-teal-300 uppercase tracking-wider">
+                    4. Strategi Penyerapan Caj &amp; Auto-Markup Harga Jualan
+                  </h4>
+                </div>
+                <span className="px-2.5 py-0.5 bg-teal-950 border border-teal-700 text-teal-300 text-[10px] font-bold rounded-full">
+                  Konfigurasi Pintar
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Pilih sama ada koperasi menyerap caj platform (dengan pilihan auto-markup pada harga katalog POS) atau mengenakan caj tambahan terus kepada pembeli semasa checkout.
+              </p>
+
+              {/* Strategy Selector Buttons */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setEditConfig({ ...editConfig, feeChargeStrategy: 'ABSORB_MARKUP' })}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    (editConfig.feeChargeStrategy || 'ABSORB_MARKUP') === 'ABSORB_MARKUP'
+                      ? 'bg-emerald-950/70 border-emerald-500 text-emerald-100 shadow-md shadow-emerald-950/40'
+                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800/80'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      🟢 Pilihan 1: Serap Caj / Auto-Markup POS
+                    </span>
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-bold">Disyorkan</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Pembeli bayar harga tepat tanpa sebarang caj pemprosesan tambahan. Koperasi boleh mengaktifkan <strong>Auto-Markup %</strong> pada harga katalog jualan POS untuk menampung kos gateway.
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setEditConfig({ ...editConfig, feeChargeStrategy: 'PASSTHROUGH_SURCHARGE' })}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    editConfig.feeChargeStrategy === 'PASSTHROUGH_SURCHARGE'
+                      ? 'bg-blue-950/70 border-blue-500 text-blue-100 shadow-md shadow-blue-950/40'
+                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800/80'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      🔵 Pilihan 2: Caj Tambahan Telus (+Surcharge)
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Caj gateway (RM1.00 + 0.5%) ditambah secara telus pada jumlah akhir di skrin checkout SecurePay/ToyyibPay. Koperasi menerima 100% jumlah harga asal bersih.
+                  </p>
+                </button>
+              </div>
+
+              {/* Auto-Markup Parameter Inputs (Active when ABSORB_MARKUP selected) */}
+              {(editConfig.feeChargeStrategy || 'ABSORB_MARKUP') === 'ABSORB_MARKUP' && (
+                <div className="p-4 bg-slate-900/90 rounded-2xl border border-emerald-800/40 space-y-3 mt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      ⚙️ Parameter Auto-Markup Harga Jualan POS:
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      Contoh: 1.5% markup pada RM10.00 = RM10.15
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-300 mb-1">Kadar Auto-Markup (%):</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          step="0.10"
+                          min="0"
+                          max="20"
+                          value={editConfig.autoMarkupPercentage ?? 1.5}
+                          onChange={e => setEditConfig({ ...editConfig, autoMarkupPercentage: Number(e.target.value) })}
+                          className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                        />
+                        <span className="text-xs font-bold text-emerald-400">%</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-300 mb-1">Skop Aplikasi Auto-Markup:</label>
+                      <select
+                        value={editConfig.markupApplyTo || 'ONLINE_PAYMENT_ONLY'}
+                        onChange={e => setEditConfig({ ...editConfig, markupApplyTo: e.target.value as any })}
+                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                      >
+                        <option value="ONLINE_PAYMENT_ONLY">Hanya Semasa Bayaran Online (SecurePay / ToyyibPay)</option>
+                        <option value="ALL_PRODUCTS">Semua Produk &amp; Kaedah Bayaran POS (Katalog Kedai)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Real-time Calculation Simulation Breakdown Box */}
+              <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                <div className="text-[11px] font-bold text-slate-300 flex items-center justify-between">
+                  <span>📊 Simulasi Contoh Kiraan Transaksi Jualan (RM 100.00):</span>
+                  <span className="text-[10px] text-teal-400 font-mono">
+                    Mod Semasa: {editConfig.feeChargeStrategy === 'PASSTHROUGH_SURCHARGE' ? 'Caj Tambahan Pembeli' : `Auto-Markup (+${editConfig.autoMarkupPercentage || 1.5}%)`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs pt-1">
+                  <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                    <div className="text-[10px] text-slate-400">Harga Asal Produk</div>
+                    <div className="text-sm font-bold text-white mt-0.5">RM 100.00</div>
+                  </div>
+
+                  <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                    <div className="text-[10px] text-slate-400">Dibayar Pembeli</div>
+                    <div className="text-sm font-bold text-amber-400 mt-0.5">
+                      {editConfig.feeChargeStrategy === 'PASSTHROUGH_SURCHARGE' 
+                        ? 'RM 101.50' 
+                        : `RM ${(100 * (1 + (editConfig.autoMarkupPercentage || 1.5)/100)).toFixed(2)}`}
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+                    <div className="text-[10px] text-slate-400">Caj Platform Verttere</div>
+                    <div className="text-sm font-bold text-indigo-400 mt-0.5">RM 1.50</div>
+                  </div>
+
+                  <div className="p-2.5 bg-emerald-950/60 rounded-xl border border-emerald-800">
+                    <div className="text-[10px] text-emerald-300 font-bold">Koperasi Terima Bersih</div>
+                    <div className="text-sm font-black text-emerald-400 mt-0.5">
+                      {editConfig.feeChargeStrategy === 'PASSTHROUGH_SURCHARGE' 
+                        ? 'RM 100.00' 
+                        : `RM ${(100 * (1 + (editConfig.autoMarkupPercentage || 1.5)/100) - 1.50).toFixed(2)}`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 5: Escrow Bank Account */}
             <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-3">
               <h4 className="text-xs font-black text-slate-300 uppercase tracking-wider">
-                4. Maklumat Akaun Bank Transit (Escrow Verttere)
+                5. Maklumat Akaun Bank Transit (Escrow Verttere)
               </h4>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
