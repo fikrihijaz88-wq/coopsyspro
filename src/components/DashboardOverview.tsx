@@ -61,6 +61,7 @@ interface NotificationItem {
 }
 
 interface DashboardOverviewProps {
+  demoMode?: boolean;
   ahliList: Ahli[];
   cartaAkaun: CartaAkaun[];
   transaksiList: Transaksi[];
@@ -75,6 +76,7 @@ interface DashboardOverviewProps {
 }
 
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
+  demoMode = false,
   ahliList = [],
   cartaAkaun = [],
   transaksiList = [],
@@ -863,7 +865,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         <div className="h-72 w-full pt-2">
           <ResponsiveContainer width="100%" height="100%">
             {chartType === 'AREA' ? (
-              <AreaChart data={MONTHLY_TREND_DATA} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+              <AreaChart data={demoMode ? MONTHLY_TREND_DATA : []} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorSyer" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
@@ -917,7 +919,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 />
               </AreaChart>
             ) : (
-              <BarChart data={MONTHLY_TREND_DATA} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
+              <BarChart data={demoMode ? MONTHLY_TREND_DATA : []} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
                 <XAxis dataKey="bulan" stroke="#94a3b8" fontSize={11} tickLine={false} />
                 <YAxis 

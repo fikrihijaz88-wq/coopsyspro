@@ -17,3 +17,7 @@ https://ai.studio/apps/489216a2-237e-4f68-b950-22327d795bba
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+Operational startup preserves existing JSON and initializes an empty database only
+when the file is absent. Demo data requires an explicit separate initialization.
+See [database safety, demo setup, backups, and manual recovery](docs/data-protection.md).
