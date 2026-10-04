@@ -3,7 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
-import { db } from "./server/db";
+import { db } from "./server/runtimeDb";
 import { SettlementBatch, GatewayTransaction, PaymentGatewayConfig } from "./src/types";
 
 dotenv.config();

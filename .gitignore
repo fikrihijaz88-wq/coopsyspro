@@ -8,3 +8,5 @@ coverage/
 !.env.example
 cloudflared.exe
 .antigravity/
+data/demo/
+data/backups/

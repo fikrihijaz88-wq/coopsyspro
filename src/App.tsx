@@ -74,38 +74,12 @@ import {
   SystemSupportTicket,
   StatusTiket
 } from './types';
-import { 
-  INITIAL_AHLI, 
-  INITIAL_CARTA_AKAUN, 
-  INITIAL_TRANSAKSI, 
-  INITIAL_PEMBIAYAAN, 
-  INITIAL_LOGS, 
-  INITIAL_MESYUARAT, 
-  INITIAL_DOKUMEN_SOKONGAN, 
-  INITIAL_PRODUK_POS, 
-  INITIAL_TRANSAKSI_POS, 
-  INITIAL_ALK_JAD, 
-  INITIAL_REKOD_KEWANGAN_TAHUNAN, 
-  INITIAL_DANA_GERAN_SKM, 
-  INITIAL_TUNTUTAN_KEBAJIKAN, 
-  INITIAL_TABUNG_KEBAJIKAN, 
-  INITIAL_ASET_TETAP, 
-  INITIAL_SIMPANAN_DEPOSIT, 
-  INITIAL_BANK_STATEMENT_ITEMS, 
-  INITIAL_BANK_RECON_SUMMARY, 
-  INITIAL_E_INVOICES,
-  INITIAL_PAYMENT_GATEWAY_CONFIG,
-  INITIAL_GATEWAY_TRANSACTIONS,
-  INITIAL_SETTLEMENT_BATCHES,
-  INITIAL_NOTIFICATION_CONFIG,
-  INITIAL_NOTIFICATION_TEMPLATES,
-  INITIAL_NOTIFICATION_LOGS,
-  INITIAL_SYSTEM_USERS,
-  INITIAL_COOP_PROFILE,
-  INITIAL_SUPPORT_TICKETS
-} from './data/initialData';
+import { createEmptyDatabase, createEmptyCoopProfile } from './data/emptyData';
 
 export default function App() {
+  const [emptyData] = useState(createEmptyDatabase);
+  const [dataLoadState, setDataLoadState] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [isDemoData, setIsDemoData] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [language, setLanguage] = useState<'BM' | 'EN'>('BM');
@@ -120,11 +94,11 @@ export default function App() {
   const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
 
   // System Users & Basic Co-op Settings
-  const [systemUsers, setSystemUsers] = useState<SystemUser[]>(INITIAL_SYSTEM_USERS);
-  const [coopProfile, setCoopProfile] = useState<CoopBasicProfile>(INITIAL_COOP_PROFILE);
+  const [systemUsers, setSystemUsers] = useState<SystemUser[]>([]);
+  const [coopProfile, setCoopProfile] = useState<CoopBasicProfile>(createEmptyCoopProfile);
 
   // System Support & Request Tickets (User/Staff -> Super Admin)
-  const [supportTickets, setSupportTickets] = useState<SystemSupportTicket[]>(INITIAL_SUPPORT_TICKETS);
+  const [supportTickets, setSupportTickets] = useState<SystemSupportTicket[]>(emptyData.supportTickets);
 
   // 15-Minute Auto-Logout Timer & Inactivity Detection
   const [lastActivityTime, setLastActivityTime] = useState<number>(Date.now());
@@ -132,31 +106,31 @@ export default function App() {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(60);
 
   // Core Reactive States
-  const [ahliList, setAhliList] = useState<Ahli[]>(INITIAL_AHLI);
-  const [cartaAkaun, setCartaAkaun] = useState<CartaAkaun[]>(INITIAL_CARTA_AKAUN);
-  const [transaksiList, setTransaksiList] = useState<Transaksi[]>(INITIAL_TRANSAKSI);
-  const [pembiayaanList, setPembiayaanList] = useState<PembiayaanAhli[]>(INITIAL_PEMBIAYAAN);
-  const [logs, setLogs] = useState<ActivityLogType[]>(INITIAL_LOGS);
-  const [mesyuaratList, setMesyuaratList] = useState<Mesyuarat[]>(INITIAL_MESYUARAT);
-  const [dokumenList, setDokumenList] = useState<DokumenSokongan[]>(INITIAL_DOKUMEN_SOKONGAN);
-  const [produkList, setProdukList] = useState<ItemProdukPOS[]>(INITIAL_PRODUK_POS);
-  const [transaksiPosList, setTransaksiPosList] = useState<TransaksiPOS[]>(INITIAL_TRANSAKSI_POS);
-  const [jawatanKuasaList, setJawatanKuasaList] = useState<AnggotaJawatankuasa[]>(INITIAL_ALK_JAD);
-  const [rekodTahunanList, setRekodTahunanList] = useState<RekodKewanganTahunan[]>(INITIAL_REKOD_KEWANGAN_TAHUNAN);
-  const [danaList, setDanaList] = useState<DanaGeranSKM[]>(INITIAL_DANA_GERAN_SKM);
-  const [tuntutanList, setTuntutanList] = useState<TuntutanKebajikan[]>(INITIAL_TUNTUTAN_KEBAJIKAN);
-  const [welfareSummary, setWelfareSummary] = useState<TabungKebajikanSummary>(INITIAL_TABUNG_KEBAJIKAN);
-  const [assetList, setAssetList] = useState<AsetTetap[]>(INITIAL_ASET_TETAP);
-  const [savingsList, setSavingsList] = useState<AkaunSimpananDeposit[]>(INITIAL_SIMPANAN_DEPOSIT);
-  const [bankItems, setBankItems] = useState<ItemPenyataBank[]>(INITIAL_BANK_STATEMENT_ITEMS);
-  const [bankReconSummary, setBankReconSummary] = useState<PenyataPenyesuaianBank>(INITIAL_BANK_RECON_SUMMARY);
-  const [eInvoiceList, setEInvoiceList] = useState<EInvoisLHDN[]>(INITIAL_E_INVOICES);
-  const [gatewayConfig, setGatewayConfig] = useState<PaymentGatewayConfig>(INITIAL_PAYMENT_GATEWAY_CONFIG);
-  const [gatewayTransactions, setGatewayTransactions] = useState<GatewayTransaction[]>(INITIAL_GATEWAY_TRANSACTIONS);
-  const [settlementBatches, setSettlementBatches] = useState<SettlementBatch[]>(INITIAL_SETTLEMENT_BATCHES);
-  const [notificationConfig, setNotificationConfig] = useState<NotificationConfig>(INITIAL_NOTIFICATION_CONFIG);
-  const [notificationTemplates, setNotificationTemplates] = useState<NotificationTemplate[]>(INITIAL_NOTIFICATION_TEMPLATES);
-  const [notificationLogs, setNotificationLogs] = useState<NotificationLog[]>(INITIAL_NOTIFICATION_LOGS);
+  const [ahliList, setAhliList] = useState<Ahli[]>(emptyData.members);
+  const [cartaAkaun, setCartaAkaun] = useState<CartaAkaun[]>(emptyData.accounts);
+  const [transaksiList, setTransaksiList] = useState<Transaksi[]>(emptyData.transactions);
+  const [pembiayaanList, setPembiayaanList] = useState<PembiayaanAhli[]>(emptyData.loans);
+  const [logs, setLogs] = useState<ActivityLogType[]>(emptyData.logs);
+  const [mesyuaratList, setMesyuaratList] = useState<Mesyuarat[]>(emptyData.meetings);
+  const [dokumenList, setDokumenList] = useState<DokumenSokongan[]>(emptyData.documents);
+  const [produkList, setProdukList] = useState<ItemProdukPOS[]>(emptyData.posProducts);
+  const [transaksiPosList, setTransaksiPosList] = useState<TransaksiPOS[]>(emptyData.posTransactions);
+  const [jawatanKuasaList, setJawatanKuasaList] = useState<AnggotaJawatankuasa[]>(emptyData.committees);
+  const [rekodTahunanList, setRekodTahunanList] = useState<RekodKewanganTahunan[]>(emptyData.yearlyRecords);
+  const [danaList, setDanaList] = useState<DanaGeranSKM[]>(emptyData.skmFunds);
+  const [tuntutanList, setTuntutanList] = useState<TuntutanKebajikan[]>(emptyData.welfareClaims);
+  const [welfareSummary, setWelfareSummary] = useState<TabungKebajikanSummary>(emptyData.welfareSummary);
+  const [assetList, setAssetList] = useState<AsetTetap[]>(emptyData.fixedAssets);
+  const [savingsList, setSavingsList] = useState<AkaunSimpananDeposit[]>(emptyData.savingsDeposits);
+  const [bankItems, setBankItems] = useState<ItemPenyataBank[]>(emptyData.bankStatements);
+  const [bankReconSummary, setBankReconSummary] = useState<PenyataPenyesuaianBank>(emptyData.bankReconSummary);
+  const [eInvoiceList, setEInvoiceList] = useState<EInvoisLHDN[]>(emptyData.eInvoices);
+  const [gatewayConfig, setGatewayConfig] = useState<PaymentGatewayConfig>(emptyData.gatewayConfig);
+  const [gatewayTransactions, setGatewayTransactions] = useState<GatewayTransaction[]>(emptyData.gatewayTransactions);
+  const [settlementBatches, setSettlementBatches] = useState<SettlementBatch[]>(emptyData.settlementBatches);
+  const [notificationConfig, setNotificationConfig] = useState<NotificationConfig>(emptyData.notificationConfig);
+  const [notificationTemplates, setNotificationTemplates] = useState<NotificationTemplate[]>(emptyData.notificationTemplates);
+  const [notificationLogs, setNotificationLogs] = useState<NotificationLog[]>(emptyData.notificationLogs);
 
   // Initial persistent database fetch
   useEffect(() => {
@@ -188,8 +162,12 @@ export default function App() {
         if (data.notificationTemplates) setNotificationTemplates(data.notificationTemplates);
         if (data.notificationLogs) setNotificationLogs(data.notificationLogs);
         if (data.logs) setLogs(data.logs);
+        if (data.supportTickets) setSupportTickets(data.supportTickets);
+        setIsDemoData(data.meta?.datasetKind === 'demo');
+        setDataLoadState('ready');
       } catch (err) {
-        console.warn('API sync unavailable, running with initial local data:', err);
+        console.error('Operational database unavailable; sample fallback is disabled:', err);
+        setDataLoadState('error');
       }
     }
     loadData();
@@ -1377,6 +1355,24 @@ export default function App() {
 
   const pendingCount = ahliList.filter(a => a.status === 'PENDING_AL').length;
 
+  // Never expose editable sample/empty fallback state when operational loading fails.
+  if (dataLoadState !== 'ready') {
+    return (
+      <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
+        <div role={dataLoadState === 'error' ? 'alert' : 'status'} className="max-w-lg space-y-4">
+          <h1 className="text-xl font-bold">
+            {dataLoadState === 'loading' ? 'Memuatkan pangkalan data / Loading database' : 'Pangkalan data tidak tersedia / Database unavailable'}
+          </h1>
+          {dataLoadState === 'error' && <>
+            <p>Data operasi tidak dapat dimuatkan. Data contoh tidak digunakan. Semak pelayan; fail rosak memerlukan pemulihan manual.</p>
+            <p>Operational data could not be loaded. No sample data is used. Check the server; a corrupt file requires manual recovery.</p>
+            <button className="rounded bg-emerald-700 px-4 py-2" onClick={() => window.location.reload()}>Cuba semula / Retry</button>
+          </>}
+        </div>
+      </main>
+    );
+  }
+
   if (!isLoggedIn) {
     return (
       <LoginScreen
@@ -1424,9 +1420,15 @@ export default function App() {
 
       {/* Primary Application Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {isDemoData && (
+          <div role="note" className="mb-6 rounded-xl border border-amber-700 bg-amber-950 p-4 text-amber-100">
+            Data contoh / Demo database — records and balances are samples for development.
+          </div>
+        )}
         
         {activeTab === 'dashboard' && (
           <DashboardOverview
+            demoMode={isDemoData}
             ahliList={ahliList}
             cartaAkaun={cartaAkaun}
             transaksiList={transaksiList}

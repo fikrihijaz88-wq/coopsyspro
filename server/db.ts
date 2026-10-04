@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { 
   Ahli, 
   CartaAkaun, 
@@ -32,296 +30,36 @@ import {
   SystemSupportTicket
 } from "../src/types";
 
-import { 
-  INITIAL_AHLI, 
-  INITIAL_CARTA_AKAUN, 
-  INITIAL_TRANSAKSI, 
-  INITIAL_PEMBIAYAAN, 
-  INITIAL_LOGS, 
-  INITIAL_MESYUARAT, 
-  INITIAL_DOKUMEN_SOKONGAN, 
-  INITIAL_PRODUK_POS, 
-  INITIAL_TRANSAKSI_POS, 
-  INITIAL_ALK_JAD, 
-  INITIAL_REKOD_KEWANGAN_TAHUNAN,
-  INITIAL_DANA_GERAN_SKM,
-  INITIAL_TUNTUTAN_KEBAJIKAN,
-  INITIAL_TABUNG_KEBAJIKAN,
-  INITIAL_ASET_TETAP,
-  INITIAL_SIMPANAN_DEPOSIT,
-  INITIAL_BANK_STATEMENT_ITEMS,
-  INITIAL_BANK_RECON_SUMMARY,
-  INITIAL_E_INVOICES,
-  INITIAL_PAYMENT_GATEWAY_CONFIG,
-  INITIAL_GATEWAY_TRANSACTIONS,
-  INITIAL_SETTLEMENT_BATCHES,
-  INITIAL_NOTIFICATION_CONFIG,
-  INITIAL_NOTIFICATION_TEMPLATES,
-  INITIAL_NOTIFICATION_LOGS,
-  INITIAL_SUPPORT_TICKETS
-} from "../src/data/initialData";
+import { createEmptyDatabase } from "../src/data/emptyData";
+import type { KoperasiDatabaseSchema, UserAccount } from "../src/data/databaseSchema";
+import { databaseFilePath, loadDatabase, persistDatabase } from "./storage";
+export type { KoperasiDatabaseSchema, UserAccount } from "../src/data/databaseSchema";
 
-export interface UserAccount {
-  id: string;
-  email: string;
-  password: string; // Stored password / hash
-  name: string;
-  role: 'BENDAHARI' | 'PENGERUSI_ALK' | 'SETIAUSAHA' | 'AUDITOR_JAD' | 'JURUWANG_POS' | 'AHLI_KOPERASI';
-  roleLabel: string;
-  noAhli?: string;
-  avatarUrl?: string;
-  lastLogin?: string;
-}
-
-export interface KoperasiDatabaseSchema {
-  users: UserAccount[];
-  members: Ahli[];
-  accounts: CartaAkaun[];
-  transactions: Transaksi[];
-  loans: PembiayaanAhli[];
-  meetings: Mesyuarat[];
-  documents: DokumenSokongan[];
-  posProducts: ItemProdukPOS[];
-  posTransactions: TransaksiPOS[];
-  committees: AnggotaJawatankuasa[];
-  yearlyRecords: RekodKewanganTahunan[];
-  skmFunds: DanaGeranSKM[];
-  welfareClaims: TuntutanKebajikan[];
-  welfareSummary: TabungKebajikanSummary;
-  fixedAssets: AsetTetap[];
-  savingsDeposits: AkaunSimpananDeposit[];
-  bankStatements: ItemPenyataBank[];
-  bankReconSummary: PenyataPenyesuaianBank;
-  eInvoices: EInvoisLHDN[];
-  gatewayConfig: PaymentGatewayConfig;
-  gatewayTransactions: GatewayTransaction[];
-  settlementBatches: SettlementBatch[];
-  notificationConfig: NotificationConfig;
-  notificationTemplates: NotificationTemplate[];
-  notificationLogs: NotificationLog[];
-  supportTickets: SystemSupportTicket[];
-  logs: ActivityLog[];
-  meta: {
-    koperasiName: string;
-    registrationNo: string;
-    lastUpdated: string;
-    version: string;
-  };
-}
-
-const DB_DIR = path.join(process.cwd(), "data");
-const DB_FILE = path.join(DB_DIR, "koperasi_db.json");
-
-// Default initial users
-const DEFAULT_USERS: UserAccount[] = [
-  {
-    id: "USR-001",
-    email: "bendahari@koperasi.my",
-    password: "koperasi123",
-    name: "Haji Ahmad Zaki",
-    role: "BENDAHARI",
-    roleLabel: "Bendahari Koperasi",
-    noAhli: "KOP-2021-003",
-  },
-  {
-    id: "USR-002",
-    email: "pengerusi@koperasi.my",
-    password: "koperasi123",
-    name: "Dato' Hj. Razali Ismail",
-    role: "PENGERUSI_ALK",
-    roleLabel: "Pengerusi ALK",
-    noAhli: "KOP-2021-001",
-  },
-  {
-    id: "USR-003",
-    email: "setiausaha@koperasi.my",
-    password: "koperasi123",
-    name: "Puan Noraini Hashim",
-    role: "SETIAUSAHA",
-    roleLabel: "Setiausaha Pentadbiran",
-    noAhli: "KOP-2021-002",
-  },
-  {
-    id: "USR-004",
-    email: "auditor@koperasi.my",
-    password: "koperasi123",
-    name: "En. Tan Chee Keong",
-    role: "AUDITOR_JAD",
-    roleLabel: "Auditor Dalaman (JAD)",
-    noAhli: "KOP-2021-005",
-  },
-  {
-    id: "USR-005",
-    email: "juruwang@koperasi.my",
-    password: "koperasi123",
-    name: "Cik Farah Nabilah",
-    role: "JURUWANG_POS",
-    roleLabel: "Juruwang Kedai POS",
-  },
-  {
-    id: "USR-006",
-    email: "ahli@koperasi.my",
-    password: "koperasi123",
-    name: "Siti Nurhaliza Bt Mohd Safian",
-    role: "AHLI_KOPERASI",
-    roleLabel: "Anggota Koperasi",
-    noAhli: "KOP-2021-002",
-  },
-];
-
-class KoperasiDatabase {
+// Importing this module is side-effect free. Runtime initialization lives in runtimeDb.ts.
+export class KoperasiDatabase {
   private data: KoperasiDatabaseSchema;
-  private saveTimeout: NodeJS.Timeout | null = null;
+  private persistedBytes: Buffer;
+  private readonly empty = createEmptyDatabase();
+  private readonly filePath: string;
 
-  constructor() {
-    this.ensureDirectory();
-    this.data = this.loadDatabase();
-  }
-
-  private ensureDirectory() {
-    if (!fs.existsSync(DB_DIR)) {
-      fs.mkdirSync(DB_DIR, { recursive: true });
-    }
-  }
-
-  private getInitialData(): KoperasiDatabaseSchema {
-    return {
-      users: DEFAULT_USERS,
-      members: INITIAL_AHLI,
-      accounts: INITIAL_CARTA_AKAUN,
-      transactions: INITIAL_TRANSAKSI,
-      loans: INITIAL_PEMBIAYAAN,
-      meetings: INITIAL_MESYUARAT,
-      documents: INITIAL_DOKUMEN_SOKONGAN,
-      posProducts: INITIAL_PRODUK_POS,
-      posTransactions: INITIAL_TRANSAKSI_POS,
-      committees: INITIAL_ALK_JAD,
-      yearlyRecords: INITIAL_REKOD_KEWANGAN_TAHUNAN,
-      skmFunds: INITIAL_DANA_GERAN_SKM,
-      welfareClaims: INITIAL_TUNTUTAN_KEBAJIKAN,
-      welfareSummary: INITIAL_TABUNG_KEBAJIKAN,
-      fixedAssets: INITIAL_ASET_TETAP,
-      savingsDeposits: INITIAL_SIMPANAN_DEPOSIT,
-      bankStatements: INITIAL_BANK_STATEMENT_ITEMS,
-      bankReconSummary: INITIAL_BANK_RECON_SUMMARY,
-      eInvoices: INITIAL_E_INVOICES,
-      gatewayConfig: INITIAL_PAYMENT_GATEWAY_CONFIG,
-      gatewayTransactions: INITIAL_GATEWAY_TRANSACTIONS,
-      settlementBatches: INITIAL_SETTLEMENT_BATCHES,
-      notificationConfig: INITIAL_NOTIFICATION_CONFIG,
-      notificationTemplates: INITIAL_NOTIFICATION_TEMPLATES,
-      notificationLogs: INITIAL_NOTIFICATION_LOGS,
-      supportTickets: INITIAL_SUPPORT_TICKETS,
-      logs: INITIAL_LOGS,
-      meta: {
-        koperasiName: "Koperasi Warga Berdaya Malaysia Berhad",
-        registrationNo: "SKM-W-4921/2018",
-        lastUpdated: new Date().toISOString(),
-        version: "2.6.0-PRO",
-      },
-    };
-  }
-
-  private loadDatabase(): KoperasiDatabaseSchema {
-    try {
-      if (fs.existsSync(DB_FILE)) {
-        const raw = fs.readFileSync(DB_FILE, "utf-8");
-        const parsed = JSON.parse(raw);
-        console.log("💾 [DB] Loaded persistent data successfully from", DB_FILE);
-        
-        // Merge with initial datasets, prioritizing newer complete sets
-        const mergedMembers = (parsed.members && parsed.members.length >= INITIAL_AHLI.length)
-          ? parsed.members
-          : INITIAL_AHLI;
-
-        const mergedCommittees = (parsed.committees && parsed.committees.length >= INITIAL_ALK_JAD.length)
-          ? parsed.committees
-          : INITIAL_ALK_JAD;
-
-        const mergedSkmFunds = (parsed.skmFunds && parsed.skmFunds.length >= INITIAL_DANA_GERAN_SKM.length)
-          ? parsed.skmFunds
-          : INITIAL_DANA_GERAN_SKM;
-
-        const mergedWelfareClaims = (parsed.welfareClaims && parsed.welfareClaims.length >= INITIAL_TUNTUTAN_KEBAJIKAN.length)
-          ? parsed.welfareClaims
-          : INITIAL_TUNTUTAN_KEBAJIKAN;
-
-        const mergedFixedAssets = (parsed.fixedAssets && parsed.fixedAssets.length >= INITIAL_ASET_TETAP.length)
-          ? parsed.fixedAssets
-          : INITIAL_ASET_TETAP;
-
-        const mergedSavings = (parsed.savingsDeposits && parsed.savingsDeposits.length >= INITIAL_SIMPANAN_DEPOSIT.length)
-          ? parsed.savingsDeposits
-          : INITIAL_SIMPANAN_DEPOSIT;
-
-        const mergedBankStatements = (parsed.bankStatements && parsed.bankStatements.length >= INITIAL_BANK_STATEMENT_ITEMS.length)
-          ? parsed.bankStatements
-          : INITIAL_BANK_STATEMENT_ITEMS;
-
-        const mergedEInvoices = (parsed.eInvoices && parsed.eInvoices.length >= INITIAL_E_INVOICES.length)
-          ? parsed.eInvoices
-          : INITIAL_E_INVOICES;
-
-        const mergedGatewayTransactions = (parsed.gatewayTransactions && parsed.gatewayTransactions.length >= INITIAL_GATEWAY_TRANSACTIONS.length)
-          ? parsed.gatewayTransactions
-          : INITIAL_GATEWAY_TRANSACTIONS;
-
-        const mergedSettlementBatches = (parsed.settlementBatches && parsed.settlementBatches.length >= INITIAL_SETTLEMENT_BATCHES.length)
-          ? parsed.settlementBatches
-          : INITIAL_SETTLEMENT_BATCHES;
-
-        const mergedData: KoperasiDatabaseSchema = {
-          ...this.getInitialData(),
-          ...parsed,
-          members: mergedMembers,
-          committees: mergedCommittees,
-          skmFunds: mergedSkmFunds,
-          welfareClaims: mergedWelfareClaims,
-          welfareSummary: parsed.welfareSummary || INITIAL_TABUNG_KEBAJIKAN,
-          fixedAssets: mergedFixedAssets,
-          savingsDeposits: mergedSavings,
-          bankStatements: mergedBankStatements,
-          bankReconSummary: parsed.bankReconSummary || INITIAL_BANK_RECON_SUMMARY,
-          eInvoices: mergedEInvoices,
-          gatewayConfig: parsed.gatewayConfig || INITIAL_PAYMENT_GATEWAY_CONFIG,
-          gatewayTransactions: mergedGatewayTransactions,
-          settlementBatches: mergedSettlementBatches,
-        };
-
-        // Persist the updated complete dataset
-        this.persistSync(mergedData);
-        return mergedData;
-      }
-    } catch (err) {
-      console.error("⚠️ [DB] Failed to read db file, initializing default dataset:", err);
-    }
-
-    const initial = this.getInitialData();
-    this.persistSync(initial);
-    return initial;
-  }
-
-  private persistSync(data: KoperasiDatabaseSchema) {
-    try {
-      this.ensureDirectory();
-      const tmpFile = `${DB_FILE}.tmp`;
-      fs.writeFileSync(tmpFile, JSON.stringify(data, null, 2), "utf-8");
-      fs.renameSync(tmpFile, DB_FILE);
-      console.log("💾 [DB] Data persisted to file.");
-    } catch (err) {
-      console.error("❌ [DB] Error persisting data:", err);
-    }
+  constructor(options: { filePath?: string } = {}) {
+    this.filePath = options.filePath || databaseFilePath();
+    const loaded = loadDatabase(this.filePath);
+    this.data = loaded.data;
+    this.persistedBytes = loaded.bytes;
   }
 
   public save() {
-    this.data.meta.lastUpdated = new Date().toISOString();
-    if (this.saveTimeout) {
-      clearTimeout(this.saveTimeout);
+    // A request succeeds only after persistence. On failure, discard unsaved changes.
+    const previousBytes = this.persistedBytes;
+    try {
+      this.data.meta.lastUpdated = new Date().toISOString();
+      this.persistedBytes = persistDatabase(this.filePath, this.data, previousBytes);
+    } catch (error) {
+      this.data = JSON.parse(previousBytes.toString("utf8"));
+      console.error("[DB] Save failed; previous database preserved:", error);
+      throw error;
     }
-    this.saveTimeout = setTimeout(() => {
-      this.persistSync(this.data);
-      this.saveTimeout = null;
-    }, 200);
   }
 
   // Getters
@@ -374,7 +112,7 @@ class KoperasiDatabase {
   }
 
   public getSkmFunds() {
-    return this.data.skmFunds;
+    return this.data.skmFunds ?? [];
   }
 
   public getLogs() {
@@ -530,19 +268,19 @@ class KoperasiDatabase {
   }
 
   public addSkmFund(fund: DanaGeranSKM) {
-    this.data.skmFunds = [fund, ...this.data.skmFunds];
+    this.data.skmFunds = [fund, ...(this.data.skmFunds ?? [])];
     this.save();
     return fund;
   }
 
   public updateSkmFund(id: string, updated: Partial<DanaGeranSKM>) {
-    this.data.skmFunds = this.data.skmFunds.map((f) => (f.id === id ? { ...f, ...updated } : f));
+    this.data.skmFunds = (this.data.skmFunds ?? []).map((f) => (f.id === id ? { ...f, ...updated } : f));
     this.save();
-    return this.data.skmFunds.find((f) => f.id === id);
+    return (this.data.skmFunds ?? []).find((f) => f.id === id);
   }
 
   public addSkmExpense(danaId: string, exp: RekodPenggunaanDana) {
-    const fund = this.data.skmFunds.find((f) => f.id === danaId);
+    const fund = (this.data.skmFunds ?? []).find((f) => f.id === danaId);
     if (fund) {
       fund.penggunaanDanaList = [exp, ...(fund.penggunaanDanaList || [])];
       fund.bakiBelumDibelanja = Math.max(0, fund.bakiBelumDibelanja - exp.jumlahRM);
@@ -553,7 +291,7 @@ class KoperasiDatabase {
   }
 
   public addSkmRepayment(danaId: string, rep: RekodBayaranBalikPinjamanSKM) {
-    const fund = this.data.skmFunds.find((f) => f.id === danaId);
+    const fund = (this.data.skmFunds ?? []).find((f) => f.id === danaId);
     if (fund) {
       fund.bayaranBalikList = [rep, ...(fund.bayaranBalikList || [])];
       fund.jumlahTelahDibayarBalik = (fund.jumlahTelahDibayarBalik || 0) + rep.jumlahBayaranRM;
@@ -584,7 +322,7 @@ class KoperasiDatabase {
   }
 
   public getWelfareSummary(): TabungKebajikanSummary {
-    return this.data.welfareSummary || INITIAL_TABUNG_KEBAJIKAN;
+    return this.data.welfareSummary || structuredClone(this.empty.welfareSummary);
   }
 
   public updateWelfareSummary(summary: TabungKebajikanSummary): TabungKebajikanSummary {
@@ -720,7 +458,7 @@ class KoperasiDatabase {
   }
 
   public getBankReconSummary(): PenyataPenyesuaianBank {
-    return this.data.bankReconSummary || INITIAL_BANK_RECON_SUMMARY;
+    return this.data.bankReconSummary || structuredClone(this.empty.bankReconSummary);
   }
 
   public updateBankReconSummary(summary: PenyataPenyesuaianBank): PenyataPenyesuaianBank {
@@ -754,12 +492,12 @@ class KoperasiDatabase {
   // PAYMENT GATEWAY & ESCROW SETTLEMENT (VERTTERE)
   // ==========================================
   public getGatewayConfig(): PaymentGatewayConfig {
-    return this.data.gatewayConfig || INITIAL_PAYMENT_GATEWAY_CONFIG;
+    return this.data.gatewayConfig || structuredClone(this.empty.gatewayConfig);
   }
 
   public updateGatewayConfig(updates: Partial<PaymentGatewayConfig>): PaymentGatewayConfig {
     this.data.gatewayConfig = {
-      ...(this.data.gatewayConfig || INITIAL_PAYMENT_GATEWAY_CONFIG),
+      ...(this.data.gatewayConfig || structuredClone(this.empty.gatewayConfig)),
       ...updates
     };
     this.save();
@@ -825,7 +563,7 @@ class KoperasiDatabase {
   // Notification Methods
   // -------------------------------------------------------------
   public getNotificationConfig(): NotificationConfig {
-    return this.data.notificationConfig || INITIAL_NOTIFICATION_CONFIG;
+    return this.data.notificationConfig || structuredClone(this.empty.notificationConfig);
   }
 
   public updateNotificationConfig(cfg: Partial<NotificationConfig>): NotificationConfig {
@@ -835,7 +573,7 @@ class KoperasiDatabase {
   }
 
   public getNotificationTemplates(): NotificationTemplate[] {
-    return this.data.notificationTemplates || INITIAL_NOTIFICATION_TEMPLATES;
+    return this.data.notificationTemplates || [];
   }
 
   public addNotificationTemplate(tmpl: NotificationTemplate): NotificationTemplate {
@@ -860,13 +598,13 @@ class KoperasiDatabase {
   }
 
   public getNotificationLogs(): NotificationLog[] {
-    return this.data.notificationLogs || INITIAL_NOTIFICATION_LOGS;
+    return this.data.notificationLogs || [];
   }
 
   public addNotificationLog(log: NotificationLog): NotificationLog {
     this.data.notificationLogs = [log, ...(this.data.notificationLogs || [])];
     if (log.saluran === 'SMS' && this.data.notificationConfig) {
-      this.data.notificationConfig.smsBalanceCredits = Math.max(0, (this.data.notificationConfig.smsBalanceCredits || 850) - 1);
+      this.data.notificationConfig.smsBalanceCredits = Math.max(0, (this.data.notificationConfig.smsBalanceCredits ?? 0) - 1);
     }
     this.save();
     return log;
@@ -874,7 +612,7 @@ class KoperasiDatabase {
 
   // Support Tickets Methods
   public getSupportTickets(): SystemSupportTicket[] {
-    return this.data.supportTickets || INITIAL_SUPPORT_TICKETS;
+    return this.data.supportTickets || [];
   }
 
   public addSupportTicket(ticket: SystemSupportTicket): SystemSupportTicket {
@@ -910,5 +648,3 @@ class KoperasiDatabase {
     return null;
   }
 }
-
-export const db = new KoperasiDatabase();
